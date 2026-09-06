@@ -241,6 +241,28 @@ def build(root, output, runner="none", compilers=None, against=()):
     report = audit(root, runner, compilers, against)
     if not report["passed"]:
         raise PackError("Publication gate failed:\n" + "\n".join(report["errors"]))
+    return _archive_reviewed(root, output, manifest, report)
+
+
+def build_from_report(root, output, execution_report, provenance, against=()):
+    """Data-only publication. Caller must authenticate the remote evidence first."""
+    if Path(output).resolve().is_relative_to(Path(root).resolve()):
+        raise PackError("Build output must be outside the package source")
+    manifest, _ = load_pack(root, approved=True)
+    review = read_json(Path(root) / "review.json")
+    sha = digest(canonical(execution_report))
+    if review.get("ciReportSha256") != sha:
+        raise PackError("Execution evidence does not match the human-reviewed report")
+    report = audit(root, against=against, execution_report=execution_report)
+    if not report["passed"]:
+        raise PackError("Publication gate failed:\n" + "\n".join(report["errors"]))
+    report["reusedExecutionReportSha256"] = sha
+    report["executionEvidence"] = provenance
+    report["originalExecutionReport"] = execution_report
+    return _archive_reviewed(root, output, manifest, report)
+
+
+def _archive_reviewed(root, output, manifest, report):
     files = payload_files(root)
     manifest = {**manifest, "files": files}
     output = Path(output)

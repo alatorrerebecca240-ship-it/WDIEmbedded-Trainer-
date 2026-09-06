@@ -1,0 +1,10 @@
+{
+  "tag": "knowledge-v1.1.0",
+  "baseRelease": "knowledge-v1.0.0",
+  "expectedImportedQuestions": 50,
+  "runs": [
+    {"id": 34025948452, "requestId": "0e20277cc404e330aac28ddbbfc6967d", "headSha": "e4feaff3376a3f88c2f29e66e5a86d1be1e8e95a"},
+    {"id": 34030923904, "requestId": "9069c1c851ebe83159a11bc96563bc98", "headSha": "0cafd77fb68e436fb9fd2e2bca7c2618a9d0362a"},
+    {"id": 34034448029, "requestId": "6717d8ad3e7f4ebdac838a05a7fdf78e", "headSha": "4f455dbe46832f1d89a53b8427858fc99d147909"}
+  ]
+}

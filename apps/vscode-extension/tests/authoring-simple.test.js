@@ -65,3 +65,16 @@ test('central review exposes counts and requires separate publication preparatio
   assert.deepEqual(calls.map((v) => v[1]), ['inbox-list']);
   assert.equal(m.busy, false);
 });
+
+test('scaffold notices are visible and retry needs no reimport or approval', async () => {
+  const item = { id: 'fixture', title: 'Fixture', key: 'c/fixture', status: 'ready',
+    warnings: ['原始上游框架缺少待实现接口'], errors: [] };
+  const m = manager({ total: 1, items: [item], counts: { ready: 1 } });
+  picks = [(items) => { assert.match(items[0].detail, /原始上游框架/); return undefined; }];
+  await m.browseInbox([item]);
+  assert.equal(calls.length, 0);
+  picks = [(items) => items.find((v) => v.action === 'retry')];
+  await m.reviewInbox();
+  assert.deepEqual(calls.map((v) => v[1]), ['inbox-list']);
+  assert.equal(cloudCalls, 1);
+});

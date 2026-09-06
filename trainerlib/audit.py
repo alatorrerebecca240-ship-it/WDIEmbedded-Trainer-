@@ -16,6 +16,13 @@ from pathlib import Path
 from .common import LICENSES, PROGRAMMING, PackError, atomic_json, canonical, digest, inside, read_json
 from .format import fingerprint, load_pack, payload_files
 from .process import limited_run
+from .scaffolds import expected_scaffold_error, starter_mode
+
+
+class CompilationError(PackError):
+    def __init__(self, diagnostics):
+        self.diagnostics = diagnostics
+        super().__init__("Compilation failed: " + diagnostics[:4000])
 
 
 def run_program(root, q, reference=True, runner="none", compiler=None, image="gcc:14"):
@@ -74,14 +81,14 @@ def run_program(root, q, reference=True, runner="none", compiler=None, image="gc
                 raise PackError("Container could not start")
             # A starter compiler error must not be misreported as an expected failing test.
             if result.returncode == 120:
-                raise PackError("Compilation failed: " + result.stderr[:4000])
+                raise CompilationError(result.stderr)
         else:
             executable = work / ("answer.exe" if os.name == "nt" else "answer")
             command = [compiler or tool, *options, "-o", str(executable)]
             try:
                 compiled = limited_run(command, cwd=work, timeout=30)
                 if compiled.returncode:
-                    raise PackError("Compilation failed: " + compiled.stderr[:4000])
+                    raise CompilationError(compiled.stderr)
                 result = limited_run([str(executable)], cwd=work, timeout=5)
             except subprocess.TimeoutExpired as exc:
                 raise PackError("Compile/test timed out") from exc
@@ -148,6 +155,7 @@ def _origin_errors(origin, root):
 
 def audit(root, runner="none", compilers=None, against=(), execution_report=None):
     errors, warnings, executed = [], [], []
+    checks = {}
     try:
         manifest, questions = load_pack(root)
         content_sha = fingerprint(root)
@@ -179,17 +187,33 @@ def audit(root, runner="none", compilers=None, against=(), execution_report=None
                         warnings.append(f"{q['id']}: similar to {previous['id']} ({score:.2f}); reviewer must inspect")
                 errors.extend(f"{q['id']}: {error}" for error in copyright_errors(q, root))
                 if q["questionType"] in PROGRAMMING | {"code-reading"}:
+                    stage = "参考答案"
+                    check = checks[q["id"]] = {"reference": "not-run", "starter": "not-run"}
                     try:
                         if execution_report is None:
                             compiler = (compilers or {}).get(q["language"])
                             run_program(root, q, runner=runner, compiler=compiler)
+                            check["reference"] = "passed"
                             if q["questionType"] in PROGRAMMING:
-                                run_program(root, q, reference=False, runner=runner, compiler=compiler)
+                                stage = "初始代码"
+                                mode = starter_mode(root, q)
+                                check["starterMode"] = mode
+                                try:
+                                    run_program(root, q, reference=False, runner=runner, compiler=compiler)
+                                    check["starter"] = "expected-test-failure"
+                                except CompilationError as exc:
+                                    if mode != "upstream-scaffold" or not expected_scaffold_error(exc.diagnostics):
+                                        raise
+                                    check["starter"] = "expected-incomplete-scaffold"
+                                    warnings.append(f"{q['id']}: 原始上游框架缺少待实现接口，属于预期；参考答案已通过完整测试。学习者需补全声明、类型或函数实现。")
+                        else:
+                            check["reference"] = "verified-by-bound-report"
                         executed.append(q["id"])
                     except (PackError, OSError) as exc:
-                        errors.append(f"{q['id']}: {exc}")
+                        check["failedStage"] = stage
+                        errors.append(f"{q['id']}: {stage}: {exc}")
             signatures.append((q, text))
-        return {"formatVersion": 1, "packId": manifest["id"], "contentSha256": content_sha, "runner": "ci-report" if execution_report is not None else runner, "passed": not errors, "errors": errors, "warnings": warnings, "referenceVerified": executed, "questionCount": len(questions)}
+        return {"formatVersion": 1, "verificationPolicy": "upstream-scaffold-v1", "checks": checks, "packId": manifest["id"], "contentSha256": content_sha, "runner": "ci-report" if execution_report is not None else runner, "passed": not errors, "errors": errors, "warnings": warnings, "referenceVerified": executed, "questionCount": len(questions)}
     except (PackError, TypeError, KeyError, ValueError) as exc:
         return {"formatVersion": 1, "passed": False, "errors": [str(exc)], "warnings": [], "referenceVerified": []}
 

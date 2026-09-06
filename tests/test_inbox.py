@@ -60,6 +60,19 @@ class InboxTests(unittest.TestCase):
         self.inbox.results(REQUEST, archive, sha)
         return self.inbox.pack(self.inbox.read()["items"][QID])
 
+    def test_scaffold_notice_is_preserved_without_automatic_approval(self):
+        self.acquire()
+        plan = self.inbox.prepare(REQUEST)
+        notice = "原始上游框架缺少待实现接口；参考答案已通过完整测试。"
+        archive, sha = self.evidence(plan, extra={"warnings": [notice]})
+        result = self.inbox.results(REQUEST, archive, sha)
+        self.assertEqual(result["counts"], {"ready": 1})
+        self.assertEqual(result["items"][0]["warnings"], [notice])
+        # No new download/verification for unchanged already-ready questions.
+        self.assertEqual(self.inbox.prepare("2" * 32)["entries"], [])
+        pack = self.inbox.pack(self.inbox.read()["items"][QID])
+        self.assertFalse((pack / "review.json").exists())
+
     def test_old_drafts_adopt_once_without_changing_originals(self):
         before = fingerprint(self.legacy)
         result = self.acquire()

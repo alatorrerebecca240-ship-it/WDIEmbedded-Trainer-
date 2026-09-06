@@ -50,7 +50,7 @@ class AuthoringManager {
       const chosen = await vscode.window.showQuickPick([
         { label: `浏览题目（${result.total}）`, action: 'browse', description: '查看题面、参考答案、测试、来源及待处理问题' },
         { label: `批量确认审核（${ready.length}）`, action: 'approve', description: '仅已通过云端验证的题；仍需人工核对内容与版权' },
-        { label: '重新验证待处理题目', action: 'retry', description: '不重复提交正在执行的题目' },
+        { label: '重新验证待处理题目', action: 'retry', description: '只处理待验证或失败题；保留原始上游空框架，不重复验证已就绪或已审核题' },
         { label: '准备发布已审核题目', action: 'stage', description: '确认后生成发布快照，不自动推送、打标签或发布' }
       ], { title: '集中审核', placeHolder: `待验证 ${result.counts.pending || 0} · 验证中 ${result.counts.checking || 0} · 待审核 ${ready.length} · 已审核 ${result.counts.approved || 0}` });
       if (!chosen) return;
@@ -72,7 +72,7 @@ class AuthoringManager {
   async browseInbox(items) {
     if (!items.length) return vscode.window.showInformationMessage('暂无题目，请先点“获取新题”。');
     const entry = await vscode.window.showQuickPick(items.map((v) => ({ label: v.title, description: STATUS[v.status] || v.status,
-      detail: `${v.key} · ${(v.errors || []).join('；') || '可查看题面、答案、测试与版权来源'}`, entry: v })),
+      detail: `${v.key} · ${[...(v.errors || []), ...(v.warnings || [])].join('；') || '可查看题面、答案、测试与版权来源'}`, entry: v })),
       { title: '集中审核 · 题目列表', matchOnDescription: true, matchOnDetail: true, placeHolder: '输入状态、题名或知识方向筛选' });
     if (!entry) return;
     const q = entry.entry;
@@ -82,7 +82,7 @@ class AuthoringManager {
       ...(['deferred', 'import-failed', 'static-failed'].includes(q.status) ? [{ label: '恢复或允许重新获取', action: 'resume' }] : []),
       ...(q.status !== 'approved' ? [{ label: '暂缓这道题', action: 'defer' }] : [])
     ];
-    const choice = await vscode.window.showQuickPick(actions, { title: `${q.title} · ${STATUS[q.status]}`, placeHolder: (q.errors || []).join('；') });
+    const choice = await vscode.window.showQuickPick(actions, { title: `${q.title} · ${STATUS[q.status]}`, placeHolder: [...(q.errors || []), ...(q.warnings || [])].join('；') });
     if (!choice) return;
     if (choice.action === 'approve') return this.approveInbox([q]);
     if (choice.action === 'files') {

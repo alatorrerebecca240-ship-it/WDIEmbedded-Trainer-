@@ -1,4 +1,16 @@
-# 一键获取 + 集中审核（0.9.0）
+# 一键获取 + 集中审核（0.10.0）
+
+## 原题直用与简化验证
+
+0.10.0 自动核对官方 Exercism 编程题的固定提交、保留的 `.meta/config.json` 中的 solution 文件列表、上游文件哈希和整个 starter 文件集合。只有与上游逐字节一致的 starter，才标记为 `upstream-scaffold`；无需重新下载或改写现有草稿，知识包指纹不变。
+
+- 参考答案仍必须在 Docker 中编译成功并通过完整测试。
+- 原始框架缺少待实现函数、类型或声明产生的已知诊断，记为提示，不再阻止进入人工审核。
+- 缺失依赖（例如 Gigasecond 缺 Boost）、编译器崩溃、超时和容器启动失败仍阻止通过。
+- 初始代码若已经通过全部测试，仍视为无有效练习；修改过的 starter、AI 变式、纠错题和未知来源仍使用严格规则。
+- 报告新增 `checks`，分别记录参考答案、初始代码、框架模式与失败阶段；集中审核显示框架提示。
+
+旧失败题直接点击“重新验证待处理题目”，不用重新获取；已就绪/已审核且指纹未变化的题不重复提交。人工内容与版权确认、准备发布依然分开，正式发布仍重新验证。升级时先将新版工具推送到 main，再使用本机新版插件；仅安装 VSIX 不会改变云端验证规则，也不会自动把旧失败题改成通过。
 
 ## 日常操作
 
@@ -10,7 +22,7 @@
 
 ## 一次性云端配置
 
-1. 将 0.9.0 工具、测试和 `.github/workflows/acquire-review.yml` 推送到目标仓库的 main。
+1. 将 0.10.0 工具、测试和 `.github/workflows/acquire-review.yml` 推送到目标仓库的 main。
 2. 在用户级 `embeddedTrainer.authoringRepository` 配置 `owner/repo`，默认本项目仓库。工作区不能覆盖此设置。
 3. 首次自动验证时确认发送范围，并通过 VS Code GitHub 登录授权。插件使用 VS Code 官方认证接口，会话令牌仅用于 `api.github.com` 请求，不写入参数、日志、工作区或队列。[VS Code 认证 API](https://code.visualstudio.com/api/references/vscode-api#authentication)
 4. 后续“获取新题”自动提交等待题目；未配置、取消授权或网络失败时保留本地收件箱，配置好后点“重新验证待处理题目”。工作流调度需要相应仓库权限，GitHub OAuth 调度接口使用 `repo` scope。[GitHub 工作流调度 API](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
@@ -25,7 +37,7 @@
 - 校验任务所属仓库、工作流、事件、请求名和工具提交；只接受对应任务的唯一未过期报告附件。下载重定向不携带 GitHub 令牌，拒绝非白名单下载域。
 - 先对 ZIP 校验 GitHub 给出的 SHA-256，再只读一个大小受限的 `inbox-results.json`，从不解压任意路径。随后检查请求摘要、完整题目集合、每题指纹和原有 Docker 审核门禁。[GitHub Artifact API](https://docs.github.com/en/rest/actions/artifacts)
 
-Actions 不运行上游构建脚本；参考答案和初始代码仅在既有无网络、只读挂载、非 root、受资源限制的 Docker 容器执行。每题独立验证，部分失败仍可生成其他题的成功证据。**工作流绿色仅表示结果完整生成，不代表所有题通过。**题目修改、旧报告、错误编译、缺少初始代码有效失败证据，都不能当作审核通过。
+Actions 不运行上游构建脚本；参考答案和初始代码仅在既有无网络、只读挂载、非 root、受资源限制的 Docker 容器执行。每题独立验证，部分失败仍可生成其他题的成功证据。**工作流绿色仅表示结果完整生成，不代表所有题通过。**题目修改、旧报告、参考答案错误或缺失依赖不能当作通过；仅满足上述来源/哈希条件的原始 starter 允许预期的接口未完成诊断。
 
 本地报告与人工批准不是数字签名；正式发布仍重新运行原有验证，不靠本地报告绕过门禁。
 

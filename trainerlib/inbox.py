@@ -342,7 +342,9 @@ class Inbox:
                     continue
                 evidence = f".trainer/authoring/evidence/{request_id}/{entry['id']}.json"
                 atomic_json(inside(self.root, evidence), execution)
-                entry.update(status="ready", errors=[], evidence=evidence, artifactSha256=expected_sha)
+                notices = execution.get("warnings", [])
+                notices = [v[:2000] for v in notices[:10] if isinstance(v, str)] if isinstance(notices, list) else []
+                entry.update(status="ready", errors=[], warnings=notices, evidence=evidence, artifactSha256=expected_sha)
             atomic_json(self.file, data)
         return self.listing()
 

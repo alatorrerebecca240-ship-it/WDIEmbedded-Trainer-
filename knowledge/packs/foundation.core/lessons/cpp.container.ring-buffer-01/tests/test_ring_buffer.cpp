@@ -35,10 +35,20 @@ int main()
     expect(third && *third == 30, "FIFO third item");
     expect(fourth && *fourth == 40, "FIFO wrapped item");
     expect(!buffer.pop().has_value(), "empty buffer returns nullopt");
+    expect(buffer.size() == 0 && buffer.empty() && !buffer.full(), "empty state after wrap");
+
+    RingBuffer<int, 1> single;
+    for (int value = 1; value <= 5; ++value) {
+        expect(single.push(value), "capacity one accepts item");
+        expect(single.size() == 1 && single.full(), "capacity one full state");
+        expect(!single.push(-1), "capacity one rejects overwrite");
+        const auto item = single.pop();
+        expect(item && *item == value, "capacity one preserves item across wrap");
+        expect(single.empty() && single.size() == 0, "capacity one empties");
+    }
 
     if (failures == 0) {
         std::cout << "PASS ring buffer\n";
     }
     return failures == 0 ? 0 : 1;
 }
-

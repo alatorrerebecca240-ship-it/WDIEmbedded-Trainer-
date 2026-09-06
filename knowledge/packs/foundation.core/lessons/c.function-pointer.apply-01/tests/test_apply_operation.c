@@ -3,9 +3,11 @@
 #include <stdio.h>
 
 static int failures = 0;
+static int callback_calls = 0;
 
 static int add(int left, int right)
 {
+    ++callback_calls;
     return left + right;
 }
 
@@ -33,6 +35,7 @@ int main(void)
     expect_equal("null callback", apply_operation(NULL, 1, 2, &result), 0);
     expect_equal("result unchanged", result, 123);
     expect_equal("null result", apply_operation(add, 1, 2, NULL), 0);
+    expect_equal("callback skipped for invalid pointers", callback_calls, 1);
     if (failures == 0) {
         puts("PASS apply operation");
     }

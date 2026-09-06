@@ -19,6 +19,8 @@ int main(void)
     expect_equal("positive saturation", clamp_motor_command(5000, 1000), 1000);
     expect_equal("negative saturation", clamp_motor_command(-5000, 1000), -1000);
     expect_equal("zero limit", clamp_motor_command(42, 0), 0);
+    expect_equal("maximum int32", clamp_motor_command(INT32_MAX, INT16_MAX), INT16_MAX);
+    expect_equal("minimum int32", clamp_motor_command(INT32_MIN, INT16_MAX), -INT16_MAX);
     if (failures == 0) {
         puts("PASS motor command limit");
     }

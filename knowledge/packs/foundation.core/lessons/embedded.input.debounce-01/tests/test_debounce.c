@@ -30,9 +30,17 @@ int main(void)
     expect_state(&button, 0U, 1U, "release stable sample 2");
     expect_state(&button, 0U, 0U, "release accepted");
 
+    debounce_init(&button, 9U, 1U);
+    expect_state(&button, 2U, 1U, "normalize initial and stable input");
+    expect_state(&button, 0U, 0U, "threshold one releases immediately");
+    expect_state(&button, 7U, 1U, "threshold one normalizes press");
+
+    debounce_init(&button, 0U, 2U);
+    expect_state(&button, 2U, 0U, "normalized candidate first sample");
+    expect_state(&button, 5U, 1U, "different nonzero samples are same state");
+
     if (failures == 0) {
         puts("PASS debounce");
     }
     return failures == 0 ? 0 : 1;
 }
-

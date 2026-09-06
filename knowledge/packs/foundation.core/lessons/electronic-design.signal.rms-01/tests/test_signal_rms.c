@@ -7,7 +7,7 @@ static int failures = 0;
 
 static void expect_near(const char *name, double actual, double expected)
 {
-    if (fabs(actual - expected) > 1e-6) {
+    if (!(fabs(actual - expected) <= 1e-6)) {
         fprintf(stderr, "FAIL %s: expected %.9f, got %.9f\n", name, expected, actual);
         ++failures;
     }
@@ -30,4 +30,3 @@ int main(void)
     }
     return failures == 0 ? 0 : 1;
 }
-

@@ -1,11 +1,21 @@
 name: Verify draft references in Docker
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'knowledge/packs/foundation.core/**'
+      - 'trainerlib/**'
+      - 'trainer.py'
+      - 'scripts/check-draft-path.py'
+      - 'scripts/draft-review-sheet.py'
+      - '.github/workflows/review-draft.yml'
   workflow_dispatch:
     inputs:
       pack:
-        description: 'Repository-relative draft package path (commit an explicitly selected draft first)'
+        description: 'Repository-relative package path; verification never approves or publishes'
         required: true
         type: string
+        default: knowledge/packs/foundation.core
 permissions:
   contents: read
 jobs:
@@ -13,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      DRAFT_PATH: ${{ inputs.pack }}
+      DRAFT_PATH: ${{ inputs.pack || 'knowledge/packs/foundation.core' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -26,9 +36,15 @@ jobs:
       - run: docker pull gcc:14
       - name: Static review plus isolated reference execution (does not approve or publish)
         run: python trainer.py packs audit "$DRAFT_PATH" --runner docker --report draft-audit.json
+      - name: Prepare human review sheet and job summary
+        if: always()
+        run: python scripts/draft-review-sheet.py --pack "$DRAFT_PATH" --report draft-audit.json --output draft-review.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: draft-audit
-          path: draft-audit.json
+          path: |
+            draft-audit.json
+            draft-review.md
           if-no-files-found: warn
+          retention-days: 30

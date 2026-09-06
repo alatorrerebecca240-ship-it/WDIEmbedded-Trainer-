@@ -22,6 +22,10 @@ int main(void)
     expect_equal("balanced", line_position_three(500U, 500U, 500U), 0);
     expect_equal("right weighted", line_position_three(100U, 100U, 300U), 400);
     expect_equal("left weighted", line_position_three(300U, 100U, 100U), -400);
+    expect_equal("negative truncates toward zero", line_position_three(2U, 0U, 1U), -333);
+    expect_equal("positive truncates toward zero", line_position_three(1U, 0U, 2U), 333);
+    expect_equal("maximum left reading", line_position_three(UINT16_MAX, 0U, 0U), -1000);
+    expect_equal("maximum balanced readings", line_position_three(UINT16_MAX, UINT16_MAX, UINT16_MAX), 0);
     if (failures == 0) {
         puts("PASS line position");
     }

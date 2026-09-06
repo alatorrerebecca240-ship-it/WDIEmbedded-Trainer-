@@ -10,9 +10,19 @@ WDI 内部代码训练、题库更新与发布项目。公开源码仓库：[WDI
 
 维护者可通过 `trainer.py packs` 获取固定提交的开源素材、声明式转换、参数模板和本地 Ollama 生成草稿，再经过人工审核与 GitHub Actions Docker 验证发布。已有 14 道第三方导入草稿和 20 道模板草稿，尚未加入正式课程。
 
-完整操作、格式、许可与安全边界、免费 GitHub 发布配置见 [知识包工作流](docs/knowledge-pack-workflow.md)。项目原创代码与题目采用 [MIT](LICENSE)，第三方代码保留原许可证。**源码仓库与审核包发布是两件事；尚无已审核 Release/题库清单，草稿不能跳过审核发布。**
+完整操作、格式、许可与安全边界、免费 GitHub 发布配置见 [知识包工作流](docs/knowledge-pack-workflow.md)。项目原创代码与题目采用 [MIT](LICENSE)，第三方代码保留原许可证。首个审核包 **foundation.core 1.0.0（198 题）** 已发布到 [knowledge-v1.0.0 Release](https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-/releases/tag/knowledge-v1.0.0)，[发布验证与部署](https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-/actions/runs/34013079842)全部通过。后续草稿仍不能跳过审核发布。
 
 学习者安装 VSIX 后在课程树上方点“管理知识包”，无需打开终端；首次使用本项目可直接继续原来的 198 道练习。
+
+### 安装公开题库（无需终端）
+
+1. 在插件中打开“管理知识包” → “添加题库清单来源”。
+2. 填入 [Pages 题库清单](https://alatorrerebecca240-ship-it.github.io/WDIEmbedded-Trainer-/catalog.json)的完整地址并确认来源。
+3. 返回“管理知识包” → “浏览并安装知识包”，选择“基础课程合集”1.0.0。
+
+其他电脑安装同一插件后可以订阅这个地址，不必克隆题库源码。知识题可直接作答；编程评测还需要本机编译器，并在阅读代码后单独确认“信任知识包代码”。发布审核不等于自动授予本机代码执行权限。
+
+离线使用可从 Release 下载 ZIP 与独立的 .sha256 文件，通过插件“离线导入 ZIP”安装。首发 ZIP 的 SHA-256 是 `5405c047cafdfccf6bf750ce81e931045df25b9eeb825e2e04205e50842cf081`。题库版本与插件版本分别管理；代码和个人学习进度不上传到公开清单。
 
 ## 命令行备用入口
 

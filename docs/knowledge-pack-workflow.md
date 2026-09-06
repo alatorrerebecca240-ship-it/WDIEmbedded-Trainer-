@@ -136,7 +136,7 @@ python trainer.py packs promote knowledge/drafts/my-pack --destination knowledge
 
 7. 提交 `knowledge/approved/` 的审阅快照到 `main`，创建并推送 `knowledge-v1.0.0` 这样的标签（或手动指定已有标签）触发 **Publish reviewed knowledge packages**。只有成功经过全部包检查后才上传 artifact，之后独立的写权限 job 创建 Release，再部署 Pages。
 8. `knowledge/approved/` 为空或任何一个包未通过时，发布失败且不生成对外 Release。不要把未授权的整个基础包直接搬进去。Release 已存在时不覆盖；失败重试若 Release 已建立，应检查资产后使用新发布标签，不强行覆盖已发布字节。
-9. 发布成功后，在插件的“管理知识包”添加 `https://alatorrerebecca240-ship-it.github.io/WDIEmbedded-Trainer-/catalog.json`，浏览并安装需要的包。这是预期地址，Pages 成功部署前不可用。每次清单包含该发布批次的全部批准包，历史 ZIP 留在旧 Releases。
+9. 发布成功后，在插件的“管理知识包”添加 `https://alatorrerebecca240-ship-it.github.io/WDIEmbedded-Trainer-/catalog.json`，浏览并安装需要的包。该地址已随首个 knowledge-v1.0.0 发布在 2026-09-06 成功部署，包含 foundation.core 1.0.0 的版本、下载地址与 SHA-256。每次清单包含该发布批次的全部批准包，历史 ZIP 留在旧 Releases。
 
 工作流 action 固定到提交 SHA。验证 job 无写权限，发布 job 不 checkout 或执行题目代码。需要持续维护这些 action 和编译器镜像版本，不能把当前固定版本当作永久安全承诺。
 

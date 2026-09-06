@@ -119,7 +119,10 @@ class PackageManager {
       ['添加题库清单来源', () => this.addSource()], ['离线导入 ZIP', () => this.offlineImport()],
       ['回退到已保留版本', () => this.rollback()], ['信任知识包代码', () => this.trust()],
       ['恢复某个包的自动更新', async () => { const p = await this.selectInstalled(); if (p) await this.run(['unpin', p.id]); }],
-      ['打开版本与缓存目录', () => vscode.commands.executeCommand('revealFileInOS', vscode.Uri.file(this.backend.packHome))]
+      ['打开版本与缓存目录', () => vscode.commands.executeCommand('revealFileInOS', vscode.Uri.file(this.backend.packHome))],
+      ['获取新题（维护者）', () => vscode.commands.executeCommand('embeddedTrainer.getNewQuestions')],
+      ['集中审核（维护者）', () => vscode.commands.executeCommand('embeddedTrainer.reviewInbox')],
+      ['高级题库维护', () => vscode.commands.executeCommand('embeddedTrainer.authoring')]
     ];
     const chosen = await vscode.window.showQuickPick(operations.map(([label, run]) => ({ label, run })), { placeHolder: '知识包管理（学习进度不会上传到公开题库）' });
     if (chosen) {

@@ -131,6 +131,9 @@ def load_pack(root, integrity=False, approved=False):
     lessons, ids = [], set()
     for q in qs:
         item = validate_question(q, root)
+        if (isinstance(q.get("origin"), dict) and "dependencies" in q["origin"]
+                and version(p["minEngineVersion"]) < (0, 8, 0)):
+            raise PackError("Dependency provenance requires minEngineVersion 0.8.0 or later")
         if item["id"] in ids:
             raise PackError(f"Duplicate ID: {item['id']}")
         ids.add(item["id"])

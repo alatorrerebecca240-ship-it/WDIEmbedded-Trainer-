@@ -58,10 +58,14 @@ def run_program(root, q, reference=True, runner="none", compiler=None, image="gc
             if not re.fullmatch(r"[a-zA-Z0-9./:_@-]+", image):
                 raise PackError("Invalid container image")
             container = "trainer-audit-" + uuid.uuid4().hex
+            # Full C++ frameworks need more compiler memory than tiny C fixtures.
+            # Fixed host limits: packages cannot request arbitrary Docker options.
+            memory = "768m" if q["language"] == "cpp" else "256m"
+            deadline = 90 if q["language"] == "cpp" else 60
             # Read-only inputs; no host home, credentials, sockets, or network mounts.
-            command = ["docker", "run", "--rm", "--name", container, "--network", "none", "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--pids-limit", "64", "--memory", "256m", "--cpus", "1", "--user", "65534:65534", "--tmpfs", "/tmp:rw,exec,nosuid,size=64m,mode=1777", "--mount", f"type=bind,source={work},target=/work,readonly", "-w", "/work", image, "sh", "-c", " ".join(shlex.quote(p) for p in [tool, *options, "-o", "/tmp/answer"]) + " || exit 120; /tmp/answer"]
+            command = ["docker", "run", "--rm", "--name", container, "--network", "none", "--read-only", "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "--pids-limit", "64", "--memory", memory, "--cpus", "1", "--user", "65534:65534", "--tmpfs", "/tmp:rw,exec,nosuid,size=64m,mode=1777", "--mount", f"type=bind,source={work},target=/work,readonly", "-w", "/work", image, "sh", "-c", " ".join(shlex.quote(p) for p in [tool, *options, "-o", "/tmp/answer"]) + " || exit 120; /tmp/answer"]
             try:
-                result = limited_run(command, timeout=60)
+                result = limited_run(command, timeout=deadline)
             except subprocess.TimeoutExpired as exc:
                 raise PackError("Sandbox execution timed out") from exc
             finally:
@@ -91,8 +95,25 @@ def run_program(root, q, reference=True, runner="none", compiler=None, image="gc
 
 
 def copyright_errors(q, root):
-    errors = []
     origin = q.get("origin", {})
+    errors = _origin_errors(origin, root)
+    if not isinstance(origin, dict):
+        return errors
+    dependencies = origin.get("dependencies", [])
+    if not isinstance(dependencies, list) or len(dependencies) > 16:
+        return errors + ["Invalid dependency provenance list"]
+    for dependency in dependencies:
+        if not isinstance(dependency, dict) or "dependencies" in dependency:
+            errors.append("Dependencies require flat, explicit provenance records")
+            continue
+        errors.extend("Dependency: " + error for error in _origin_errors(dependency, root))
+    return errors
+
+
+def _origin_errors(origin, root):
+    errors = []
+    if not isinstance(origin, dict):
+        return ["Invalid origin record"]
     if origin.get("license") not in LICENSES:
         errors.append("A supported explicit SPDX license is required; project-license/unknown is not publishable")
     if "authoredLicense" in origin and origin["authoredLicense"] not in LICENSES:

@@ -1,0 +1,31 @@
+name: Import and verify Exercism pilot (draft only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Download pinned sources and convert without executing them
+        run: python scripts/import-exercism-pilot.py
+      - run: docker pull gcc:14
+      - name: Verify references and starter failure inside restricted Docker
+        run: python trainer.py packs audit knowledge/drafts/exercism.pilot --runner docker --report exercism-audit.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: exercism-pilot-draft-review
+          path: |
+            exercism-audit.json
+            knowledge/drafts/exercism.pilot/
+          if-no-files-found: warn
+          retention-days: 30
+      # Deliberately no approve/build/release, write token, secrets or deployment.

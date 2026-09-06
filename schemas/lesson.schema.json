@@ -123,7 +123,22 @@
       "properties": {
         "type": { "type": "string" },
         "license": { "type": "string" },
-        "url": { "type": "string" }
+        "url": { "type": "string" },
+        "dependencies": {
+          "description": "Independent flat provenance records; requires pack minEngineVersion >= 0.8.0.",
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": ["type", "license", "licenseFiles"],
+            "properties": {
+              "type": { "enum": ["self-authored", "imported", "adapted", "generated"] },
+              "license": { "type": "string" },
+              "licenseFiles": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+            },
+            "not": { "required": ["dependencies"] }
+          }
+        }
       },
       "additionalProperties": true
     }

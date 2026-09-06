@@ -2,7 +2,7 @@
   "name": "embedded-trainer",
   "displayName": "Embedded Trainer",
   "description": "独立知识包驱动的 C/C++、嵌入式、Linux 与 ROS 2 训练，支持更新、回退和离线导入。",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "publisher": "local-development",
   "engines": {
     "vscode": "^1.85.0"
@@ -42,6 +42,21 @@
   },
   "contributes": {
     "commands": [
+      {
+        "command": "embeddedTrainer.getNewQuestions",
+        "title": "Embedded Trainer: 获取新题",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "embeddedTrainer.reviewInbox",
+        "title": "Embedded Trainer: 集中审核",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "embeddedTrainer.authoring",
+        "title": "Embedded Trainer: 批量获取开源题目（维护者）",
+        "icon": "$(repo-clone)"
+      },
       {
         "command": "embeddedTrainer.refresh",
         "title": "Embedded Trainer: 刷新课程",
@@ -129,6 +144,21 @@
     "menus": {
       "view/title": [
         {
+          "command": "embeddedTrainer.getNewQuestions",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "maintenance@1"
+        },
+        {
+          "command": "embeddedTrainer.reviewInbox",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "maintenance@2"
+        },
+        {
+          "command": "embeddedTrainer.authoring",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "maintenance@3"
+        },
+        {
           "command": "embeddedTrainer.refresh",
           "when": "view == embeddedTrainer.lessons",
           "group": "navigation@1"
@@ -192,6 +222,12 @@
     "configuration": {
       "title": "Embedded Trainer",
       "properties": {
+        "embeddedTrainer.authoringRepository": {
+          "type": "string",
+          "default": "alatorrerebecca240-ship-it/WDIEmbedded-Trainer-",
+          "scope": "application",
+          "description": "一键获取/集中审核的 GitHub 仓库（owner/repo）。须先将 acquire-review.yml 和 0.9.0 工具推送到 main。工作区不能覆盖此地址。"
+        },
         "embeddedTrainer.pythonPath": {
           "type": "string",
           "default": "python",
@@ -233,7 +269,7 @@
     }
   },
   "scripts": {
-    "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/dashboard-client.js && node --check src/testing.js && node --check src/packages.js",
+    "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/dashboard-client.js && node --check src/testing.js && node --check src/packages.js && node --check src/authoring.js && node --check src/authoring-cloud.js",
     "package": "npx @vscode/vsce package",
     "test": "node --test tests/*.test.js",
     "vscode:prepublish": "node scripts/prepare-runtime.js && npm run check"

@@ -6,6 +6,7 @@ const { LessonTreeProvider, STATUS_NAMES, QUESTION_TYPE_NAMES, LANGUAGE_NAMES } 
 const { LessonDashboard } = require('./src/dashboard');
 const { TestingIntegration } = require('./src/testing');
 const { PackageManager } = require('./src/packages');
+const { AuthoringManager } = require('./src/authoring');
 
 async function exists(uri) {
   try {
@@ -315,6 +316,7 @@ async function activate(context) {
   });
 
   const packages = new PackageManager(context, backend, refresh);
+  const authoring = new AuthoringManager(context, backend);
   context.subscriptions.push(
     output,
     diagnostics,
@@ -329,6 +331,9 @@ async function activate(context) {
     vscode.commands.registerCommand('embeddedTrainer.doctor', runDoctor),
     vscode.commands.registerCommand('embeddedTrainer.progress', showProgress),
     vscode.commands.registerCommand('embeddedTrainer.packages', () => packages.manage()),
+    vscode.commands.registerCommand('embeddedTrainer.authoring', () => authoring.manage()),
+    vscode.commands.registerCommand('embeddedTrainer.getNewQuestions', () => authoring.getNew()),
+    vscode.commands.registerCommand('embeddedTrainer.reviewInbox', () => authoring.reviewInbox()),
     vscode.commands.registerCommand('embeddedTrainer.updatePackages', () => packages.update()),
     vscode.commands.registerCommand('embeddedTrainer.importPackage', async () => {
       try { await packages.offlineImport(); } catch (error) { vscode.window.showErrorMessage(error.message); }
@@ -357,6 +362,7 @@ async function activate(context) {
 
   await safeRefresh();
   packages.start();
+  authoring.start();
 
   const guideKey = 'usageGuideShownVersion';
   const currentVersion = context.extension.packageJSON.version;

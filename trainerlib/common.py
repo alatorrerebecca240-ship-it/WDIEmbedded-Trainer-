@@ -20,7 +20,7 @@ MAX_EXPANDED = 128 * 1024 * 1024
 MAX_FILES = 4000
 ID = re.compile(r"[a-z0-9][a-z0-9.-]{0,99}\Z")
 HASH = re.compile(r"[a-f0-9]{64}\Z")
-LICENSES = {"MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "CC0-1.0", "CC-BY-4.0"}
+LICENSES = {"MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "BSL-1.0", "CC0-1.0", "CC-BY-4.0"}
 PROGRAMMING = {"programming", "debugging"}
 TYPES = PROGRAMMING | {"single-choice", "true-false", "fill-blank", "code-reading"}
 

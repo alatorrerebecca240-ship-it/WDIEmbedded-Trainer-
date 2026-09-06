@@ -14,6 +14,8 @@ from .audit import approve, audit, build
 from .common import PROGRAMMING, PackError, atomic_json, digest, inside, read_json
 from .format import fingerprint, load_pack
 from .generate import ai_variants, template_variants
+from .exercism import scan as scan_exercism, import_batch as import_exercism
+from .inbox import Inbox
 from .runtime import store_for
 from .store import PackStore
 
@@ -80,7 +82,25 @@ def handle(args):
         store.reserved_questions = {q["id"]: q.get("_packId", "legacy") for q in trainer.discover_lessons().values()}
     if getattr(args, "runner", None) == "native" and not getattr(args, "trust_code", False):
         raise PackError("Native execution is NOT a sandbox. Pass --trust-code only after reviewing all input code, or use Docker.")
-    if action == "list":
+    if action.startswith("inbox-"):
+        inbox = Inbox(root)
+        if action == "inbox-get":
+            result = inbox.acquire(args.project_license, args.offline, args.limit, trainer.discover_lessons().values())
+        elif action == "inbox-list":
+            result = inbox.listing()
+        elif action == "inbox-details":
+            result = inbox.details(args.question)
+        elif action == "inbox-plan":
+            result = inbox.prepare(args.request, args.id)
+        elif action == "inbox-fail":
+            result = inbox.fail_request(args.request, args.reason)
+        elif action == "inbox-results":
+            result = inbox.results(args.request, args.archive, args.sha256)
+        elif action == "inbox-decide":
+            result = inbox.decide(args.id, args.decision, args.reviewer, args.ack_content, args.ack_copyright)
+        elif action == "inbox-stage":
+            result = inbox.stage_approved()
+    elif action == "list":
         result = store.index()
     elif action == "migrate":
         result = migrate(args.source, args.destination, args.id)
@@ -149,6 +169,11 @@ def handle(args):
             if args.id and not installed:
                 raise PackError("Requested package not found or belongs to another source")
             result["installed"] = installed
+    elif action == "exercism-scan":
+        result = scan_exercism(args.output, args.cache, args.language, args.max_difficulty,
+                              {key: value for key, value in {"c": args.ref_c, "cpp": args.ref_cpp}.items() if value}, args.offline)
+    elif action == "exercism-import":
+        result = import_exercism(args.index, args.destination, args.cache, args.exercise, args.recommended, args.project_license)
     elif action == "fetch":
         profiles = read_json(args.profiles)["sources"]
         selected = profiles if args.source == "all" else [p for p in profiles if p["id"] == args.source]
@@ -173,8 +198,28 @@ def handle(args):
 def add_commands(commands):
     parser = commands.add_parser("packs", help="知识包：导入、验证、发布、更新与回退")
     actions = parser.add_subparsers(dest="pack_action", required=True)
-    for name in ("list", "migrate", "audit", "review", "build", "promote", "stage-catalog", "publish-bundle", "install", "rollback", "unpin", "trust", "updates", "sync", "fetch", "import", "generate", "ai"):
+    for name in ("list", "migrate", "audit", "review", "build", "promote", "stage-catalog", "publish-bundle", "install", "rollback", "unpin", "trust", "updates", "sync", "fetch", "import", "generate", "ai", "exercism-scan", "exercism-import", "inbox-get", "inbox-list", "inbox-details", "inbox-plan", "inbox-fail", "inbox-results", "inbox-decide", "inbox-stage"):
         p = actions.add_parser(name)
+        if name == "inbox-details":
+            p.add_argument("--question", required=True)
+        if name == "inbox-get":
+            p.add_argument("--project-license", default="LICENSE")
+            p.add_argument("--offline", action="store_true")
+            p.add_argument("--limit", type=int, default=20)
+        if name in {"inbox-plan", "inbox-fail", "inbox-results"}:
+            p.add_argument("--request", required=True)
+        if name in {"inbox-plan", "inbox-decide"}:
+            p.add_argument("--id", action="append", default=[])
+        if name == "inbox-fail":
+            p.add_argument("--reason", required=True)
+        if name == "inbox-results":
+            p.add_argument("--archive", required=True)
+            p.add_argument("--sha256", required=True)
+        if name == "inbox-decide":
+            p.add_argument("--decision", choices=["approve", "defer", "resume"], required=True)
+            p.add_argument("--reviewer", default="")
+            p.add_argument("--ack-content", action="store_true")
+            p.add_argument("--ack-copyright", action="store_true")
         p.set_defaults(handler=handle)
         if name in {"audit", "review", "build", "publish-bundle"}:
             p.add_argument("--runner", choices=["none", "native", "docker"], default="none")
@@ -220,6 +265,21 @@ def add_commands(commands):
             p.add_argument("--profiles", default="knowledge/sources.json")
             p.add_argument("--source", required=True)
             p.add_argument("--ref")
+        if name in {"exercism-scan", "exercism-import"}:
+            p.add_argument("--cache", default=".imports/exercism-cache")
+        if name == "exercism-scan":
+            p.add_argument("--output", default=".imports/exercism-index.json")
+            p.add_argument("--language", choices=["all", "c", "cpp"], default="all")
+            p.add_argument("--max-difficulty", type=int, default=3)
+            p.add_argument("--ref-c")
+            p.add_argument("--ref-cpp")
+            p.add_argument("--offline", action="store_true")
+        if name == "exercism-import":
+            p.add_argument("--index", default=".imports/exercism-index.json")
+            p.add_argument("--destination", required=True)
+            p.add_argument("--exercise", action="append", default=[])
+            p.add_argument("--recommended", action="store_true")
+            p.add_argument("--project-license", default="LICENSE")
         if name == "import":
             p.add_argument("--source", required=True)
             p.add_argument("--recipe", required=True)

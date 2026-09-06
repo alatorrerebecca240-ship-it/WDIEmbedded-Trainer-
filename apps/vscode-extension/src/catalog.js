@@ -71,6 +71,22 @@ class LessonCatalog {
     return lessons;
   }
 
+  async reloadProgress() {
+    let data;
+    try {
+      data = await readJson(vscode.Uri.joinPath(this.rootUri, '.trainer', 'progress.json'));
+    } catch (error) {
+      // An absent file means no attempts; invalid JSON/permissions must retain
+      // the last good state rather than silently resetting the user's progress.
+      if (error.code !== 'FileNotFound' && error.code !== 'ENOENT') throw error;
+      data = {};
+    }
+    const progress = data && typeof data === 'object' && !Array.isArray(data) ? data : {};
+    if (JSON.stringify(progress) === JSON.stringify(this.progress)) return false;
+    this.progress = progress;
+    return true;
+  }
+
   get(id) {
     return this.lessons.find((lesson) => lesson.id === id);
   }

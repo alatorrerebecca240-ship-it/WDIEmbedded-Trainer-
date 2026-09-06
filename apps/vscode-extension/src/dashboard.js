@@ -59,6 +59,7 @@ class LessonDashboard {
     }
     this.panel.title = `课程：${lesson.title}`;
     this.panel.webview.html = this.render();
+    this.renderedPending = this.pending;
   }
 
   async handleMessage(message) {
@@ -86,10 +87,14 @@ class LessonDashboard {
 
   update(lesson, progress, state = {}) {
     if (!this.panel || !this.lesson || this.lesson.id !== lesson.id) return;
+    const nextState = { ...this.state, ...state };
+    if (this.renderedPending === this.pending && this.lesson === lesson && JSON.stringify(this.progress) === JSON.stringify(progress)
+      && JSON.stringify(this.state) === JSON.stringify(nextState)) return;
     this.lesson = lesson;
     this.progress = progress;
-    this.state = { ...this.state, ...state };
+    this.state = nextState;
     this.panel.webview.html = this.render();
+    this.renderedPending = this.pending;
   }
 
   render() {

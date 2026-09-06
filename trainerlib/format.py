@@ -1,6 +1,8 @@
 """Knowledge Pack v1: data-only, portable, fully indexed archives."""
 
+import os
 import re
+import stat
 from pathlib import Path
 
 from . import ENGINE_VERSION
@@ -8,31 +10,49 @@ from .common import HASH, ID, LICENSES, MAX_EXPANDED, MAX_FILES, PROGRAMMING, TY
 
 
 def payload_files(root):
-    root = Path(root)
+    root = Path(root).resolve()
     result = {}
     folded_names = set()
     size = 0
-    for file in sorted(root.rglob("*")):
-        relative = file.relative_to(root).as_posix()
-        inside(root, relative)
-        if not file.is_file() or relative in {"pack.json", "review.json", "audit.json"}:
-            continue
-        if relative.casefold() in folded_names:
-            raise PackError("Case-colliding payload filenames")
-        folded_names.add(relative.casefold())
-        if file.suffix.lower() not in {".json", ".md", ".txt", ".c", ".h", ".cpp", ".hpp", ".cc", ".cxx", ".hh"}:
-            raise PackError(f"Unsupported payload file (no scripts/binaries): {relative}")
-        size += file.stat().st_size
-        if size > MAX_EXPANDED or len(result) >= MAX_FILES:
-            raise PackError("Package exceeds file/size limit")
-        result[relative] = digest(file.read_bytes())
-    return result
+    # Check each directory entry before descending. scandir supplies cached metadata
+    # on Windows, avoiding repeated resolve/lstat calls for every file's ancestors.
+    # No cross-request metadata/hash cache: edits are still checked on every load.
+    pending = [(root, "")]
+    while pending:
+        directory, prefix = pending.pop()
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                relative = safe_path(prefix + entry.name)
+                info = entry.stat(follow_symlinks=False)
+                if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & 0x400:
+                    raise PackError(f"Links are not permitted: {entry.path}")
+                if stat.S_ISDIR(info.st_mode):
+                    pending.append((Path(entry.path), relative + "/"))
+                    continue
+                if not stat.S_ISREG(info.st_mode):
+                    raise PackError(f"Only regular payload files are allowed: {relative}")
+                if relative in {"pack.json", "review.json", "audit.json"}:
+                    continue
+                if relative.casefold() in folded_names:
+                    raise PackError("Case-colliding payload filenames")
+                folded_names.add(relative.casefold())
+                file = Path(entry.path)
+                if file.suffix.lower() not in {".json", ".md", ".txt", ".c", ".h", ".cpp", ".hpp", ".cc", ".cxx", ".hh"}:
+                    raise PackError(f"Unsupported payload file (no scripts/binaries): {relative}")
+                size += info.st_size
+                if size > MAX_EXPANDED or len(result) >= MAX_FILES:
+                    raise PackError("Package exceeds file/size limit")
+                result[relative] = digest(file.read_bytes())
+    return dict(sorted(result.items()))
 
 
 def fingerprint(root):
     manifest = read_json(Path(root) / "pack.json")
-    manifest.pop("files", None)
-    return digest(canonical({"manifest": manifest, "files": payload_files(root)}))
+    return _content_fingerprint(manifest, payload_files(root))
+
+
+def _content_fingerprint(manifest, files):
+    return digest(canonical({"manifest": {k: v for k, v in manifest.items() if k != "files"}, "files": files}))
 
 
 def validate_question(q, root):
@@ -111,6 +131,12 @@ def validate_question(q, root):
 
 
 def load_pack(root, integrity=False, approved=False):
+    manifest, lessons, _ = load_pack_snapshot(root, integrity, approved)
+    return manifest, lessons
+
+
+def load_pack_snapshot(root, integrity=False, approved=False):
+    """Load and fingerprint one validated snapshot without a second payload scan."""
     root = Path(root)
     p = read_json(root / "pack.json")
     if not isinstance(p, dict) or p.get("formatVersion") != 1 or not ID.fullmatch(p.get("id", "")):
@@ -139,12 +165,13 @@ def load_pack(root, integrity=False, approved=False):
         ids.add(item["id"])
         lessons.append(item)
     actual = payload_files(root)
+    content_sha = _content_fingerprint(p, actual)
     if integrity and p.get("files") != actual:
         raise PackError("Package file index/hash mismatch")
     if approved:
         review = read_json(root / "review.json")
-        if review.get("approved") is not True or not review.get("reviewer") or review.get("contentSha256") != fingerprint(root):
+        if review.get("approved") is not True or not review.get("reviewer") or review.get("contentSha256") != content_sha:
             raise PackError("Missing, unapproved or stale review")
         if review.get("copyrightChecked") is not True or review.get("contentChecked") is not True:
             raise PackError("Copyright and content review are required")
-    return p, lessons
+    return p, lessons, content_sha

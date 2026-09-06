@@ -35,6 +35,17 @@ function lesson(questionType = 'single-choice') {
   };
 }
 
+test('unchanged refresh does not reload the webview or reset unfinished answers', () => {
+  const dashboard = new LessonDashboard(() => {});
+  const item = lesson();
+  dashboard.show(item, { attempts: 2 });
+  const html = dashboard.panel.webview.html;
+  dashboard.update(item, { attempts: 2 });
+  assert.equal(dashboard.panel.webview.html, html, 'nonce/HTML must not change');
+  dashboard.update(item, { attempts: 3 });
+  assert.notEqual(dashboard.panel.webview.html, html);
+});
+
 test('all six question types have native controls and do not expose reference answers', () => {
   for (const type of ['programming', 'debugging', 'single-choice', 'true-false', 'fill-blank', 'code-reading']) {
     const dashboard = new LessonDashboard(() => {});

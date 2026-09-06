@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from .common import PackError, inside, read_json
-from .format import fingerprint, load_pack
+from .format import load_pack_snapshot
 from .store import PackStore
 
 
@@ -19,10 +19,9 @@ def configured_lessons(root):
     by_pack = {}
     for source in config.get("sources", []):
         directory = inside(root, source)
-        manifest, lessons = load_pack(directory)
+        manifest, lessons, sha = load_pack_snapshot(directory)
         if manifest["id"] in by_pack:
             raise PackError("Duplicate configured source package")
-        sha = fingerprint(directory)
         by_pack[manifest["id"]] = [{**q, "_packId": manifest["id"], "_packVersion": manifest["version"], "_packSha256": sha, "_needsTrust": False} for q in lessons]
     # Explicit installed versions take precedence over the same editable source package.
     by_pack.update(store_for(root).lessons())

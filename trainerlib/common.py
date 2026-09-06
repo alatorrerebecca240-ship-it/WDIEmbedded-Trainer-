@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tempfile
 import time
 import urllib.parse
@@ -78,6 +79,21 @@ def safe_path(value):
     return value
 
 
+def _path_identity(path):
+    # Windows realpath can retain the extended-length prefix when a concurrent
+    # writer creates a formerly absent path. Normalize only DOS/UNC spellings,
+    # not device namespaces, before comparing containment.
+    drive = path.drive
+    if os.name == "nt" and drive.startswith("\\\\?\\"):
+        plain = drive[4:]
+        if plain.upper().startswith("UNC\\"):
+            plain = "\\\\" + plain[4:]
+        elif not re.fullmatch(r"[A-Za-z]:", plain):
+            return path
+        return Path(plain + str(path)[len(drive):])
+    return path
+
+
 def inside(root, value):
     root = Path(root).resolve()
     path = root / safe_path(value)
@@ -85,9 +101,13 @@ def inside(root, value):
     for candidate in (path, *path.parents):
         if candidate == root:
             break
-        if candidate.is_symlink() or (candidate.exists() and getattr(candidate.lstat(), "st_file_attributes", 0) & 0x400):
+        try:
+            info = candidate.lstat()
+        except FileNotFoundError:
+            continue
+        if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & 0x400:
             raise PackError(f"Links are not permitted: {candidate}")
-    if not path.resolve().is_relative_to(root):
+    if not _path_identity(path.resolve()).is_relative_to(_path_identity(root)):
         raise PackError(f"Path escapes root: {value}")
     return path
 

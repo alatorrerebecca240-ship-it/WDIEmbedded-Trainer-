@@ -7,6 +7,7 @@ const { LessonDashboard } = require('./src/dashboard');
 const { TestingIntegration } = require('./src/testing');
 const { PackageManager } = require('./src/packages');
 const { AuthoringManager } = require('./src/authoring');
+const { RefreshQueue } = require('./src/refresh');
 
 async function exists(uri) {
   try {
@@ -55,33 +56,27 @@ async function activate(context) {
 
   let dashboard;
   let testing;
-  let refreshing;
-
-  const refresh = async () => {
-    if (refreshing) {
-      return refreshing;
+  const refreshQueue = new RefreshQueue(async (kind) => {
+    if (kind === 'full') await catalog.reload();
+    else if (!await catalog.reloadProgress()) return;
+    treeProvider.refresh();
+    if (testing && kind === 'full') {
+      testing.sync(catalog.lessons);
     }
-    refreshing = (async () => {
-      await catalog.reload();
-      treeProvider.refresh();
-      if (testing) {
-        testing.sync(catalog.lessons);
+    const passed = catalog.lessons.filter((lesson) => catalog.status(lesson.id).status === 'passed').length;
+    statusBar.text = `$(mortar-board) Trainer ${passed}/${catalog.lessons.length}`;
+    statusBar.tooltip = `已通过 ${passed} 个课程，共 ${catalog.lessons.length} 个`;
+    treeView.badge = { value: passed, tooltip: `已通过 ${passed}/${catalog.lessons.length}` };
+    if (dashboard && dashboard.lesson) {
+      const latest = catalog.get(dashboard.lesson.id);
+      if (latest) {
+        dashboard.update(latest, catalog.status(latest.id));
       }
-      const passed = catalog.lessons.filter((lesson) => catalog.status(lesson.id).status === 'passed').length;
-      statusBar.text = `$(mortar-board) Trainer ${passed}/${catalog.lessons.length}`;
-      statusBar.tooltip = `已通过 ${passed} 个课程，共 ${catalog.lessons.length} 个`;
-      treeView.badge = { value: passed, tooltip: `已通过 ${passed}/${catalog.lessons.length}` };
-      if (dashboard && dashboard.lesson) {
-        const latest = catalog.get(dashboard.lesson.id);
-        if (latest) {
-          dashboard.update(latest, catalog.status(latest.id));
-        }
-      }
-    })().finally(() => {
-      refreshing = undefined;
-    });
-    return refreshing;
-  };
+    }
+  }, (error) => output.appendLine(`题库刷新失败，保留旧列表：${error.message}`));
+  context.subscriptions.push(refreshQueue);
+  const refresh = () => refreshQueue.request('full');
+  const refreshProgress = () => refreshQueue.request('progress');
 
   const resolveLesson = async (input) => {
     let id;
@@ -116,7 +111,6 @@ async function activate(context) {
     if (result.code !== 0) {
       throw new Error(result.output || `无法创建课程 ${lesson.id}`);
     }
-    await refresh();
     return exerciseUri;
   };
 
@@ -149,7 +143,7 @@ async function activate(context) {
       await vscode.workspace.saveAll(false);
       diagnostics.clear();
       const result = await backend.run(['check', lesson.id], { token, collectDiagnostics: true });
-      await refresh();
+      await refreshProgress();
       dashboard.update(lesson, catalog.status(lesson.id), {
         result: { ok: result.code === 0, text: result.output.trim() }
       });
@@ -183,7 +177,7 @@ async function activate(context) {
         () => ensureStarted(lesson)
       );
       await openSource(lesson);
-      await refresh();
+      await refreshProgress();
       dashboard.show(lesson, catalog.status(lesson.id));
     } catch (error) {
       vscode.window.showErrorMessage(error instanceof Error ? error.message : String(error));
@@ -259,7 +253,6 @@ async function activate(context) {
       { location: vscode.ProgressLocation.Notification, title: `评测：${lesson.title}`, cancellable: true },
       (_, token) => testing.runLesson(lesson.id, token)
     );
-    await refresh();
     dashboard.show(lesson, catalog.status(lesson.id), {
       result: { ok: result && result.code === 0, text: result ? result.output.trim() : '评测已取消' }
     });
@@ -283,7 +276,7 @@ async function activate(context) {
       { location: vscode.ProgressLocation.Notification, title: `提交：${lesson.title}`, cancellable: false },
       () => backend.run(['submit', lesson.id, '--answer', JSON.stringify(answer)])
     );
-    await refresh();
+    await refreshProgress();
     dashboard.show(lesson, catalog.status(lesson.id), {
       result: { ok: result.code === 0, text: result.output.trim() }
     });
@@ -349,14 +342,15 @@ async function activate(context) {
   const progressWatcher = vscode.workspace.createFileSystemWatcher(
     new vscode.RelativePattern(rootUri.fsPath, '.trainer/progress.json')
   );
-  const sourceWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'knowledge/packs/**/*.json'));
+  const sourceWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'knowledge/packs/**/*'));
   const configWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'trainer-packs.json'));
   const packWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(packUri.fsPath, 'installed.json'));
   const safeRefresh = () => refresh().catch((error) => output.appendLine(`题库刷新失败，保留旧列表：${error.message}`));
   for (const watcher of [lessonWatcher, questionBankWatcher, progressWatcher, sourceWatcher, configWatcher, packWatcher]) {
-    watcher.onDidCreate(safeRefresh);
-    watcher.onDidChange(safeRefresh);
-    watcher.onDidDelete(safeRefresh);
+    const changed = () => refreshQueue.schedule(watcher === progressWatcher ? 'progress' : 'full');
+    watcher.onDidCreate(changed);
+    watcher.onDidChange(changed);
+    watcher.onDidDelete(changed);
     context.subscriptions.push(watcher);
   }
 

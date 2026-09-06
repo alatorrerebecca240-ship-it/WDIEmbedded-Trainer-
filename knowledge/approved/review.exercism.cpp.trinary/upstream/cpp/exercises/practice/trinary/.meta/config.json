@@ -1,0 +1,29 @@
+{
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "patricksjackson"
+  ],
+  "files": {
+    "solution": [
+      "trinary.cpp",
+      "trinary.h"
+    ],
+    "test": [
+      "trinary_test.cpp"
+    ],
+    "example": [
+      ".meta/example.cpp",
+      ".meta/example.h"
+    ]
+  },
+  "blurb": "Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.",
+  "source": "All of Computer Science",
+  "source_url": "https://www.wolframalpha.com/examples/mathematics/numbers/base-conversions"
+}

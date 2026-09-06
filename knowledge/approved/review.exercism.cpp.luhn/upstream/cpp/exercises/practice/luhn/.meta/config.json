@@ -1,0 +1,27 @@
+{
+  "authors": [
+    "junming403"
+  ],
+  "contributors": [
+    "elyashiv",
+    "KevinWMatthews",
+    "patricksjackson",
+    "siebenschlaefer"
+  ],
+  "files": {
+    "solution": [
+      "luhn.cpp",
+      "luhn.h"
+    ],
+    "test": [
+      "luhn_test.cpp"
+    ],
+    "example": [
+      ".meta/example.cpp",
+      ".meta/example.h"
+    ]
+  },
+  "blurb": "Given a number determine whether or not it is valid per the Luhn formula.",
+  "source": "The Luhn Algorithm on Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Luhn_algorithm"
+}

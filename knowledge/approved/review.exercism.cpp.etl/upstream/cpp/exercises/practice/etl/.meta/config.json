@@ -1,0 +1,30 @@
+{
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "objarni",
+    "patricksjackson"
+  ],
+  "files": {
+    "solution": [
+      "etl.cpp",
+      "etl.h"
+    ],
+    "test": [
+      "etl_test.cpp"
+    ],
+    "example": [
+      ".meta/example.cpp",
+      ".meta/example.h"
+    ]
+  },
+  "blurb": "Change the data format for scoring a game to more easily add other languages.",
+  "source": "Based on an exercise by the JumpstartLab team for students at The Turing School of Software and Design.",
+  "source_url": "https://www.turing.edu/"
+}

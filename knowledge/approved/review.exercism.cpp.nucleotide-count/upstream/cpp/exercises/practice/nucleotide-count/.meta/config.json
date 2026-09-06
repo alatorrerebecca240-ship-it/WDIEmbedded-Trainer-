@@ -1,0 +1,31 @@
+{
+  "authors": [
+    "LegalizeAdulthood"
+  ],
+  "contributors": [
+    "cyborgsphinx",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "kytrinyx",
+    "objarni",
+    "patricksjackson",
+    "sjakobi"
+  ],
+  "files": {
+    "solution": [
+      "nucleotide_count.cpp",
+      "nucleotide_count.h"
+    ],
+    "test": [
+      "nucleotide_count_test.cpp"
+    ],
+    "example": [
+      ".meta/example.cpp",
+      ".meta/example.h"
+    ]
+  },
+  "blurb": "Given a DNA string, compute how many times each nucleotide occurs in the string.",
+  "source": "The Calculating DNA Nucleotides_problem at Rosalind",
+  "source_url": "https://rosalind.info/problems/dna/"
+}

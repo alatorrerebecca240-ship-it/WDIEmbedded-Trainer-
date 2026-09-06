@@ -1,0 +1,29 @@
+{
+  "authors": [
+    "vivshaw"
+  ],
+  "contributors": [
+    "AlexLeSang",
+    "elyashiv",
+    "jackhughesweb",
+    "KevinWMatthews",
+    "LegalizeAdulthood",
+    "patricksjackson"
+  ],
+  "files": {
+    "solution": [
+      "atbash_cipher.cpp",
+      "atbash_cipher.h"
+    ],
+    "test": [
+      "atbash_cipher_test.cpp"
+    ],
+    "example": [
+      ".meta/example.cpp",
+      ".meta/example.h"
+    ]
+  },
+  "blurb": "Create an implementation of the Atbash cipher, an ancient encryption system created in the Middle East.",
+  "source": "Wikipedia",
+  "source_url": "https://en.wikipedia.org/wiki/Atbash"
+}

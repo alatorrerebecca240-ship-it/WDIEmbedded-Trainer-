@@ -35,22 +35,28 @@ const QUESTION_TYPE_NAMES = {
 };
 
 class TrackItem extends vscode.TreeItem {
-  constructor(track, lessons) {
+  constructor(track, lessons, passed) {
     super(TRACK_NAMES[track] || track, vscode.TreeItemCollapsibleState.Expanded);
     this.track = track;
     this.lessons = lessons;
-    this.description = `${lessons.length} 题`;
+    this.id = `track:${track}`;
+    this.description = `${lessons.length} 题 · ${passed} 已通过`;
     this.contextValue = 'track';
-    this.iconPath = new vscode.ThemeIcon('library');
+    this.iconPath = new vscode.ThemeIcon({
+      'c-basics': 'code', 'cpp-basics': 'symbol-class', embedded: 'circuit-board',
+      'smart-car': 'dashboard', 'electronic-design': 'pulse',
+      'linux-basics': 'terminal', 'ros2-basics': 'hubot'
+    }[track] || 'library');
   }
 }
 
 class QuestionTypeItem extends vscode.TreeItem {
-  constructor(questionType, lessons) {
+  constructor(questionType, lessons, passed) {
     super(QUESTION_TYPE_NAMES[questionType] || questionType, vscode.TreeItemCollapsibleState.Collapsed);
     this.questionType = questionType;
     this.lessons = lessons;
-    this.description = `${lessons.length} 题`;
+    this.id = `type:${lessons[0].track}:${questionType}`;
+    this.description = `${lessons.length} 题 · ${passed} 已通过`;
     this.contextValue = 'question-type';
     this.iconPath = new vscode.ThemeIcon(
       questionType === 'programming' ? 'code' : questionType === 'single-choice' ? 'list-selection' : questionType === 'true-false' ? 'checklist' : 'symbol-key'
@@ -62,12 +68,11 @@ class LessonItem extends vscode.TreeItem {
   constructor(lesson, progress) {
     super(lesson.title, vscode.TreeItemCollapsibleState.None);
     this.lesson = lesson;
+    this.id = `lesson:${lesson.id}`;
     this.progress = progress;
     const status = progress.status || 'not-started';
     this.description = `${LANGUAGE_NAMES[lesson.language] || lesson.language} · ${DIFFICULTY_NAMES[lesson.difficulty] || lesson.difficulty} · ${STATUS_NAMES[status] || status}`;
-    this.tooltip = new vscode.MarkdownString(
-      `**${lesson.title}**\n\n${lesson.summary}\n\n课程 ID：\`${lesson.id}\``
-    );
+    this.tooltip = `${lesson.title}\n\n${lesson.summary}\n\n课程 ID：${lesson.id}`;
     this.contextValue = `lesson-${lesson.questionType}-${status}`;
     this.iconPath = new vscode.ThemeIcon(
       status === 'passed' ? 'pass-filled' : status === 'in-progress' ? 'edit' : lesson.questionType === 'programming' ? 'code' : 'question',
@@ -107,7 +112,7 @@ class LessonTreeProvider {
       const order = ['programming', 'single-choice', 'true-false', 'fill-blank', 'code-reading', 'debugging'];
       return [...groups.entries()]
         .sort((left, right) => order.indexOf(left[0]) - order.indexOf(right[0]))
-        .map(([questionType, lessons]) => new QuestionTypeItem(questionType, lessons));
+        .map(([questionType, lessons]) => new QuestionTypeItem(questionType, lessons, this.passedCount(lessons)));
     }
     if (item instanceof QuestionTypeItem) {
       return item.lessons.map((lesson) => new LessonItem(lesson, this.catalog.status(lesson.id)));
@@ -121,7 +126,11 @@ class LessonTreeProvider {
       group.push(lesson);
       groups.set(lesson.track, group);
     }
-    return [...groups.entries()].map(([track, lessons]) => new TrackItem(track, lessons));
+    return [...groups.entries()].map(([track, lessons]) => new TrackItem(track, lessons, this.passedCount(lessons)));
+  }
+
+  passedCount(lessons) {
+    return lessons.filter((lesson) => this.catalog.status(lesson.id).status === 'passed').length;
   }
 }
 

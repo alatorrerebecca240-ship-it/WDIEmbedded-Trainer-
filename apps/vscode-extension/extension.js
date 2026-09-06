@@ -307,6 +307,8 @@ async function activate(context) {
       await openInstructions(lesson.id);
     } else if (message.command === 'help') {
       await showHelp();
+    } else if (message.command === 'packages') {
+      await vscode.commands.executeCommand('embeddedTrainer.packages');
     } else if (message.command === 'submit') {
       await submitQuiz(lesson, message.answer);
     }

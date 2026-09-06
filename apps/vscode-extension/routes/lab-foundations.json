@@ -1,0 +1,209 @@
+{
+  "formatVersion": 1,
+  "id": "lab.c-to-embedded",
+  "version": "1.0.0",
+  "title": "新生训练营 · 从 C 到嵌入式",
+  "description": "不按周、不赶进度。沿着能力路线学习，用已有题目练手，再用一个无硬件小项目串起来。",
+  "stages": [
+    {
+      "id": "first-program",
+      "title": "建立程序的基本认识",
+      "summary": "知道代码如何变成程序，能看懂一个最小 C 程序。",
+      "minutes": 90,
+      "concepts": [
+        "源代码先经过预处理和编译，再与所需目标文件或库链接成可执行程序。报错时先区分编译失败与运行结果不符合预期。",
+        "变量用于保存数据。自动局部变量不会保证自动清零，使用前要显式初始化。",
+        "先预测程序输出，再运行对照；遇到错误只改一个地方，观察结果。"
+      ],
+      "example": "#include <stdio.h>\nint main(void) {\n    int value = 7;\n    printf(\"%d\\n\", value);\n    return 0;\n}",
+      "predict": "把 value 的初值改成 -3，预测输出；再解释 %d 和换行符的作用。",
+      "required": [
+        "c.fill.include-01",
+        "c.fill.semicolon-01",
+        "c.true.main-void-01",
+        "c.choice.printf-integer-01",
+        "c.true.case-sensitive-01",
+        "c.true.local-zero-01"
+      ],
+      "optional": [
+        "oss.exercism.c.hello-world",
+        "c.choice.sizeof-char-01"
+      ],
+      "checkpoint": "用自己的话描述“编辑 → 编译 → 运行”，以及编译报错和测试失败的区别。",
+      "projectStep": "创建自己的学习笔记，记录一次报错、原因和解决方法。"
+    },
+    {
+      "id": "control-flow",
+      "title": "让程序做判断和重复",
+      "summary": "掌握条件、循环与函数，把需求拆成可测试的小步骤。",
+      "minutes": 150,
+      "concepts": [
+        "= 用来赋值，== 用来比较。写 if 时先用几个具体输入检查分支条件。",
+        "循环要有初始状态、继续条件和推进动作。特别关注 0 次、1 次和最后一次迭代。",
+        "函数把工作分开；先确定参数、返回值和边界情况，再实现函数体。"
+      ],
+      "example": "int sum = 0;\nfor (int i = 1; i <= 3; ++i) {\n    sum += i;\n}",
+      "predict": "逐轮写出 i 与 sum。把 <= 改为 < 后，结果为什么不同？",
+      "required": [
+        "c.choice.assignment-comparison-01",
+        "c.choice.integer-division-01",
+        "c.choice.logical-and-01",
+        "c.fill.while-loop-01",
+        "c.true.break-01",
+        "c.true.continue-01",
+        "c.syntax.max-three-01"
+      ],
+      "optional": [
+        "c.choice.switch-break-01",
+        "c.true.short-circuit-01",
+        "oss.exercism.c.leap"
+      ],
+      "checkpoint": "给“求三个整数最大值”补充相等、全负数两组输入，并解释为什么要测它们。",
+      "projectStep": "为模拟设备写出“启动、停止、输入异常”三个分支的伪代码。"
+    },
+    {
+      "id": "data-sequences",
+      "title": "处理数组与字符串",
+      "summary": "从一个数扩展到一组数，开始处理模拟传感器数据。",
+      "minutes": 180,
+      "concepts": [
+        "长度为 n 的数组有效下标是 0 到 n-1。传给函数时，通常需要另传元素数量。",
+        "C 字符串依靠空字符结束。字符数组与合法字符串不完全相同，长度计算必须避免越界。",
+        "处理一组数据时先明确空数组、边界值和累计结果的范围；平均值还要考虑除法与截断。"
+      ],
+      "example": "int samples[4] = {-2, 0, 5, 8};\nint positive = 0;\nfor (int i = 0; i < 4; ++i) {\n    if (samples[i] > 0) ++positive;\n}",
+      "predict": "positive 最终是多少？把 > 0 改成 >= 0 会改变什么需求？",
+      "required": [
+        "c.true.array-index-01",
+        "c.choice.array-length-01",
+        "c.choice.out-of-bounds-01",
+        "c.array.count-positive-01",
+        "c.array.reverse-01",
+        "c.choice.string-terminator-01",
+        "c.string.length-01",
+        "c.number.safe-average-01"
+      ],
+      "optional": [
+        "c.true.string-null-01",
+        "c.fill.null-character-01",
+        "oss.exercism.c.hamming"
+      ],
+      "checkpoint": "说明数组长度、最后一个有效下标和字符串结束符的区别，列出至少一个边界测试。",
+      "projectStep": "准备三组模拟传感器数据，写出每组的数量、范围和期望处理结果。"
+    },
+    {
+      "id": "pointers",
+      "title": "理解地址与指针",
+      "summary": "真正分清指针变量、地址与地址中的值。",
+      "minutes": 150,
+      "concepts": [
+        "&value 取得对象的地址。指针保存地址；*p 访问该地址对应的对象。",
+        "int *p; 只声明了指针，没有给它可用的目标。必须先指向有效对象，再解引用。",
+        "函数参数本身按值传递。传入对象地址后，函数可以通过该地址修改外部对象；同时要尊重对象的生命周期。"
+      ],
+      "example": "int value = 7;\nint *p = &value;\n*p = -3;\n/* 此时 value 为 -3，p 仍指向 value。 */",
+      "predict": "分别解释 value、&value、p、*p；交换两个数时，为什么普通 int 临时变量就够了？",
+      "required": [
+        "c.choice.address-operator-01",
+        "c.choice.dereference-01",
+        "c.true.pointer-object-01",
+        "c.fill.address-operator-01",
+        "c.fill.dereference-01",
+        "c.pointer.swap-01",
+        "c.choice.pointer-arithmetic-01"
+      ],
+      "optional": [
+        "c.choice.pointer-to-const-01",
+        "c.fill.const-qualifier-01"
+      ],
+      "checkpoint": "画出两个变量和指针的对应关系，并解释未初始化指针为什么不能直接写入。",
+      "projectStep": "给模拟设备的函数接口标注：哪些参数是输入，哪些参数允许修改调用者的数据。"
+    },
+    {
+      "id": "structured-state",
+      "title": "组织数据与设备状态",
+      "summary": "用结构体、枚举和清晰接口表达设备。",
+      "minutes": 150,
+      "concepts": [
+        "结构体把相关数据放在一起。对象用点运算符访问成员，结构体指针用箭头运算符。",
+        "枚举给状态起名字，状态转换则描述“在什么条件下从哪里到哪里”。枚举本身不会自动完成状态机。",
+        "头文件放对外声明，源文件放实现。头文件保护避免重复包含，但不能替代正确的链接组织。"
+      ],
+      "example": "enum Mode { STOPPED, RUNNING };\nstruct Device {\n    enum Mode mode;\n    int command;\n};\nstruct Device car = {STOPPED, 0};",
+      "predict": "如何表达“停止状态输出必须为 0”？这条规则应该在哪些转换时检查？",
+      "required": [
+        "c.choice.struct-member-01",
+        "c.choice.struct-pointer-member-01",
+        "c.choice.enum-default-01",
+        "c.fill.struct-keyword-01",
+        "c.struct.student-average-01",
+        "c.enum.traffic-light-01",
+        "c.choice.header-guard-01"
+      ],
+      "optional": [
+        "c.fill.header-guard-01",
+        "c.true.static-function-01"
+      ],
+      "checkpoint": "描述设备的状态、状态中保存的数据和允许发生的转换，不只列出变量名称。",
+      "projectStep": "设计模拟智能车的数据结构，明确启动、运行、停止三类行为及文件分工。"
+    },
+    {
+      "id": "embedded-io",
+      "title": "连接嵌入式基础概念",
+      "summary": "不依赖开发板，先理解输入电平、ADC、位操作与消抖。",
+      "minutes": 210,
+      "concepts": [
+        "低电平有效表示读到 0 时逻辑上处于触发状态。电气电平与软件中的“按下”语义要分开。",
+        "ADC 将模拟量量化为数字码值。换算时确认参考电压、有效码值范围和所用公式，避免整数运算先截断。",
+        "位操作只改指定标志；机械按键会抖动，可以通过连续采样或状态机确认稳定状态，不要把一次边沿直接当作一次有效动作。"
+      ],
+      "example": "unsigned flags = 0;\nflags |= (1u << 2);   /* 设置第 2 位 */\nflags &= ~(1u << 2);  /* 清除第 2 位 */",
+      "predict": "这两次操作是否影响其他位？一次读到低电平，就一定能判断发生了一次有效按键吗？",
+      "required": [
+        "embedded.true.uint8-width-01",
+        "c.bit.flags-01",
+        "embedded.choice.gpio-input-01",
+        "embedded.choice.active-low-button-01",
+        "embedded.input.active-low-01",
+        "embedded.choice.adc-purpose-01",
+        "embedded.adc.millivolts-01",
+        "embedded.true.button-bounce-01",
+        "embedded.input.debounce-01"
+      ],
+      "optional": [
+        "embedded.true.isr-short-01",
+        "embedded.choice.timer-periodic-01",
+        "embedded.choice.uart-01"
+      ],
+      "checkpoint": "解释电平、逻辑状态与消抖结果的区别；为消抖写出一组含抖动的输入序列。",
+      "projectStep": "为模拟输入加入按键状态与传感器数值换算，暂时不要连接真实电机。"
+    },
+    {
+      "id": "capstone",
+      "title": "完成一个模拟智能车小项目",
+      "summary": "把输入、计算、状态和输出串起来，再向同伴讲清楚。",
+      "minutes": 240,
+      "concepts": [
+        "先处理传感器输入，再计算位置或偏差，最后生成受限的控制输出。明确每一步的数据范围和单位。",
+        "同样的算法在不同传感器上可能表现不同，所以要先理解标定、反馈方向和输出限制。",
+        "本阶段验收分为“已有题目测试通过”和“自己完成项目并讲解”。项目自查不等于带教人员已经审核，也不自动证明掌握。"
+      ],
+      "example": "/* 设计草图，不是现成接口或参考答案：\n   读取模拟输入 -> 计算位置 -> 得到控制量\n   -> 输出限幅 -> 按设备状态决定输出\n*/",
+      "predict": "当设备停止、数据无效或控制量过大时，输出应该是什么？写出规则再实现。",
+      "required": [
+        "smart-car.motor.clamp-command-01",
+        "smart-car.true.output-limit-01",
+        "smart-car.sensor.line-position-01",
+        "smart-car.choice.sensor-calibration-01",
+        "smart-car.choice.differential-turn-01"
+      ],
+      "optional": [
+        "smart-car.choice.pwm-duty-01",
+        "smart-car.choice.p-term-01",
+        "smart-car.control.pid-01"
+      ],
+      "checkpoint": "记录项目文件位置（可用相对路径）、三组输入与结果、一个尚未解决的问题；向同伴解释模块分工。",
+      "projectStep": "按“模拟智能车项目指南”完成独立小项目；导出学习报告给带教同学，接受代码讲解与边界测试检查。"
+    }
+  ]
+}

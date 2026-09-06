@@ -1,8 +1,8 @@
 {
   "name": "embedded-trainer",
   "displayName": "Embedded Trainer",
-  "description": "独立知识包驱动的 C/C++、嵌入式、Linux 与 ROS 2 训练，支持更新、回退和离线导入。",
-  "version": "0.10.1",
+  "description": "实验室与社团的新生训练营：能力路线图、分层提示与本地学习报告，兼容原有 C/C++ 和嵌入式知识包。",
+  "version": "0.11.0",
   "publisher": "local-development",
   "engines": {
     "vscode": "^1.85.0"
@@ -25,6 +25,7 @@
     "src/**",
     "media/**",
     "docs/**",
+    "routes/**",
     "README.md",
     "LICENSE",
     "runtime/**/*.py"
@@ -41,7 +42,25 @@
     }
   },
   "contributes": {
+    "jsonValidation": [
+      { "fileMatch": "trainer-roadmap.json", "url": "./routes/training-route.schema.json" }
+    ],
     "commands": [
+      {
+        "command": "embeddedTrainer.roadmap",
+        "title": "Embedded Trainer: 打开新生训练路线",
+        "icon": "$(milestone)"
+      },
+      {
+        "command": "embeddedTrainer.library",
+        "title": "Embedded Trainer: 浏览完整题库",
+        "icon": "$(library)"
+      },
+      {
+        "command": "embeddedTrainer.exportReport",
+        "title": "Embedded Trainer: 导出训练营学习报告",
+        "icon": "$(export)"
+      },
       {
         "command": "embeddedTrainer.getNewQuestions",
         "title": "Embedded Trainer: 获取新题",
@@ -131,18 +150,28 @@
       "embeddedTrainer": [
         {
           "id": "embeddedTrainer.lessons",
-          "name": "课程路线"
+          "name": "新生训练营"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "embeddedTrainer.lessons",
-        "contents": "通过[管理知识包](command:embeddedTrainer.packages)添加可信题库或离线导入。无需克隆插件源码，仍需 Python；编程评测另需 C/C++ 编译器。"
+        "contents": "从[训练路线图](command:embeddedTrainer.roadmap)开始，或通过[管理知识包](command:embeddedTrainer.packages)添加可信题库。仍需 Python；编程评测另需 C/C++ 编译器。"
       }
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "embeddedTrainer.roadmap",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@0"
+        },
+        {
+          "command": "embeddedTrainer.exportReport",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "learning@1"
+        },
         {
           "command": "embeddedTrainer.getNewQuestions",
           "when": "view == embeddedTrainer.lessons",
@@ -269,7 +298,7 @@
     }
   },
   "scripts": {
-    "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/refresh.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/dashboard-client.js && node --check src/testing.js && node --check src/packages.js && node --check src/authoring.js && node --check src/authoring-cloud.js",
+    "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/refresh.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/dashboard-client.js && node --check src/testing.js && node --check src/packages.js && node --check src/authoring.js && node --check src/authoring-cloud.js && node --check src/roadmap.js && node --check src/roadmap-model.js && node --check src/roadmap-client.js && node --check src/camp-store.js && node --check src/hints.js",
     "package": "npx @vscode/vsce package",
     "test": "node --test tests/*.test.js",
     "vscode:prepublish": "node scripts/prepare-runtime.js && npm run check"

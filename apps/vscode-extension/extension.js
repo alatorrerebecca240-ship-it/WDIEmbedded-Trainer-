@@ -8,6 +8,8 @@ const { TestingIntegration } = require('./src/testing');
 const { PackageManager } = require('./src/packages');
 const { AuthoringManager } = require('./src/authoring');
 const { RefreshQueue } = require('./src/refresh');
+const { CampDashboard } = require('./src/roadmap');
+const { hintSteps } = require('./src/hints');
 
 async function exists(uri) {
   try {
@@ -56,6 +58,7 @@ async function activate(context) {
 
   let dashboard;
   let testing;
+  let camp;
   const refreshQueue = new RefreshQueue(async (kind) => {
     if (kind === 'full') await catalog.reload();
     else if (!await catalog.reloadProgress()) return;
@@ -73,6 +76,7 @@ async function activate(context) {
         dashboard.update(latest, catalog.status(latest.id));
       }
     }
+    if (camp) await camp.refresh().catch((error) => output.appendLine(`训练营记录读取失败，不影响题目评测：${error.message}`));
   }, (error) => output.appendLine(`题库刷新失败，保留旧列表：${error.message}`));
   context.subscriptions.push(refreshQueue);
   const refresh = () => refreshQueue.request('full');
@@ -156,10 +160,16 @@ async function activate(context) {
   testing = new TestingIntegration(context, executeLesson);
 
   const showDashboard = async (input) => {
+    if (!input) return camp.show();
     const lesson = await resolveLesson(input);
     if (lesson) {
       dashboard.show(lesson, catalog.status(lesson.id));
     }
+  };
+
+  const showLibrary = async () => {
+    const lesson = await resolveLesson();
+    if (lesson) dashboard.show(lesson, catalog.status(lesson.id));
   };
 
   const startLesson = async (input) => {
@@ -186,16 +196,12 @@ async function activate(context) {
 
   const showHint = async (input) => {
     const lesson = await resolveLesson(input);
-    if (!lesson || !lesson.hints || lesson.hints.length === 0) {
-      return;
-    }
-    const selected = await vscode.window.showQuickPick(
-      lesson.hints.map((hint, index) => ({ label: `提示 ${index + 1}`, detail: index === 0 ? '信息最少' : '逐步增加信息', hint })),
-      { placeHolder: '选择提示级别，建议从提示 1 开始' }
-    );
-    if (selected) {
-      dashboard.show(lesson, catalog.status(lesson.id), { hint: selected.hint });
-    }
+    if (!lesson) return;
+    const steps = hintSteps(lesson);
+    const previous = dashboard.lesson?.id === lesson.id ? dashboard.state?.hintLevel || 0 : 0;
+    const level = Math.min(previous + 1, steps.length);
+    dashboard.show(lesson, catalog.status(lesson.id), { hintLevel: level, hintTotal: steps.length,
+      hint: steps.slice(0, level).map((step) => step.title + '\n' + step.text).join('\n\n') });
   };
 
   const openInstructions = async (input) => {
@@ -303,10 +309,14 @@ async function activate(context) {
       await showHelp();
     } else if (message.command === 'packages') {
       await vscode.commands.executeCommand('embeddedTrainer.packages');
+    } else if (message.command === 'roadmap') {
+      await camp.show();
     } else if (message.command === 'submit') {
       await submitQuiz(lesson, message.answer);
     }
   });
+  camp = new CampDashboard(context, rootUri, catalog, showDashboard);
+  context.subscriptions.push(camp);
 
   const packages = new PackageManager(context, backend, refresh);
   const authoring = new AuthoringManager(context, backend);
@@ -317,6 +327,9 @@ async function activate(context) {
     statusBar,
     vscode.commands.registerCommand('embeddedTrainer.refresh', refresh),
     vscode.commands.registerCommand('embeddedTrainer.dashboard', showDashboard),
+    vscode.commands.registerCommand('embeddedTrainer.roadmap', () => camp.show()),
+    vscode.commands.registerCommand('embeddedTrainer.library', showLibrary),
+    vscode.commands.registerCommand('embeddedTrainer.exportReport', () => camp.exportReport()),
     vscode.commands.registerCommand('embeddedTrainer.start', startLesson),
     vscode.commands.registerCommand('embeddedTrainer.check', checkLesson),
     vscode.commands.registerCommand('embeddedTrainer.hint', showHint),
@@ -345,6 +358,17 @@ async function activate(context) {
   const sourceWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'knowledge/packs/**/*'));
   const configWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'trainer-packs.json'));
   const packWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(packUri.fsPath, 'installed.json'));
+  const campWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, '.trainer/camp-progress.json'));
+  const routeWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(rootUri.fsPath, 'trainer-roadmap.json'));
+  const refreshCamp = async (reloadRoute) => {
+    try { if (reloadRoute) await camp.loadRoute(); await camp.refresh(); }
+    catch (error) { output.appendLine(`训练路线刷新失败，保留已有数据：${error.message}`); vscode.window.showWarningMessage(error.message); }
+  };
+  for (const watcher of [campWatcher, routeWatcher]) {
+    const changed = () => refreshCamp(watcher === routeWatcher);
+    watcher.onDidCreate(changed); watcher.onDidChange(changed); watcher.onDidDelete(changed);
+    context.subscriptions.push(watcher);
+  }
   const safeRefresh = () => refresh().catch((error) => output.appendLine(`题库刷新失败，保留旧列表：${error.message}`));
   for (const watcher of [lessonWatcher, questionBankWatcher, progressWatcher, sourceWatcher, configWatcher, packWatcher]) {
     const changed = () => refreshQueue.schedule(watcher === progressWatcher ? 'progress' : 'full');
@@ -363,11 +387,13 @@ async function activate(context) {
   if (context.globalState.get(guideKey) !== currentVersion) {
     await context.globalState.update(guideKey, currentVersion);
     const action = await vscode.window.showInformationMessage(
-      'Embedded Trainer 已准备好，全程可以在 VS Code 界面内使用。',
-      '打开使用说明'
+      '新生训练营已准备好：沿路线学习，完整题库仍然保留。',
+      '打开训练路线', '打开使用说明'
     );
     if (action === '打开使用说明') {
       await showHelp();
+    } else if (action === '打开训练路线') {
+      await camp.show();
     }
   }
 }

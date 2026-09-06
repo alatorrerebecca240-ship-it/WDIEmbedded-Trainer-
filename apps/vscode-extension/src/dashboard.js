@@ -6,7 +6,7 @@ const { dashboardClient } = require('./dashboard-client');
 const { STATUS_NAMES, DIFFICULTY_NAMES, TRACK_NAMES, QUESTION_TYPE_NAMES, LANGUAGE_NAMES } = require('./tree');
 
 const styles = fs.readFileSync(path.join(__dirname, '../media/dashboard.css'), 'utf8');
-const commands = new Set(['start', 'check', 'hint', 'instructions', 'help', 'packages', 'submit']);
+const commands = new Set(['start', 'check', 'hint', 'instructions', 'help', 'packages', 'submit', 'roadmap']);
 const symbols = {
   code: '<path d="m6 5-4 3 4 3m4-6 4 3-4 3M9 3 7 13"/>',
   play: '<path d="m5 3 8 5-8 5z"/>',
@@ -106,8 +106,8 @@ class LessonDashboard {
     const isProgramming = ['programming', 'debugging'].includes(lesson.questionType);
     const tags = (lesson.knowledge || []).map((item) => `<span class="tag">${escapeHtml(item)}</span>`).join('');
     const prerequisites = (lesson.prerequisites || []).map((item) => `<li><code>${escapeHtml(item)}</code></li>`).join('');
-    const hintButton = (lesson.hints || []).length ? button('hint', '查看提示', 'hint') : '';
-    const hint = this.state.hint ? `<section class="notice" aria-labelledby="hint-title"><h2 id="hint-title">${icon('hint')}分级提示</h2><p>${escapeHtml(this.state.hint)}</p></section>` : '';
+    const hintButton = button('hint', !this.state.hintLevel ? '先看思路提示' : this.state.hintLevel < this.state.hintTotal ? `下一层提示（${this.state.hintLevel + 1}/${this.state.hintTotal}）` : '回顾全部提示', 'hint');
+    const hint = this.state.hint ? `<section class="notice" aria-labelledby="hint-title"><h2 id="hint-title">${icon('hint')}分级提示${this.state.hintLevel ? ` · ${this.state.hintLevel}/${this.state.hintTotal}` : ''}</h2>${this.state.hint.split('\n\n').map((part) => `<p>${escapeHtml(part).replace(/\n/g, '<br>')}</p>`).join('')}</section>` : '';
     const result = this.state.result
       ? `<section class="result ${this.state.result.ok ? 'ok' : 'bad'}" aria-labelledby="result-title" role="status">
           <h2 id="result-title">${icon(this.state.result.ok ? 'check' : 'close')}${this.state.result.ok ? (isProgramming ? '评测通过' : '回答正确') : (isProgramming ? '评测未通过' : '本次提交未通过')}</h2>
@@ -159,7 +159,7 @@ class LessonDashboard {
 <body data-lesson-id="${escapeHtml(lesson.id)}" data-busy="${this.pending}">
   <div class="workbench">
     <header class="toolbar"><div class="brand">${icon('circuit')}<span>EMBEDDED <strong>TRAINER</strong></span></div>
-      <nav aria-label="工具">${button('packages', '知识包', 'package')}${button('help', '使用说明', 'help')}</nav></header>
+      <nav aria-label="工具">${button('roadmap', '训练路线', 'circuit')}${button('packages', '知识包', 'package')}${button('help', '使用说明', 'help')}</nav></header>
     <main>
       <header class="lesson-header">
         <div class="breadcrumb">${escapeHtml(TRACK_NAMES[lesson.track] || lesson.track)}<span aria-hidden="true">/</span>${escapeHtml(QUESTION_TYPE_NAMES[lesson.questionType] || lesson.questionType)}</div>

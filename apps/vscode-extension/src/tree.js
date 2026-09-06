@@ -102,6 +102,8 @@ class LessonTreeProvider {
   }
 
   getChildren(item) {
+    if (item?.contextValue === 'camp-home') return [];
+    if (item?.contextValue === 'library-root') return this.trackItems();
     if (item instanceof TrackItem) {
       const groups = new Map();
       for (const lesson of item.lessons) {
@@ -120,6 +122,17 @@ class LessonTreeProvider {
     if (item) {
       return [];
     }
+    const home = new vscode.TreeItem('新生训练营 · 路线图', vscode.TreeItemCollapsibleState.None);
+    home.id = 'camp:home'; home.contextValue = 'camp-home'; home.description = '从 C 到嵌入式';
+    home.iconPath = new vscode.ThemeIcon('milestone');
+    home.command = { command: 'embeddedTrainer.roadmap', title: '打开训练路线' };
+    const library = new vscode.TreeItem('完整题库', vscode.TreeItemCollapsibleState.Collapsed);
+    library.id = 'library:root'; library.contextValue = 'library-root'; library.iconPath = new vscode.ThemeIcon('library');
+    library.description = `${this.catalog.lessons.length} 题 · ${this.passedCount(this.catalog.lessons)} 已通过`;
+    return [home, library];
+  }
+
+  trackItems() {
     const groups = new Map();
     for (const lesson of this.catalog.lessons) {
       const group = groups.get(lesson.track) || [];

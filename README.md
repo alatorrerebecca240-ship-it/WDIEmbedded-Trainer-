@@ -1,5 +1,9 @@
 # Embedded Trainer
 
+## 0.11.0：新生训练营路线图
+
+在原有插件和题库上增加路线层：7 个能力阶段、49 道必做题、逐层提示、阶段自查和本地报告导出。不按周划分，不迁移题目或覆盖进度；完整题库继续保留。路线模板只引用题目 ID，可通过工作区 `trainer-roadmap.json` 扩展。详见 [训练营说明](docs/training-camp.md)。
+
 WDI 内部代码训练、题库更新与发布项目。公开源码仓库：[WDIEmbedded-Trainer-](https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-)。
 
 一个面向 C、C++、嵌入式、智能车、电子设计竞赛、Linux 和 ROS 2 基础的本地训练框架。当前版本以“零第三方 Python 依赖”为目标：训练核心使用 Python 标准库，练习使用 GCC/Clang 编译，VS Code 负责编辑、任务入口和课程树界面。

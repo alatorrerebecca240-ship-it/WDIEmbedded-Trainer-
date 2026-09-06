@@ -1,0 +1,55 @@
+.camp { max-width: 1180px; margin: 0 auto; padding: 28px 30px 60px; }
+.camp .toolbar { margin-bottom: 42px; }
+.camp-kicker { color: var(--vscode-textLink-foreground); font-family: var(--vscode-editor-font-family); font-size: 12px; letter-spacing: 2px; }
+.camp h1 { font-size: clamp(26px, 3vw, 38px); line-height: 1.3; margin: 14px 0; }
+.camp-intro { color: var(--vscode-descriptionForeground); max-width: 760px; line-height: 1.8; }
+.camp-metrics { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 30px; }
+.camp-metrics span { border: 1px solid var(--vscode-widget-border, #5558); padding: 8px 12px; border-radius: 4px; font-size: 12px; }
+.camp-metrics strong { color: var(--vscode-textLink-foreground); font-size: 17px; margin-right: 5px; }
+.route-overview { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin: 0 0 26px; }
+.route-overview button { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; background: transparent; color: var(--vscode-foreground); border: 1px solid var(--vscode-widget-border, #5558); text-align: left; line-height: 1.7; font-size: 12px; }
+.route-overview button:hover { border-color: var(--vscode-focusBorder); background: var(--vscode-textBlockQuote-background, #8881); }
+.route-overview button span { color: var(--vscode-textLink-foreground); font-family: var(--vscode-editor-font-family); }
+.route-overview button.done span { color: var(--vscode-testing-iconPassed); }
+.camp-next { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px; background: var(--vscode-textBlockQuote-background, #8881); border: 1px solid var(--vscode-focusBorder); border-radius: 5px; margin-bottom: 30px; }
+.camp-next h2 { margin: 4px 0 8px; font-size: 19px; }
+.camp-next p { margin: 0; color: var(--vscode-descriptionForeground); }
+.camp-grid { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 30px; }
+.route-list { list-style: none; padding: 0; margin: 0; }
+.route-node { position: relative; padding: 0 0 18px 34px; border-left: 1px solid var(--vscode-widget-border, #5558); margin-left: 13px; }
+.route-node:last-child { border-left-color: transparent; }
+.node-number { position: absolute; top: 16px; left: -14px; display: grid; place-items: center; width: 27px; height: 27px; font-size: 12px; color: var(--vscode-descriptionForeground); background: var(--vscode-editor-background); border: 1px solid var(--vscode-widget-border, #5558); border-radius: 50%; }
+.route-node.complete .node-number { color: var(--vscode-testing-iconPassed); border-color: currentColor; }
+.route-node.current .node-number { color: var(--vscode-textLink-foreground); border-color: currentColor; box-shadow: 0 0 0 4px var(--vscode-textBlockQuote-background, #8881); }
+.route-node details { border: 1px solid var(--vscode-widget-border, #5558); border-radius: 5px; overflow: hidden; }
+.route-node.current details { border-color: var(--vscode-focusBorder); }
+.route-node summary { cursor: pointer; padding: 17px 19px; }
+.stage-heading { display: inline; font-weight: 600; font-size: 16px; }
+.stage-meta { display: block; margin: 10px 0 0 16px; font-size: 12px; color: var(--vscode-descriptionForeground); line-height: 1.8; }
+.stage-meta progress { display: block; width: 100%; height: 4px; margin-top: 10px; accent-color: var(--vscode-textLink-foreground); }
+.stage-body { border-top: 1px solid var(--vscode-widget-border, #5558); padding: 0 20px 20px; }
+.stage-body h3 { font-size: 14px; margin: 24px 0 12px; }
+.stage-body p, .stage-body li { line-height: 1.8; }
+.stage-body ul { padding-left: 20px; }
+.stage-body pre { max-height: 280px; overflow: auto; padding: 14px; background: var(--vscode-textCodeBlock-background); white-space: pre; border: 1px solid var(--vscode-widget-border, #5558); }
+.camp .lesson-rows { padding: 0; list-style: none; }
+.lesson-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--vscode-widget-border, #5554); padding: 8px 0; }
+.lesson-row button { min-width: 0; overflow-wrap: anywhere; text-align: left; padding: 5px 0; color: var(--vscode-textLink-foreground); background: none; border: none; }
+.lesson-row small { flex-shrink: 0; color: var(--vscode-descriptionForeground); font-size: 11px; }
+.lesson-row.passed small { color: var(--vscode-testing-iconPassed); }
+.camp textarea { display: block; width: 100%; min-height: 105px; resize: vertical; padding: 10px; box-sizing: border-box; color: var(--vscode-input-foreground); background: var(--vscode-input-background); border: 1px solid var(--vscode-input-border, var(--vscode-widget-border, #5558)); border-radius: 3px; font: inherit; line-height: 1.6; }
+.camp .self-check { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0; font-size: 12px; }
+.self-check input { margin-top: 3px; }
+.camp-note { color: var(--vscode-descriptionForeground); font-size: 12px; line-height: 1.8; }
+.camp-side section { border-top: 1px solid var(--vscode-widget-border, #5558); padding: 16px 0; }
+.camp-side h2 { font-size: 14px; margin-top: 0; }
+.camp-side p, .camp-side li { font-size: 12px; line-height: 1.9; color: var(--vscode-descriptionForeground); }
+.camp-side ol { padding-left: 19px; }
+.camp-side button { margin-top: 8px; }
+.camp-status { min-height: 24px; margin: 12px 0; color: var(--vscode-descriptionForeground); }
+.camp summary:focus-visible, .camp textarea:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: 2px; }
+.vscode-high-contrast .route-node details, .vscode-high-contrast-light .route-node details { border-color: var(--vscode-contrastBorder); }
+@media (max-width: 900px) { .route-overview { grid-template-columns: repeat(4, minmax(0, 1fr)); } .camp-grid { grid-template-columns: minmax(0, 1fr); } .camp-side { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; } }
+@media (max-width: 600px) { .camp { padding: 20px 14px; } .camp-next { align-items: flex-start; flex-direction: column; } .camp-side { display: block; } .stage-body { padding: 0 12px 14px; } .route-node { padding-left: 22px; } .camp .toolbar { flex-wrap: wrap; gap: 14px; } .lesson-row { align-items: flex-start; } }
+@media (prefers-reduced-motion: reduce) { .camp * { scroll-behavior: auto; animation: none; } }
+@media (max-width: 600px) { .route-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

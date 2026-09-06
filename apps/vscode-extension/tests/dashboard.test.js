@@ -220,11 +220,14 @@ test('native tree has stable identities and accurate completion counts after ref
   const first = lesson('programming'), second = lesson('single-choice');
   let passed = false;
   const tree = new LessonTreeProvider({ lessons: [first, second], status: (id) => ({ status: passed && id === first.id ? 'passed' : 'not-started' }) });
-  const before = tree.getChildren()[0];
+  const root = tree.getChildren();
+  assert.equal(root[0].command.command, 'embeddedTrainer.roadmap');
+  assert.equal(root[1].contextValue, 'library-root');
+  const before = tree.getChildren(root[1])[0];
   assert.equal(before.description, '2 题 · 0 已通过');
   passed = true;
   tree.refresh();
-  const after = tree.getChildren()[0];
+  const after = tree.getChildren(tree.getChildren()[1])[0];
   assert.equal(after.id, before.id);
   assert.equal(after.description, '2 题 · 1 已通过');
   const group = tree.getChildren(after)[0];

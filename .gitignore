@@ -9,6 +9,7 @@ __pycache__/
 .imports/
 dist/
 apps/vscode-extension/runtime/
+apps/vscode-extension/routes/training-route.schema.json
 knowledge/drafts/
 .vscode/settings.json
 .vscode/c_cpp_properties.json

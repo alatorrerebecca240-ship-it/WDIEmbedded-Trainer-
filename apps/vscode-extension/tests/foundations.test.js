@@ -44,7 +44,7 @@ test('new tracks merge defaults, group four types and render knowledge labels', 
   const catalog = new LessonCatalog(uri(root));
   await catalog.reload();
   const tree = new LessonTreeProvider(catalog);
-  const tracks = tree.getChildren();
+  const tracks = tree.getChildren(tree.getChildren().find((item) => item.contextValue === 'library-root'));
   for (const [id, title] of [['linux-basics', 'Linux 基础'], ['ros2-basics', 'ROS 2 基础']]) {
     const track = tracks.find((item) => item.track === id);
     assert.equal(track.label, title);

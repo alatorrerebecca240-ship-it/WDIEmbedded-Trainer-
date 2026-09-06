@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "linux.path.components-01",
+  "title": "统计路径片段（C 教学模型）",
+  "track": "linux-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "扫描使用 / 分隔的路径字符串，练习字符判断和简单状态记录。",
+  "prerequisites": [],
+  "knowledge": [
+    "路径字符串",
+    "循环",
+    "状态记录"
+  ],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c11",
+    "sources": [
+      "path_parts.c"
+    ],
+    "tests": [
+      "test_path_parts.c"
+    ],
+    "includeDirs": [
+      "."
+    ],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "这里只解析字符串，不访问文件系统，也不解析符号链接。",
+    "每遇到一个非 '/' 字符，判断它是否是新的片段开头。",
+    "片段开头的条件：这是首字符，或者前一字符是 '/'。先处理空指针。"
+  ],
+  "origin": {
+    "type": "self-authored",
+    "license": "project-license"
+  }
+}

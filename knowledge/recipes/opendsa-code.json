@@ -1,0 +1,89 @@
+{
+  "formatVersion": 1,
+  "source": "opendsa-code",
+  "pack": {
+    "formatVersion": 1,
+    "id": "opendsa.sorting",
+    "version": "1.0.0",
+    "title": "OpenDSA：基础排序",
+    "minEngineVersion": "0.6.0",
+    "license": "MIT"
+  },
+  "modifications": "Selected source retained unchanged for attribution; original Chinese objective questions were added. Hardware-dependent code is not executed or advertised as a portable program. New Chinese prompts and adaptation code are MIT licensed. Upstream license remains unchanged; human review is still required.",
+  "questions": [
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.opendsa.insertion.choice",
+        "title": "插入排序维护什么",
+        "track": "open-source-basics",
+        "language": "cpp",
+        "questionType": "single-choice",
+        "difficulty": "beginner",
+        "summary": "理解插入排序的有序前缀。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "OpenDSA 的 inssort 从 i=1 开始，每轮把第 i 项向前比较交换。这主要是在维护什么？",
+          "options": [
+            {
+              "id": "A",
+              "text": "已处理部分有序"
+            },
+            {
+              "id": "B",
+              "text": "每次删除最大元素"
+            },
+            {
+              "id": "C",
+              "text": "每次把数组长度加一"
+            },
+            {
+              "id": "D",
+              "text": "只检查最后一个元素"
+            }
+          ],
+          "answer": "A",
+          "explanation": "插入排序把新元素插入前面已经有序的区间。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.opendsa.insertion.judge",
+        "title": "插入排序最坏情况",
+        "track": "open-source-basics",
+        "language": "cpp",
+        "questionType": "true-false",
+        "difficulty": "beginner",
+        "summary": "识别反序输入产生的重复比较。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "对一般比较型插入排序，反序数组的最坏时间复杂度始终是 O(n)。",
+          "answer": false,
+          "explanation": "逐个插入时可能移动前面的所有元素，总工作量为二次量级 O(n²)。"
+        }
+      }
+    }
+  ],
+  "authoredLicense": {
+    "license": "MIT",
+    "text": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

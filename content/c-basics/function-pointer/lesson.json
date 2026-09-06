@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.function-pointer.apply-01",
+  "title": "调用二元运算函数指针",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "练习函数指针、回调调用和空指针检查。",
+  "prerequisites": ["c.choice.function-pointer-01"],
+  "knowledge": ["function-pointer", "callback", "null-check"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["apply_operation.c"], "tests": ["test_apply_operation.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["先检查 op 和 result 是否为空。", "函数指针可以像函数名一样写 op(a, b)。", "调用成功后把结果写入 *result 并返回 1。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

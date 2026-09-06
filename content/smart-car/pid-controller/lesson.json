@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "smart-car.control.pid-01",
+  "title": "带积分限幅的 PID 控制器",
+  "track": "smart-car",
+  "language": "cpp",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "实现适合固定周期控制循环的 PID 控制器。",
+  "prerequisites": ["cpp.container.ring-buffer-01"],
+  "knowledge": ["pid", "motor-control", "integral-windup", "control-loop"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c++17",
+    "sources": [],
+    "tests": ["test_pid.cpp"],
+    "includeDirs": ["."],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "积分项先累加 error * dt，再限制在配置范围内。",
+    "微分项是 (error - previous_error) / dt；第一次更新时可令微分项为 0。",
+    "reset 需要同时清除积分、上次误差和首次更新标志。"
+  ],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

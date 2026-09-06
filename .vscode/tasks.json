@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Trainer: 环境检查",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "doctor"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Trainer: 校验课程库",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "validate"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Trainer: 冒烟检查全部课程",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "smoke"],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Trainer: 开始课程",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "start", "${input:lessonId}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Trainer: 检查课程",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "check", "${input:lessonId}"],
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Trainer: 查看进度",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/trainer.py", "progress"],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "lessonId",
+      "type": "promptString",
+      "description": "输入课程 ID（可先运行 trainer list）",
+      "default": "c.pointer.swap-01"
+    }
+  ]
+}

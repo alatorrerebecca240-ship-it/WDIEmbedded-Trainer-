@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.list.count-01",
+  "title": "统计单链表节点数量",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "练习自引用结构体、指针遍历和空指针终止条件。",
+  "prerequisites": ["c.choice.struct-pointer-member-01", "c.true.pointer-object-01"],
+  "knowledge": ["linked-list", "self-referential-struct", "pointer-traversal"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["list_count.c"], "tests": ["test_list_count.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["用一个指针从 head 开始。", "每访问一个非空节点就把计数加一。", "通过 current = current->next 移动，直到指针为 NULL。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

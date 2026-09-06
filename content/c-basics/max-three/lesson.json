@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.syntax.max-three-01",
+  "title": "求三个整数中的最大值",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "练习 if 条件判断、比较运算和返回值。",
+  "prerequisites": ["c.choice.assignment-comparison-01"],
+  "knowledge": ["if", "comparison", "return"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["max_three.c"], "tests": ["test_max_three.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["先假设第一个参数最大。", "依次把当前最大值与另外两个参数比较。", "不要使用只对某种参数顺序有效的嵌套条件。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

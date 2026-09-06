@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "cpp.container.ring-buffer-01",
+  "title": "固定容量环形缓冲区",
+  "track": "cpp-basics",
+  "language": "cpp",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "使用模板、std::array 和索引回绕实现无动态内存的 FIFO。",
+  "prerequisites": ["c.pointer.swap-01"],
+  "knowledge": ["template", "array", "fifo", "embedded-memory"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c++17",
+    "sources": [],
+    "tests": ["test_ring_buffer.cpp"],
+    "includeDirs": ["."],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "分别保存读索引、写索引和当前元素数量。",
+    "索引前进一步可写为 (index + 1) % Capacity。",
+    "push 在 size == Capacity 时失败；pop 在 size == 0 时返回 std::nullopt。"
+  ],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

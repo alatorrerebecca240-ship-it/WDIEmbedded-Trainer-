@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "electronic-design.circuit.divider-01",
+  "title": "计算电阻分压输出",
+  "track": "electronic-design",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "用基础算术实现理想无负载电阻分压公式。",
+  "prerequisites": ["electronic-design.choice.series-current-01"],
+  "knowledge": ["voltage-divider", "resistor", "floating-point"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["resistor_divider.c"], "tests": ["test_resistor_divider.c"], "includeDirs": ["."], "linkLibraries": ["m"], "timeoutSeconds": 5 },
+  "hints": ["输出位于下方电阻两端。", "公式是 vin × bottom / (top + bottom)。", "任一电阻为负或总电阻不大于零时返回 0.0。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

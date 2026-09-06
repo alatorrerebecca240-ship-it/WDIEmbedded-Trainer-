@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://embedded-trainer.local/schemas/question-bank.schema.json",
+  "title": "Embedded Trainer question bank",
+  "type": "object",
+  "required": ["schemaVersion", "questions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "defaults": {
+      "type": "object",
+      "description": "与每道题合并的公共字段，题目自身字段优先。"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "questionType", "difficulty", "summary", "knowledge", "hints", "quiz"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

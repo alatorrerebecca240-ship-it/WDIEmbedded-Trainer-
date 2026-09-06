@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GitHub Pages knowledge catalog v1",
+  "type": "object",
+  "required": ["formatVersion", "repository", "packages"],
+  "properties": {
+    "formatVersion": { "const": 1 },
+    "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "releaseTag": { "type": "string" },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version", "url", "sha256", "size"],
+        "properties": {
+          "id": { "type": "string" }, "title": { "type": "string" },
+          "version": { "type": "string" }, "minEngineVersion": { "type": "string" },
+          "url": { "type": "string", "pattern": "^https://github.com/" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "size": { "type": "integer", "minimum": 1, "maximum": 33554432 }
+        }
+      }
+    }
+  }
+}

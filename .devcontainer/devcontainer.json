@@ -1,0 +1,14 @@
+{
+  "name": "Embedded Trainer",
+  "build": { "dockerfile": "Dockerfile" },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools"
+      ]
+    }
+  },
+  "postCreateCommand": "python3 trainer.py doctor"
+}
+

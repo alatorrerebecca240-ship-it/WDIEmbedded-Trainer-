@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "electronic-design.signal.mean-01",
+  "title": "计算采样序列平均值",
+  "track": "electronic-design",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "通过累加和除法计算传感器采样的直流平均值。",
+  "prerequisites": [],
+  "knowledge": ["sampling", "mean", "array"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["sample_mean.c"], "tests": ["test_sample_mean.c"], "includeDirs": ["."], "linkLibraries": ["m"], "timeoutSeconds": 5 },
+  "hints": ["用 double 变量累加全部样本。", "遍历结束后除以 count。", "count 为 0 或 samples 为 NULL 时返回 0.0。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

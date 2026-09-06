@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://embedded-trainer.local/schemas/lesson.schema.json",
+  "title": "Embedded Trainer lesson or question",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "track",
+    "language",
+    "questionType",
+    "difficulty",
+    "summary",
+    "prerequisites",
+    "knowledge",
+    "target",
+    "hints"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "track": { "type": "string", "minLength": 1 },
+    "language": { "enum": ["c", "cpp", "text"] },
+    "questionType": {
+      "enum": ["programming", "debugging", "single-choice", "true-false", "fill-blank", "code-reading"]
+    },
+    "difficulty": { "enum": ["beginner", "intermediate", "advanced"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "knowledge": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "target": { "type": "string", "minLength": 1 },
+    "hints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "starter": { "type": "string", "minLength": 1 },
+    "assetRoot": { "type": "string", "minLength": 1 },
+    "reference": { "type": "string", "minLength": 1 },
+    "variantOf": { "type": "string" },
+    "parameters": { "type": "object" },
+    "verification": {
+      "type": "object",
+      "required": ["source", "expectedStdout"],
+      "properties": { "source": { "type": "string" }, "expectedStdout": { "type": "string" } },
+      "additionalProperties": false
+    },
+    "statement": { "type": "string", "minLength": 1 },
+    "build": {
+      "type": "object",
+      "required": ["standard", "sources", "tests"],
+      "properties": {
+        "standard": { "type": "string", "minLength": 1 },
+        "sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 0
+        },
+        "tests": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "quiz": {
+      "type": "object",
+      "required": ["prompt", "explanation"],
+      "properties": {
+        "prompt": { "type": "string", "minLength": 1 },
+        "code": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["id", "text"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "text": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "answer": {},
+        "blanks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["label", "answers"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "answers": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 1
+              },
+              "caseSensitive": { "type": "boolean", "default": false }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "origin": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "license": { "type": "string" },
+        "url": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "questionType": { "enum": ["programming", "debugging"] } } },
+      "then": {
+        "required": ["starter", "statement", "build"],
+        "properties": { "language": { "enum": ["c", "cpp"] } }
+      }
+    },
+    {
+      "if": { "properties": { "questionType": { "const": "single-choice" } } },
+      "then": {
+        "required": ["quiz"],
+        "properties": {
+          "quiz": { "required": ["options", "answer"] }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "questionType": { "const": "true-false" } } },
+      "then": {
+        "required": ["quiz"],
+        "properties": {
+          "quiz": {
+            "required": ["answer"],
+            "properties": { "answer": { "type": "boolean" } }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "questionType": { "enum": ["fill-blank", "code-reading"] } } },
+      "then": {
+        "required": ["quiz"],
+        "properties": {
+          "quiz": { "required": ["blanks"] }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "questionType": { "const": "code-reading" } } },
+      "then": {
+        "required": ["verification"],
+        "properties": {
+          "language": { "enum": ["c", "cpp"] },
+          "quiz": { "required": ["code"] }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

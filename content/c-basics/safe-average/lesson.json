@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.number.safe-average-01",
+  "title": "安全计算整数数组平均值",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "练习类型转换，并避免整数累加和整数除法带来的错误。",
+  "prerequisites": ["c.choice.integer-division-01", "c.array.count-positive-01"],
+  "knowledge": ["floating-point", "accumulator", "conversion"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["safe_average.c"], "tests": ["test_safe_average.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["用 double 类型保存累加和。", "循环中把每个 int 加到 double 会发生安全的数值转换。", "count 为 0 时直接返回 0.0，避免除以零。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

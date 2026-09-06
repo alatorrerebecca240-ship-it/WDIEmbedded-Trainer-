@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.bit.flags-01",
+  "title": "设置、清除与读取标志位",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "使用位移、按位或、按位与操作 8 位寄存器。",
+  "prerequisites": [],
+  "knowledge": ["bitwise", "mask", "stdint"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["bit_flags.c"], "tests": ["test_bit_flags.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["用 1U << bit 构造掩码。", "设置位使用按位或，清除位使用按位与和取反掩码。", "读取位时把 value 与掩码相与并判断是否非零。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

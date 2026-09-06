@@ -1,0 +1,89 @@
+{
+  "formatVersion": 1,
+  "source": "freertos-kernel",
+  "pack": {
+    "formatVersion": 1,
+    "id": "freertos.basic",
+    "version": "1.0.0",
+    "title": "FreeRTOS：任务基础",
+    "minEngineVersion": "0.6.0",
+    "license": "MIT"
+  },
+  "modifications": "Selected source retained unchanged for attribution; original Chinese objective questions were added. Hardware-dependent code is not executed or advertised as a portable program. New Chinese prompts and adaptation code are MIT licensed. Upstream license remains unchanged; human review is still required.",
+  "questions": [
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.freertos.delay.choice",
+        "title": "vTaskDelay 的单位",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "single-choice",
+        "difficulty": "beginner",
+        "summary": "区分 tick 和毫秒。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "FreeRTOS 的 vTaskDelay(xTicksToDelay) 参数按什么单位解释？",
+          "options": [
+            {
+              "id": "A",
+              "text": "字节"
+            },
+            {
+              "id": "B",
+              "text": "秒"
+            },
+            {
+              "id": "C",
+              "text": "固定一毫秒"
+            },
+            {
+              "id": "D",
+              "text": "内核 tick"
+            }
+          ],
+          "answer": "D",
+          "explanation": "实际时间取决于 tick 频率，不能无条件把参数值当毫秒。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.freertos.delay.judge",
+        "title": "延时是否就是忙等",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "true-false",
+        "difficulty": "beginner",
+        "summary": "认识阻塞态延时。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "vTaskDelay 的设计是让任务在整个延时时间内持续执行一个空循环，占用处理器忙等。",
+          "answer": false,
+          "explanation": "该 API 让任务进入阻塞状态等待指定 tick，调度器可调度其他可运行任务。"
+        }
+      }
+    }
+  ],
+  "authoredLicense": {
+    "license": "MIT",
+    "text": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

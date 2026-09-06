@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "embedded.input.debounce-01",
+  "title": "按键消抖状态机",
+  "track": "embedded",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "把带抖动的 GPIO 采样转换成稳定的按键状态。",
+  "prerequisites": ["c.pointer.swap-01"],
+  "knowledge": ["gpio", "state-machine", "sampling", "debounce"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c11",
+    "sources": ["debounce.c"],
+    "tests": ["test_debounce.c"],
+    "includeDirs": ["."],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "只有连续多次采样值相同时，才改变稳定状态。",
+    "采样值改变时，将 candidate_state 更新为新值，并把 consecutive_count 设为 1。",
+    "当计数达到 threshold 时提交候选状态，然后把计数清零。"
+  ],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

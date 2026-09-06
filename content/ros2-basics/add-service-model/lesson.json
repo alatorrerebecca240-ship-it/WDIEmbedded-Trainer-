@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "ros2.service.add-01",
+  "title": "请求生成响应（C++ 教学模型）",
+  "track": "ros2-basics",
+  "language": "cpp",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "读取请求中的两个整数，返回响应结构体，理解服务的请求/响应思路。",
+  "prerequisites": [],
+  "knowledge": [
+    "请求响应",
+    "const 引用",
+    "结构体返回值"
+  ],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c++17",
+    "sources": [
+      "add_service.cpp"
+    ],
+    "tests": [
+      "test_add_service.cpp"
+    ],
+    "includeDirs": [
+      "."
+    ],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "request 通过 const 引用传入，只读取它，不修改它。",
+    "把两个请求字段相加，写入响应的 sum。",
+    "返回响应结构体，而不是打印答案；输入范围保证 int64_t 求和不会溢出。"
+  ],
+  "origin": {
+    "type": "self-authored",
+    "license": "project-license"
+  }
+}

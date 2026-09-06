@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "smart-car.sensor.line-position-01",
+  "title": "三路传感器估算赛道位置",
+  "track": "smart-car",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "使用加权平均把三路循迹传感器读数转换为位置误差。",
+  "prerequisites": ["smart-car.choice.sensor-calibration-01"],
+  "knowledge": ["line-sensor", "weighted-average", "position-error"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["line_position.c"], "tests": ["test_line_position.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["给左、中、右传感器的位置权重设为 -1000、0、1000。", "分子可化简为 (right - left) × 1000。", "三个读数之和为 0 时返回 0，计算前转换为 int32_t。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

@@ -1,0 +1,89 @@
+{
+  "formatVersion": 1,
+  "source": "cmsis6",
+  "pack": {
+    "formatVersion": 1,
+    "id": "cmsis.rtos2",
+    "version": "1.0.0",
+    "title": "CMSIS-RTOS2：接口基础",
+    "minEngineVersion": "0.6.0",
+    "license": "mixed"
+  },
+  "modifications": "Selected source retained unchanged for attribution; original Chinese objective questions were added. Hardware-dependent code is not executed or advertised as a portable program. New Chinese prompts and adaptation code are MIT licensed. Upstream license remains unchanged; human review is still required.",
+  "questions": [
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.cmsis.delay.choice",
+        "title": "osDelay 的参数",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "single-choice",
+        "difficulty": "beginner",
+        "summary": "读取接口注释里的单位约定。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "CMSIS-RTOS2 头文件中 osDelay(uint32_t ticks) 的参数是什么？",
+          "options": [
+            {
+              "id": "A",
+              "text": "内核时间 tick 数"
+            },
+            {
+              "id": "B",
+              "text": "无条件按毫秒解释"
+            },
+            {
+              "id": "C",
+              "text": "要分配的内存大小"
+            },
+            {
+              "id": "D",
+              "text": "线程优先级"
+            }
+          ],
+          "answer": "A",
+          "explanation": "接口以 tick 为单位，需要结合内核 tick 频率理解时间。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.cmsis.delay.judge",
+        "title": "相对等待与绝对时刻",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "true-false",
+        "difficulty": "beginner",
+        "summary": "区分 osDelay 和 osDelayUntil。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "CMSIS-RTOS2 中 osDelayUntil 的参数表示绝对 tick 时刻，而不是简单的相对等待长度。",
+          "answer": true,
+          "explanation": "接口注释区分了相对 tick 延时和绝对 tick 时刻；实际使用还需遵守实现与时间回绕约束。"
+        }
+      }
+    }
+  ],
+  "authoredLicense": {
+    "license": "MIT",
+    "text": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

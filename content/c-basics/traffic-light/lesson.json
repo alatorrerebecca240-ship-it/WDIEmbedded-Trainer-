@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.enum.traffic-light-01",
+  "title": "交通灯枚举状态转换",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "使用 enum 与 switch 表达有限状态转换。",
+  "prerequisites": ["c.choice.enum-default-01", "c.choice.switch-break-01"],
+  "knowledge": ["enum", "switch", "state-machine"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["traffic_light.c"], "tests": ["test_traffic_light.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["为每个枚举状态写一个 case。", "状态顺序是红到绿、绿到黄、黄到红。", "default 分支返回 TRAFFIC_RED。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

@@ -1,0 +1,870 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "ros2-basics",
+    "language": "text",
+    "target": "无需 ROS 2 环境",
+    "prerequisites": [],
+    "origin": {
+      "type": "self-authored",
+      "license": "project-license"
+    }
+  },
+  "questions": [
+    {
+      "id": "ros2.node.role-choice-01",
+      "title": "节点是什么",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解节点、功能划分，为机器人应用开发打基础。",
+      "knowledge": [
+        "节点",
+        "功能划分"
+      ],
+      "hints": [
+        "想想传感器读取与控制计算能否各自成为一个功能模块。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 系统中的节点（node）主要是什么？",
+        "explanation": "节点负责相对独立的功能，例如读取传感器或处理控制指令；它是软件概念，不要求与硬件一一对应。",
+        "options": [
+          {
+            "id": "A",
+            "text": "必须对应一块实体电路板"
+          },
+          {
+            "id": "B",
+            "text": "承担特定功能并参与 ROS 通信的软件单元"
+          },
+          {
+            "id": "C",
+            "text": "只能存储文本的文件夹"
+          },
+          {
+            "id": "D",
+            "text": "Linux 内核的一种名称"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "ros2.topic.stream-choice-01",
+      "title": "连续数据如何传递",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解话题、发布订阅，为机器人应用开发打基础。",
+      "knowledge": [
+        "话题",
+        "发布订阅"
+      ],
+      "hints": [
+        "消费者需要持续接收数据，而不是每帧都调用一次请求。"
+      ],
+      "quiz": {
+        "prompt": "摄像头持续输出图像，多种处理程序需要订阅这些图像。通常优先选择哪种 ROS 2 通信方式？",
+        "explanation": "话题采用发布/订阅模式，适合连续数据流。服务侧重请求/响应，参数用于节点配置，动作适合有反馈的长任务。",
+        "options": [
+          {
+            "id": "A",
+            "text": "参数"
+          },
+          {
+            "id": "B",
+            "text": "服务"
+          },
+          {
+            "id": "C",
+            "text": "动作"
+          },
+          {
+            "id": "D",
+            "text": "话题"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "ros2.service.request-choice-01",
+      "title": "一次请求与响应",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解服务、请求响应，为机器人应用开发打基础。",
+      "knowledge": [
+        "服务",
+        "请求响应"
+      ],
+      "hints": [
+        "客户端发出请求，并等待对应的结果。"
+      ],
+      "quiz": {
+        "prompt": "客户端发送两个数，服务端快速计算并返回一次和。哪种通信方式最符合这个描述？",
+        "explanation": "服务由请求和响应组成，适合这种短时计算。耗时任务如导航通常更适合动作。",
+        "options": [
+          {
+            "id": "A",
+            "text": "服务"
+          },
+          {
+            "id": "B",
+            "text": "仅设置参数"
+          },
+          {
+            "id": "C",
+            "text": "只使用日志"
+          },
+          {
+            "id": "D",
+            "text": "只启动定时器"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "ros2.action.feedback-choice-01",
+      "title": "带进度的长任务",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解动作、反馈，为机器人应用开发打基础。",
+      "knowledge": [
+        "动作",
+        "反馈"
+      ],
+      "hints": [
+        "题目强调的是长任务、过程反馈与取消请求。"
+      ],
+      "quiz": {
+        "prompt": "机器人前往目标点可能持续几十秒，希望获得进度并能请求取消。通常优先选什么接口？",
+        "explanation": "动作具有目标、反馈和结果，并支持取消请求；是否接受取消取决于服务端逻辑，不等于任何时候都能立即停止。",
+        "options": [
+          {
+            "id": "A",
+            "text": "一个静态参数"
+          },
+          {
+            "id": "B",
+            "text": "单次阻塞服务"
+          },
+          {
+            "id": "C",
+            "text": "动作（action）"
+          },
+          {
+            "id": "D",
+            "text": "只输出一行日志"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "ros2.cli.node-list-choice-01",
+      "title": "列出已发现节点",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解节点查询、ros2 node，为机器人应用开发打基础。",
+      "knowledge": [
+        "节点查询",
+        "ros2 node"
+      ],
+      "hints": [
+        "对象是 node，操作是 list。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 环境已配置，想列出当前可发现的节点名称，应使用哪条命令？",
+        "explanation": "ros2 node list 列出节点名称；node info 可继续查看指定节点的通信接口。是否能发现还受环境和网络配置影响。",
+        "options": [
+          {
+            "id": "A",
+            "text": "ros2 topic echo"
+          },
+          {
+            "id": "B",
+            "text": "ros2 node list"
+          },
+          {
+            "id": "C",
+            "text": "ros2 param set"
+          },
+          {
+            "id": "D",
+            "text": "colcon build"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "ros2.cli.topic-echo-choice-01",
+      "title": "查看话题数据",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解话题查询、ros2 topic echo，为机器人应用开发打基础。",
+      "knowledge": [
+        "话题查询",
+        "ros2 topic echo"
+      ],
+      "hints": [
+        "列出名字与读取消息内容不同。"
+      ],
+      "quiz": {
+        "prompt": "/temperature 话题正在发布且通信配置兼容，要在终端查看收到的消息内容，通常使用什么？",
+        "explanation": "topic echo 显示接收到的消息；topic list 列出话题名称而非持续显示消息内容。",
+        "options": [
+          {
+            "id": "A",
+            "text": "ros2 node list"
+          },
+          {
+            "id": "B",
+            "text": "ros2 pkg list"
+          },
+          {
+            "id": "C",
+            "text": "ros2 topic echo /temperature"
+          },
+          {
+            "id": "D",
+            "text": "ros2 topic list"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "ros2.interface.type-choice-01",
+      "title": "认识消息类型名称",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解消息类型、接口命名，为机器人应用开发打基础。",
+      "knowledge": [
+        "消息类型",
+        "接口命名"
+      ],
+      "hints": [
+        "话题名称和话题所使用的数据类型不是一回事。"
+      ],
+      "quiz": {
+        "prompt": "geometry_msgs/msg/Twist 中，geometry_msgs、msg、Twist 分别表示什么？",
+        "explanation": "该名称标识 geometry_msgs 包中的 Twist 消息类型，而不是某个具体话题。一个消息类型可用于不同话题。",
+        "options": [
+          {
+            "id": "A",
+            "text": "包名、消息接口类别、类型名"
+          },
+          {
+            "id": "B",
+            "text": "节点名、目录权限、话题名"
+          },
+          {
+            "id": "C",
+            "text": "工作空间、编译器、变量名"
+          },
+          {
+            "id": "D",
+            "text": "操作系统、服务名、参数值"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "ros2.parameter.role-choice-01",
+      "title": "参数适合存什么",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解参数、节点配置，为机器人应用开发打基础。",
+      "knowledge": [
+        "参数",
+        "节点配置"
+      ],
+      "hints": [
+        "配置项通常不需要以传感器数据的频率连续传递。"
+      ],
+      "quiz": {
+        "prompt": "以下哪项最适合作为节点参数的用途？",
+        "explanation": "参数是与节点关联的配置值，例如控制增益；是否允许运行时修改取决于声明、描述符与节点逻辑。",
+        "options": [
+          {
+            "id": "A",
+            "text": "持续传送每一帧摄像头图像"
+          },
+          {
+            "id": "B",
+            "text": "替代所有发布与订阅"
+          },
+          {
+            "id": "C",
+            "text": "保存整段导航反馈流"
+          },
+          {
+            "id": "D",
+            "text": "配置节点的控制增益或工作模式"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "ros2.workspace.build-choice-01",
+      "title": "构建工作空间",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解工作空间、colcon，为机器人应用开发打基础。",
+      "knowledge": [
+        "工作空间",
+        "colcon"
+      ],
+      "hints": [
+        "构建工具名称不是 ros2。"
+      ],
+      "quiz": {
+        "prompt": "依赖已准备好，在包含 src 的 ROS 2 工作空间根目录中，哪条命令用于构建包？",
+        "explanation": "colcon build 负责构建工作空间中的包。构建完成后，还需在使用它的终端加载相应安装环境。",
+        "options": [
+          {
+            "id": "A",
+            "text": "ros2 node list"
+          },
+          {
+            "id": "B",
+            "text": "colcon build"
+          },
+          {
+            "id": "C",
+            "text": "ros2 topic echo"
+          },
+          {
+            "id": "D",
+            "text": "ros2 bag play"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "ros2.package.manifest-choice-01",
+      "title": "包的元数据文件",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解包、package.xml，为机器人应用开发打基础。",
+      "knowledge": [
+        "包",
+        "package.xml"
+      ],
+      "hints": [
+        "注意文件名中的 package。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 包中，通常哪个文件声明包名、版本、许可证与依赖等元数据？",
+        "explanation": "package.xml 描述包的元数据与依赖；C++ 包通常另外使用 CMakeLists.txt 描述构建规则。",
+        "options": [
+          {
+            "id": "A",
+            "text": "README.png"
+          },
+          {
+            "id": "B",
+            "text": "progress.json"
+          },
+          {
+            "id": "C",
+            "text": "package.xml"
+          },
+          {
+            "id": "D",
+            "text": "setup.bash"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "ros2.qos.compatibility-choice-01",
+      "title": "收不到消息先查什么",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解QoS、通信排查，为机器人应用开发打基础。",
+      "knowledge": [
+        "QoS",
+        "通信排查"
+      ],
+      "hints": [
+        "发布者提供的策略是否满足订阅者的要求？"
+      ],
+      "quiz": {
+        "prompt": "已确认发布端和订阅端处于可互相发现的环境，话题名称和消息类型一致，但仍不能建立消息连接。还应检查什么？",
+        "explanation": "ROS 2 的 QoS 兼容性会影响通信，名称和类型一致并不充分。策略需要兼容，并非每一项都必须完全相同。",
+        "options": [
+          {
+            "id": "A",
+            "text": "源码编辑器的主题"
+          },
+          {
+            "id": "B",
+            "text": "文件名是否全为大写"
+          },
+          {
+            "id": "C",
+            "text": "屏幕分辨率"
+          },
+          {
+            "id": "D",
+            "text": "QoS 策略是否兼容"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "ros2.frame.tf-choice-01",
+      "title": "坐标变换的用途",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解tf2、坐标系，为机器人应用开发打基础。",
+      "knowledge": [
+        "tf2",
+        "坐标系"
+      ],
+      "hints": [
+        "同一个空间点在不同坐标系中有不同坐标。"
+      ],
+      "quiz": {
+        "prompt": "知道激光点在雷达坐标系中的坐标，想转换到机器人机体坐标系，ROS 2 中哪个库主要负责管理并查询坐标系变换？",
+        "explanation": "tf2 管理坐标系之间随时间变化的变换关系；它不是构建工具，也不会自动推断未提供的变换。",
+        "options": [
+          {
+            "id": "A",
+            "text": "tf2"
+          },
+          {
+            "id": "B",
+            "text": "colcon"
+          },
+          {
+            "id": "C",
+            "text": "rosdep"
+          },
+          {
+            "id": "D",
+            "text": "rqt_console"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "ros2.node.process-judge-01",
+      "title": "节点与进程的关系",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解节点、进程，为机器人应用开发打基础。",
+      "knowledge": [
+        "节点",
+        "进程"
+      ],
+      "hints": [
+        "区分软件功能划分与操作系统进程。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 规定每个进程中只能包含一个节点。",
+        "explanation": "一个进程可以包含多个节点，例如节点组合。节点是功能单元，进程是操作系统层面的运行与资源管理单元。",
+        "answer": false
+      }
+    },
+    {
+      "id": "ros2.topic.multiple-judge-01",
+      "title": "一个话题多个订阅者",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解发布订阅，为机器人应用开发打基础。",
+      "knowledge": [
+        "发布订阅"
+      ],
+      "hints": [
+        "数据处理和数据记录可能需要同时读取同一传感器消息。"
+      ],
+      "quiz": {
+        "prompt": "在名称、类型及通信策略兼容的情况下，一个 ROS 2 话题可以有多个订阅者。",
+        "explanation": "发布/订阅允许数据被多个消费者接收，不必为每个订阅者各建一个同内容话题。",
+        "answer": true
+      }
+    },
+    {
+      "id": "ros2.service.structure-judge-01",
+      "title": "服务接口的两部分",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解服务接口，为机器人应用开发打基础。",
+      "knowledge": [
+        "服务接口"
+      ],
+      "hints": [
+        "发送什么数据，返回什么数据？"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 的 .srv 接口描述包含请求与响应两部分。",
+        "explanation": ".srv 中用 --- 分隔请求字段与响应字段。动作的 .action 接口则包含目标、结果和反馈三部分。",
+        "answer": true
+      }
+    },
+    {
+      "id": "ros2.parameter.global-judge-01",
+      "title": "参数属于谁",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解参数、节点配置，为机器人应用开发打基础。",
+      "knowledge": [
+        "参数",
+        "节点配置"
+      ],
+      "hints": [
+        "ros2 param get 为什么还需要节点名？"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 的所有参数都必须集中保存在一个全局参数服务器上，而不是归属于具体节点。",
+        "explanation": "ROS 2 参数与具体节点关联。查询与设置时通常要指定节点名，不应直接套用 ROS 1 全局参数服务器的模型。",
+        "answer": false
+      }
+    },
+    {
+      "id": "ros2.launch.multiple-judge-01",
+      "title": "同时启动多个节点",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解launch、启动管理，为机器人应用开发打基础。",
+      "knowledge": [
+        "launch",
+        "启动管理"
+      ],
+      "hints": [
+        "机器人系统往往需要同时启动传感、定位与控制等模块。"
+      ],
+      "quiz": {
+        "prompt": "一个 ROS 2 launch 文件可以描述多个节点的启动及其参数配置。",
+        "explanation": "launch 用于组织启动过程，也能设置命名空间、重映射和配置。它并不只局限于一个节点。",
+        "answer": true
+      }
+    },
+    {
+      "id": "ros2.parameter.persistence-judge-01",
+      "title": "参数修改会永久保存吗",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解运行时参数与持久化配置的区别。",
+      "knowledge": [
+        "参数",
+        "配置持久化"
+      ],
+      "hints": [
+        "当前节点的内存状态与下次启动的配置文件不是一回事。"
+      ],
+      "quiz": {
+        "prompt": "在没有额外保存逻辑时，用 ros2 param set 成功修改参数，必然会自动改写启动配置，保证节点重启后保持该值。",
+        "explanation": "运行时修改通常只影响当前节点会话。若要重启后使用该配置，需要另行保存（如 param dump）并在启动时加载；set 本身不保证改写启动配置。",
+        "answer": false
+      }
+    },
+    {
+      "id": "ros2.qos.equal-judge-01",
+      "title": "QoS 兼容是否等于完全相同",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "理解QoS、可靠性，为机器人应用开发打基础。",
+      "knowledge": [
+        "QoS",
+        "可靠性"
+      ],
+      "hints": [
+        "提供更强的可靠性，可能满足较低要求。"
+      ],
+      "quiz": {
+        "prompt": "发布端与订阅端的所有 QoS 设置必须逐项完全相同，否则一定不能通信。",
+        "explanation": "要求是兼容而非完全相同。例如只考虑 reliability，reliable 发布端可满足 best_effort 订阅端；反方向不兼容。其他策略也须兼容。",
+        "answer": false
+      }
+    },
+    {
+      "id": "ros2.domain.security-judge-01",
+      "title": "域 ID 是否等于安全隔离",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "理解ROS_DOMAIN_ID、安全边界，为机器人应用开发打基础。",
+      "knowledge": [
+        "ROS_DOMAIN_ID",
+        "安全边界"
+      ],
+      "hints": [
+        "避免相互发现，不等于阻止别人使用同一域 ID。"
+      ],
+      "quiz": {
+        "prompt": "在基于 DDS 的 ROS 2 环境中，设置不同 ROS_DOMAIN_ID 就等于完成了认证和加密，可以替代安全配置。",
+        "explanation": "域 ID 用于划分发现与通信的逻辑域，不是认证、授权或加密机制；保密与访问控制需另外配置安全能力。",
+        "answer": false
+      }
+    },
+    {
+      "id": "ros2.executor.callback-judge-01",
+      "title": "spin 与回调",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "理解执行器、回调，为机器人应用开发打基础。",
+      "knowledge": [
+        "执行器",
+        "回调"
+      ],
+      "hints": [
+        "编译程序与运行事件循环是两个阶段。"
+      ],
+      "quiz": {
+        "prompt": "在常见 rclcpp 程序中，执行器的 spin 会处理待执行工作，例如订阅和定时器回调；它不是把 C++ 源码编译成程序的命令。",
+        "explanation": "执行器负责调度回调；构建发生在运行之前。执行器的线程模型与回调组还会影响并发行为。",
+        "answer": true
+      }
+    },
+    {
+      "id": "ros2.cli.run-fill-01",
+      "title": "运行一个可执行程序",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解ros2 run，为机器人应用开发打基础。",
+      "knowledge": [
+        "ros2 run"
+      ],
+      "hints": [
+        "英文中表示运行的动词。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 环境与 demo_nodes_cpp 包已安装并加载。补全：ros2 ____ demo_nodes_cpp talker。只填子命令。",
+        "explanation": "ros2 run 的后面依次给出包名和可执行程序名；这与 ros2 launch 运行启动文件不同。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "run"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.cli.topic-list-fill-01",
+      "title": "列出话题",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解ros2 topic，为机器人应用开发打基础。",
+      "knowledge": [
+        "ros2 topic"
+      ],
+      "hints": [
+        "英文中表示列表的词。"
+      ],
+      "quiz": {
+        "prompt": "补全列出可发现话题名称的命令：ros2 topic ____。只填子命令。",
+        "explanation": "topic list 列出话题，topic echo 用来观察消息内容。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "list"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.cli.service-list-fill-01",
+      "title": "列出服务",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解ros2 service，为机器人应用开发打基础。",
+      "knowledge": [
+        "ros2 service"
+      ],
+      "hints": [
+        "这里不是 topic，也不是 action。"
+      ],
+      "quiz": {
+        "prompt": "补全列出可发现服务名称的命令：ros2 ____ list。只填接口类别。",
+        "explanation": "ros2 service list 查询服务；调用服务时还需知道类型与请求字段。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "service"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.cli.interface-fill-01",
+      "title": "查看消息字段",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解ros2 interface，为机器人应用开发打基础。",
+      "knowledge": [
+        "ros2 interface"
+      ],
+      "hints": [
+        "英文中表示展示的动词。"
+      ],
+      "quiz": {
+        "prompt": "补全查看 Twist 消息结构的命令：ros2 interface ____ geometry_msgs/msg/Twist。只填子命令。",
+        "explanation": "interface show 展示接口字段定义，有助于确认数据类型与结构。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "show"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.environment.source-fill-01",
+      "title": "加载当前工作空间",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解source、工作空间环境，为机器人应用开发打基础。",
+      "knowledge": [
+        "source",
+        "工作空间环境"
+      ],
+      "hints": [
+        "这个操作需要改变当前终端环境。"
+      ],
+      "quiz": {
+        "prompt": "在 Linux Bash 中，当前位于已成功构建的工作空间根目录，setup.bash 存在。补全：____ install/setup.bash。填写在当前 shell 中加载该脚本的命令。",
+        "explanation": "source（或 .）在当前 shell 中执行安装环境脚本，更新该终端用于发现包等的环境。单独用 bash 启动子进程不等同于修改当前 shell。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "source",
+              "."
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.client.cpp-fill-01",
+      "title": "C++ 客户端库",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解rclcpp、客户端库，为机器人应用开发打基础。",
+      "knowledge": [
+        "rclcpp",
+        "客户端库"
+      ],
+      "hints": [
+        "后缀表示 C++。"
+      ],
+      "quiz": {
+        "prompt": "ROS 2 常用的 C++ 客户端库叫 ____；Python 客户端库叫 rclpy。只填 C++ 库名。",
+        "explanation": "rclcpp 提供 C++ 节点、发布者、订阅者等 API；rclpy 提供 Python 接口。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "rclcpp"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.message.twist-fill-01",
+      "title": "角速度字段",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解Twist、速度消息，为机器人应用开发打基础。",
+      "knowledge": [
+        "Twist",
+        "速度消息"
+      ],
+      "hints": [
+        "英文中表示角的形容词。"
+      ],
+      "quiz": {
+        "prompt": "geometry_msgs/msg/Twist 有 linear 和 ____ 两个 Vector3 字段，后者表示角速度。只填字段名。",
+        "explanation": "linear 是线速度向量，angular 是角速度向量，每个向量都有 x、y、z 分量。Twist 本身不包含 Header。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "angular"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.bag.record-fill-01",
+      "title": "记录话题消息",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "理解rosbag2、数据记录，为机器人应用开发打基础。",
+      "knowledge": [
+        "rosbag2",
+        "数据记录"
+      ],
+      "hints": [
+        "记录与回放是两个不同动作。"
+      ],
+      "quiz": {
+        "prompt": "已配置 ROS 2 环境，补全记录 /chatter 话题数据的命令：ros2 bag ____ /chatter。只填子命令。",
+        "explanation": "bag record 将收到的消息写入记录文件；bag play 回放记录。实际使用时需留意磁盘容量及数据隐私。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "record"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ros2.domain.variable-fill-01",
+      "title": "配置 DDS 域 ID",
+      "questionType": "fill-blank",
+      "difficulty": "intermediate",
+      "summary": "理解ROS_DOMAIN_ID、节点发现，为机器人应用开发打基础。",
+      "knowledge": [
+        "ROS_DOMAIN_ID",
+        "节点发现"
+      ],
+      "hints": [
+        "名称由 ROS、DOMAIN、ID 用下划线连接。"
+      ],
+      "quiz": {
+        "prompt": "在基于 DDS 的 ROS 2 环境中，用于配置 ROS 域编号的环境变量是 ____。只填全大写变量名。",
+        "explanation": "ROS_DOMAIN_ID 用于选择通信域。域号匹配不是通信成功的唯一条件，还要考虑网络、发现范围和 QoS 等；它不是安全凭证。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "ROS_DOMAIN_ID"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    }
+  ]
+}

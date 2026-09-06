@@ -1,0 +1,241 @@
+{
+  "name": "embedded-trainer",
+  "displayName": "Embedded Trainer",
+  "description": "独立知识包驱动的 C/C++、嵌入式、Linux 与 ROS 2 训练，支持更新、回退和离线导入。",
+  "version": "0.6.0",
+  "publisher": "local-development",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Education",
+    "Testing"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-.git"
+  },
+  "homepage": "https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-",
+  "bugs": {
+    "url": "https://github.com/alatorrerebecca240-ship-it/WDIEmbedded-Trainer-/issues"
+  },
+  "files": [
+    "extension.js",
+    "src/**",
+    "media/**",
+    "docs/**",
+    "README.md",
+    "LICENSE",
+    "runtime/**/*.py"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:embeddedTrainer.lessons",
+    "onCommand:embeddedTrainer.dashboard"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "embeddedTrainer.refresh",
+        "title": "Embedded Trainer: 刷新课程",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "embeddedTrainer.dashboard",
+        "title": "Embedded Trainer: 打开课程面板",
+        "icon": "$(preview)"
+      },
+      {
+        "command": "embeddedTrainer.start",
+        "title": "Embedded Trainer: 开始或打开课程",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "embeddedTrainer.check",
+        "title": "Embedded Trainer: 运行课程评测",
+        "icon": "$(testing-run-icon)"
+      },
+      {
+        "command": "embeddedTrainer.hint",
+        "title": "Embedded Trainer: 查看分级提示",
+        "icon": "$(lightbulb)"
+      },
+      {
+        "command": "embeddedTrainer.instructions",
+        "title": "Embedded Trainer: 打开完整题目",
+        "icon": "$(book)"
+      },
+      {
+        "command": "embeddedTrainer.doctor",
+        "title": "Embedded Trainer: 检查训练环境",
+        "icon": "$(tools)"
+      },
+      {
+        "command": "embeddedTrainer.progress",
+        "title": "Embedded Trainer: 查看学习进度",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "embeddedTrainer.help",
+        "title": "Embedded Trainer: 打开使用说明",
+        "icon": "$(question)"
+      },
+      {
+        "command": "embeddedTrainer.packages",
+        "title": "Embedded Trainer: 管理知识包",
+        "icon": "$(package)"
+      },
+      {
+        "command": "embeddedTrainer.updatePackages",
+        "title": "Embedded Trainer: 检查并更新题库",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "embeddedTrainer.importPackage",
+        "title": "Embedded Trainer: 离线导入知识包",
+        "icon": "$(folder-opened)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "embeddedTrainer",
+          "title": "Embedded Trainer",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "embeddedTrainer": [
+        {
+          "id": "embeddedTrainer.lessons",
+          "name": "课程路线"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "embeddedTrainer.lessons",
+        "contents": "通过[管理知识包](command:embeddedTrainer.packages)添加可信题库或离线导入。无需克隆插件源码，仍需 Python；编程评测另需 C/C++ 编译器。"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "embeddedTrainer.refresh",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@1"
+        },
+        {
+          "command": "embeddedTrainer.progress",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@2"
+        },
+        {
+          "command": "embeddedTrainer.doctor",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@3"
+        },
+        {
+          "command": "embeddedTrainer.help",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@4"
+        },
+        {
+          "command": "embeddedTrainer.packages",
+          "when": "view == embeddedTrainer.lessons",
+          "group": "navigation@5"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "embeddedTrainer.start",
+          "when": "view == embeddedTrainer.lessons && viewItem =~ /^lesson-(programming|debugging)-/",
+          "group": "inline@1"
+        },
+        {
+          "command": "embeddedTrainer.check",
+          "when": "view == embeddedTrainer.lessons && viewItem =~ /^lesson-(programming|debugging)-/",
+          "group": "inline@2"
+        },
+        {
+          "command": "embeddedTrainer.dashboard",
+          "when": "view == embeddedTrainer.lessons && viewItem =~ /^lesson-/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "embeddedTrainer.instructions",
+          "when": "view == embeddedTrainer.lessons && viewItem =~ /^lesson-/",
+          "group": "navigation@2"
+        },
+        {
+          "command": "embeddedTrainer.hint",
+          "when": "view == embeddedTrainer.lessons && viewItem =~ /^lesson-/",
+          "group": "navigation@3"
+        }
+      ],
+      "testing/item/context": [
+        {
+          "command": "embeddedTrainer.dashboard",
+          "when": "controllerId == embeddedTrainerTests",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Embedded Trainer",
+      "properties": {
+        "embeddedTrainer.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "训练插件在后台运行 trainer.py 时使用的 Python 命令或绝对路径。"
+        },
+        "embeddedTrainer.catalogUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "application",
+          "description": "可信 GitHub Pages catalog.json HTTPS 地址，可通过 Settings Sync 同步，工作区不能覆盖来源。"
+        },
+        "embeddedTrainer.enabledPackages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "application",
+          "description": "订阅格式为清单地址#知识包ID；其他电脑同步设置后可下载相同题库，不上传私人答案。"
+        },
+        "embeddedTrainer.autoUpdatePacks": {
+          "type": "boolean",
+          "default": true,
+          "scope": "application",
+          "description": "VS Code 运行期间定期更新已订阅知识包，安装时不执行包内代码。"
+        },
+        "embeddedTrainer.updateIntervalHours": {
+          "type": "number",
+          "default": 24,
+          "minimum": 6,
+          "maximum": 720,
+          "scope": "application",
+          "description": "检查间隔小时数，退出 VS Code 后不运行后台服务。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/testing.js && node --check src/packages.js",
+    "package": "npx @vscode/vsce package",
+    "test": "node --test tests/*.test.js",
+    "vscode:prepublish": "node scripts/prepare-runtime.js && npm run check"
+  }
+}

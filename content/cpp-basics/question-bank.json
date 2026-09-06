@@ -1,0 +1,224 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "cpp-basics",
+    "language": "cpp",
+    "target": "native",
+    "prerequisites": [],
+    "origin": { "type": "self-authored", "license": "project-license" }
+  },
+  "questions": [
+    {
+      "id": "cpp.choice.reference-01",
+      "title": "引用参数",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "认识 C++ 引用声明和按引用传递。",
+      "knowledge": ["reference", "parameter"],
+      "hints": ["引用声明在类型后使用 &。", "它让形参成为实参的别名。"],
+      "quiz": {
+        "prompt": "哪个函数参数声明可以直接修改调用者传入的 int 对象，且不需要在函数内解引用？",
+        "options": [
+          { "id": "A", "text": "int value" },
+          { "id": "B", "text": "const int value" },
+          { "id": "C", "text": "int &value" },
+          { "id": "D", "text": "void value" }
+        ],
+        "answer": "C",
+        "explanation": "int &value 是左值引用形参，它是调用者对象的别名，可直接修改该对象。"
+      }
+    },
+    {
+      "id": "cpp.choice.vector-size-01",
+      "title": "vector 元素数量",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "使用标准容器接口取得元素数量。",
+      "knowledge": ["std::vector", "container"],
+      "hints": ["标准容器普遍提供同名成员函数。", "函数名就是英文的大小。"],
+      "quiz": {
+        "prompt": "已有 std::vector<int> values;，哪个表达式返回当前元素数量？",
+        "options": [
+          { "id": "A", "text": "values.length" },
+          { "id": "B", "text": "values.size()" },
+          { "id": "C", "text": "sizeof(values)" },
+          { "id": "D", "text": "values.count" }
+        ],
+        "answer": "B",
+        "explanation": "std::vector::size() 返回容器当前保存的元素数量；sizeof 得到的是容器对象本身的字节数。"
+      }
+    },
+    {
+      "id": "cpp.choice.nullptr-01",
+      "title": "现代 C++ 空指针",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "选择类型安全的空指针字面量。",
+      "knowledge": ["nullptr", "pointer"],
+      "hints": ["C++11 引入了专门的空指针字面量。", "它比数字 0 的意图更清楚。"],
+      "quiz": {
+        "prompt": "现代 C++ 中，表示空指针时优先使用哪个写法？",
+        "options": [
+          { "id": "A", "text": "nullptr" },
+          { "id": "B", "text": "falseptr" },
+          { "id": "C", "text": "empty" },
+          { "id": "D", "text": "void" }
+        ],
+        "answer": "A",
+        "explanation": "nullptr 是 C++11 引入的空指针字面量，能避免整数 0 在重载解析中的歧义。"
+      }
+    },
+    {
+      "id": "cpp.choice.constructor-01",
+      "title": "构造函数名称",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "认识类构造函数的声明规则。",
+      "knowledge": ["class", "constructor"],
+      "hints": ["构造函数与类同名。", "它不写返回类型。"],
+      "quiz": {
+        "prompt": "类名为 Motor，哪个声明是它的默认构造函数？",
+        "options": [
+          { "id": "A", "text": "void Motor();" },
+          { "id": "B", "text": "Motor();" },
+          { "id": "C", "text": "motor Motor();" },
+          { "id": "D", "text": "new Motor();" }
+        ],
+        "answer": "B",
+        "explanation": "构造函数与类同名且没有返回类型；Motor(); 是默认构造函数声明。"
+      }
+    },
+    {
+      "id": "cpp.choice.const-member-01",
+      "title": "const 成员函数",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解成员函数末尾 const 的基本约束。",
+      "knowledge": ["const", "member-function"],
+      "hints": ["const 写在参数列表之后。", "它约束通过 this 修改对象状态。"],
+      "quiz": {
+        "prompt": "成员函数 int speed() const; 末尾的 const 主要表示什么？",
+        "options": [
+          { "id": "A", "text": "函数只能调用一次" },
+          { "id": "B", "text": "函数不能返回值" },
+          { "id": "C", "text": "函数不会修改对象的非 mutable 数据成员" },
+          { "id": "D", "text": "对象必须位于只读存储器" }
+        ],
+        "answer": "C",
+        "explanation": "const 成员函数把 this 视为指向 const 对象的指针，不能修改普通数据成员。"
+      }
+    },
+    {
+      "id": "cpp.choice.enum-class-01",
+      "title": "作用域枚举",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解 enum class 的作用域访问方式。",
+      "knowledge": ["enum-class", "scope"],
+      "hints": ["枚举成员位于枚举类型自己的作用域。", "使用作用域解析运算符。"],
+      "quiz": {
+        "prompt": "已有 enum class Mode { Idle, Run };，如何表示 Run 枚举值？",
+        "options": [
+          { "id": "A", "text": "Run" },
+          { "id": "B", "text": "Mode.Run" },
+          { "id": "C", "text": "Mode::Run" },
+          { "id": "D", "text": "Mode->Run" }
+        ],
+        "answer": "C",
+        "explanation": "enum class 的枚举成员具有作用域，需要写成 Mode::Run。"
+      }
+    },
+    {
+      "id": "cpp.true.overload-01",
+      "title": "函数重载",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "判断 C++ 是否支持按参数列表重载函数。",
+      "knowledge": ["overload", "function"],
+      "hints": ["同名函数可以有不同参数类型或数量。"],
+      "quiz": { "prompt": "C++ 允许多个函数同名，只要它们的参数列表足以区分。", "answer": true, "explanation": "这称为函数重载，编译器根据实参匹配合适的重载。" }
+    },
+    {
+      "id": "cpp.true.array-bounds-01",
+      "title": "vector 下标检查",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "区分 vector 的 operator[] 和 at。",
+      "knowledge": ["std::vector", "bounds"],
+      "hints": ["operator[] 追求与数组相近的访问方式。", "需要检查时可使用 at。"],
+      "quiz": { "prompt": "std::vector 的 operator[] 在下标越界时保证抛出异常。", "answer": false, "explanation": "operator[] 不做有保证的边界检查；at() 越界时会抛出 std::out_of_range。" }
+    },
+    {
+      "id": "cpp.true.stack-destructor-01",
+      "title": "自动对象析构",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解局部对象离开作用域时的析构。",
+      "knowledge": ["destructor", "scope", "RAII"],
+      "hints": ["这正是 RAII 管理资源的基础。"],
+      "quiz": { "prompt": "函数中的普通局部类对象离开作用域时，会自动调用其析构函数。", "answer": true, "explanation": "具有自动存储期的对象在生命周期结束时自动析构，因此可以用 RAII 管理资源。" }
+    },
+    {
+      "id": "cpp.true.new-free-01",
+      "title": "new 与释放方式",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "匹配 C++ 动态分配与释放操作。",
+      "knowledge": ["new", "delete", "memory"],
+      "hints": ["C 的 malloc/free 和 C++ 的 new/delete 应成对使用。"],
+      "quiz": { "prompt": "使用 new 创建的单个对象应使用 free 释放。", "answer": false, "explanation": "new 创建的单个对象应使用 delete；更推荐使用自动对象或智能指针管理所有权。" }
+    },
+    {
+      "id": "cpp.true.virtual-destructor-01",
+      "title": "多态基类析构",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "认识通过基类指针删除派生对象时的析构要求。",
+      "knowledge": ["virtual", "destructor", "polymorphism"],
+      "hints": ["删除时需要从派生类析构到基类。"],
+      "quiz": { "prompt": "若类可能通过基类指针被多态删除，基类析构函数通常应声明为 virtual。", "answer": true, "explanation": "虚析构保证 delete 基类指针时调用完整的派生类析构链。" }
+    },
+    {
+      "id": "cpp.fill.namespace-01",
+      "title": "标准库命名空间",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写 C++ 标准库使用的命名空间。",
+      "knowledge": ["namespace", "standard-library"],
+      "hints": ["常见写法是 std::vector。"],
+      "quiz": { "prompt": "C++ 标准库的主要命名空间名称是 ____。", "blanks": [{ "label": "命名空间", "answers": ["std"], "caseSensitive": true }], "explanation": "标准库实体通常位于 std 命名空间。" }
+    },
+    {
+      "id": "cpp.fill.cout-01",
+      "title": "标准输出流",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写 iostream 中的标准输出流对象。",
+      "knowledge": ["iostream", "output"],
+      "hints": ["完整写法以 std:: 开头。", "对象名是 cout。"],
+      "quiz": { "prompt": "补全输出语句：____ << \"hello\";", "blanks": [{ "label": "输出流", "answers": ["std::cout"], "caseSensitive": true }], "explanation": "std::cout 是 <iostream> 提供的标准输出流对象。" }
+    },
+    {
+      "id": "cpp.fill.nullptr-01",
+      "title": "填写空指针字面量",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写现代 C++ 推荐的空指针写法。",
+      "knowledge": ["nullptr", "pointer"],
+      "hints": ["这是 C++11 关键字。"],
+      "quiz": { "prompt": "补全初始化：int *p = ____;", "blanks": [{ "label": "空指针字面量", "answers": ["nullptr"], "caseSensitive": true }], "explanation": "nullptr 是类型安全且意图明确的空指针字面量。" }
+    },
+    {
+      "id": "cpp.fill.vector-header-01",
+      "title": "vector 头文件",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写使用 std::vector 所需的标准头文件。",
+      "knowledge": ["std::vector", "header"],
+      "hints": ["头文件与容器同名。"],
+      "quiz": { "prompt": "使用 std::vector 前应包含头文件 #include ____。", "blanks": [{ "label": "头文件", "answers": ["<vector>", "vector"], "caseSensitive": true }], "explanation": "std::vector 定义在标准头文件 <vector> 中。" }
+    }
+  ]
+}

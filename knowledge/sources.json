@@ -1,0 +1,74 @@
+{
+  "formatVersion": 1,
+  "sources": [
+    {
+      "id": "exercism-c",
+      "repository": "exercism/c",
+      "ref": "main",
+      "license": "MIT",
+      "scope": "Selected track code/tests only; inspect file notices.",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "files": [
+        "exercises/practice/leap/leap.h",
+        "exercises/practice/leap/.meta/example.c",
+        "exercises/practice/leap/test_leap.c"
+      ]
+    },
+    {
+      "id": "opendsa-code",
+      "repository": "OpenDSA/OpenDSA",
+      "ref": "master",
+      "license": "MIT",
+      "scope": "SourceCode only. Not textbook chapters, images or external exercises.",
+      "licenseFiles": [
+        "MIT-license.txt"
+      ],
+      "files": [
+        "SourceCode/C++/Sorting/Insertionsort.cpp",
+        "SourceCode/C++/Sorting/Bubblesort.cpp"
+      ]
+    },
+    {
+      "id": "zephyr",
+      "repository": "zephyrproject-rtos/zephyr",
+      "ref": "main",
+      "license": "Apache-2.0",
+      "scope": "Selected sample only; inspect SPDX per file. Third-party modules may differ.",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "files": [
+        "samples/basic/blinky/src/main.c"
+      ]
+    },
+    {
+      "id": "freertos-kernel",
+      "repository": "FreeRTOS/FreeRTOS-Kernel",
+      "ref": "main",
+      "license": "MIT",
+      "scope": "Selected kernel headers; retain copyright and check port/vendor exceptions.",
+      "licenseFiles": [
+        "LICENSE.md"
+      ],
+      "files": [
+        "include/task.h",
+        "include/queue.h"
+      ]
+    },
+    {
+      "id": "cmsis6",
+      "repository": "ARM-software/CMSIS_6",
+      "ref": "main",
+      "license": "Apache-2.0",
+      "scope": "Selected CMSIS-RTOS2 header only; vendor packs may differ.",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "files": [
+        "CMSIS/RTOS2/Include/cmsis_os2.h"
+      ]
+    }
+  ]
+}

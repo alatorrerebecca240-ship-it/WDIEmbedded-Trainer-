@@ -1,0 +1,87 @@
+{
+  "formatVersion": 1,
+  "id": "c.modulo.reading",
+  "pack": {
+    "formatVersion": 1,
+    "id": "generated.c-modulo",
+    "version": "1.0.0",
+    "title": "C 入门：参数化求余变式",
+    "minEngineVersion": "0.6.0",
+    "license": "MIT"
+  },
+  "variables": {
+    "a": [
+      3,
+      5,
+      7,
+      9,
+      12,
+      15,
+      21,
+      25,
+      31,
+      39
+    ],
+    "b": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "derive": {
+    "answer": {
+      "op": "mod",
+      "args": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  "origin": {
+    "license": "MIT",
+    "licenseFiles": [
+      "licenses/MIT.txt"
+    ]
+  },
+  "question": {
+    "schemaVersion": 1,
+    "id": "generated.c.modulo.${index}",
+    "title": "阅读：${a} 除以 ${b} 的余数",
+    "track": "open-source-basics",
+    "language": "c",
+    "questionType": "code-reading",
+    "difficulty": "beginner",
+    "summary": "理解正整数求余运算与输出。",
+    "prerequisites": [],
+    "knowledge": [
+      "基础概念",
+      "开源示例"
+    ],
+    "target": "知识题",
+    "hints": [
+      "先阅读题目约定，区分一般规则与特殊边界。"
+    ],
+    "quiz": {
+      "prompt": "阅读程序：a=${a}，b=${b}，填写标准输出（不包含换行）。",
+      "code": "#include <stdio.h>\nint main(void) { printf(\"%d\\n\", ${a} % ${b}); return 0; }\n",
+      "blanks": [
+        {
+          "label": "输出",
+          "answers": [
+            "${answer}"
+          ],
+          "caseSensitive": true
+        }
+      ],
+      "explanation": "对非负整数，% 得到整数除法的余数，本题为 ${answer}。"
+    },
+    "verification": {
+      "source": "#include <stdio.h>\nint main(void) { printf(\"%d\\n\", ${a} % ${b}); return 0; }\n",
+      "expectedStdout": "${answer}"
+    }
+  },
+  "files": {
+    "licenses/MIT.txt": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "electronic-design.signal.rms-01",
+  "title": "计算采样信号有效值",
+  "track": "electronic-design",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "从浮点采样数组计算 RMS，为测量类电赛题打基础。",
+  "prerequisites": ["c.pointer.swap-01"],
+  "knowledge": ["sampling", "rms", "array", "measurement"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c11",
+    "sources": ["signal_rms.c"],
+    "tests": ["test_signal_rms.c"],
+    "includeDirs": ["."],
+    "linkLibraries": ["m"],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "RMS 等于各采样值平方的平均值再开平方。",
+    "使用 double 作为累加器，减少累计误差。",
+    "samples 为空指针或 count 为 0 时直接返回 0。"
+  ],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

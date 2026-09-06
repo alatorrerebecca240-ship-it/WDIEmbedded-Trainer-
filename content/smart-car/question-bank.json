@@ -1,0 +1,224 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "smart-car",
+    "language": "c",
+    "target": "simulator",
+    "prerequisites": [],
+    "origin": { "type": "self-authored", "license": "project-license" }
+  },
+  "questions": [
+    {
+      "id": "smart-car.choice.p-term-01",
+      "title": "PID 比例项",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解比例项与当前误差的关系。",
+      "knowledge": ["PID", "proportional"],
+      "hints": ["P 代表 Proportional。", "它直接使用本次误差。"],
+      "quiz": {
+        "prompt": "PID 控制器中的比例项 P 通常由什么计算得到？",
+        "options": [
+          { "id": "A", "text": "当前误差乘以比例系数" },
+          { "id": "B", "text": "所有历史误差的总和" },
+          { "id": "C", "text": "目标值的平方" },
+          { "id": "D", "text": "电池电压的倒数" }
+        ],
+        "answer": "A",
+        "explanation": "比例项通常为 Kp × 当前误差，对眼前偏差立即产生校正作用。"
+      }
+    },
+    {
+      "id": "smart-car.choice.d-term-01",
+      "title": "PID 微分项",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解微分项反映误差变化趋势。",
+      "knowledge": ["PID", "derivative"],
+      "hints": ["比较本次误差与上次误差。", "它对快速变化较敏感。"],
+      "quiz": {
+        "prompt": "离散 PID 中，最简单的微分项通常主要使用哪两个量的差？",
+        "options": [
+          { "id": "A", "text": "当前误差与上一次误差" },
+          { "id": "B", "text": "左右轮直径" },
+          { "id": "C", "text": "最高速度与电池容量" },
+          { "id": "D", "text": "积分上限与下限" }
+        ],
+        "answer": "A",
+        "explanation": "离散微分常用 error - previous_error，再结合采样周期和 Kd 进行缩放。"
+      }
+    },
+    {
+      "id": "smart-car.choice.pwm-duty-01",
+      "title": "PWM 占空比",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解占空比对电机平均驱动的影响。",
+      "knowledge": ["PWM", "motor"],
+      "hints": ["占空比是高电平时间占周期的比例。"],
+      "quiz": {
+        "prompt": "在电源和负载条件相同的理想情况下，提高电机 PWM 占空比通常会怎样？",
+        "options": [
+          { "id": "A", "text": "降低平均驱动电压" },
+          { "id": "B", "text": "提高平均驱动电压" },
+          { "id": "C", "text": "让编码器停止计数" },
+          { "id": "D", "text": "自动反转电机方向" }
+        ],
+        "answer": "B",
+        "explanation": "占空比增大意味着一个周期内通电时间比例提高，平均驱动电压通常随之提高。"
+      }
+    },
+    {
+      "id": "smart-car.choice.encoder-01",
+      "title": "编码器测速",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "认识轮式智能车的速度反馈传感器。",
+      "knowledge": ["encoder", "speed-feedback"],
+      "hints": ["它随车轮或电机轴转动产生脉冲。"],
+      "quiz": {
+        "prompt": "智能车中常用哪种传感器根据单位时间内的脉冲数估计车轮速度？",
+        "options": [
+          { "id": "A", "text": "旋转编码器" },
+          { "id": "B", "text": "蜂鸣器" },
+          { "id": "C", "text": "LED" },
+          { "id": "D", "text": "稳压二极管" }
+        ],
+        "answer": "A",
+        "explanation": "编码器把轴的转动转换为脉冲，结合脉冲数、分辨率和采样时间可估算速度。"
+      }
+    },
+    {
+      "id": "smart-car.choice.differential-turn-01",
+      "title": "差速转向",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解两轮差速底盘的转向方式。",
+      "knowledge": ["differential-drive", "steering"],
+      "hints": ["左右轮速度不同会产生角速度。"],
+      "quiz": {
+        "prompt": "两轮差速小车想向左转，常见控制方式是什么？",
+        "options": [
+          { "id": "A", "text": "让左轮速度低于右轮" },
+          { "id": "B", "text": "让左右轮始终完全同速" },
+          { "id": "C", "text": "只改变传感器采样率" },
+          { "id": "D", "text": "关闭所有电机驱动" }
+        ],
+        "answer": "A",
+        "explanation": "右轮相对更快时，车体会产生向左的角速度；具体正负方向仍取决于电机安装定义。"
+      }
+    },
+    {
+      "id": "smart-car.choice.sensor-calibration-01",
+      "title": "循迹传感器标定",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解赛前标定对环境适应性的作用。",
+      "knowledge": ["line-sensor", "calibration"],
+      "hints": ["不同赛道、光照和器件会改变原始读数。"],
+      "quiz": {
+        "prompt": "对循迹传感器记录黑白区域的典型读数，主要有什么作用？",
+        "options": [
+          { "id": "A", "text": "建立归一化或阈值依据，减小器件和环境差异" },
+          { "id": "B", "text": "永久提高 CPU 主频" },
+          { "id": "C", "text": "替代全部电机控制" },
+          { "id": "D", "text": "让电池自动充电" }
+        ],
+        "answer": "A",
+        "explanation": "标定获得传感器在典型黑白表面上的范围，可用于归一化和阈值选择。"
+      }
+    },
+    {
+      "id": "smart-car.true.positive-feedback-01",
+      "title": "转向反馈方向",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "判断循迹闭环中反馈符号的重要性。",
+      "knowledge": ["feedback", "steering"],
+      "hints": ["校正量应让偏差减小。"],
+      "quiz": { "prompt": "若转向控制的符号写反，使偏差越大时车辆越向错误方向转，这会形成不稳定的正反馈。", "answer": true, "explanation": "反馈方向错误会放大偏差；调试闭环前应先确认传感器误差和执行器方向的符号约定。" }
+    },
+    {
+      "id": "smart-car.true.output-limit-01",
+      "title": "控制输出限幅",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解控制量与执行器范围匹配。",
+      "knowledge": ["saturation", "motor-command"],
+      "hints": ["PWM 或驱动器都有有效输入范围。"],
+      "quiz": { "prompt": "将控制器输出限制在电机驱动器允许的范围内，是合理的保护措施。", "answer": true, "explanation": "限幅能避免向执行器发送无法实现或不安全的命令，也便于处理积分饱和。" }
+    },
+    {
+      "id": "smart-car.true.integral-windup-01",
+      "title": "积分饱和",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "认识执行器饱和时积分继续累积的问题。",
+      "knowledge": ["PID", "integral-windup"],
+      "hints": ["执行器已经到极限，但误差可能仍存在。"],
+      "quiz": { "prompt": "执行器已经饱和时，如果积分项仍无限累积，可能导致恢复变慢和较大超调。", "answer": true, "explanation": "这称为积分饱和或积分 windup，可通过积分限幅、条件积分等方式缓解。" }
+    },
+    {
+      "id": "smart-car.true.sample-period-01",
+      "title": "控制采样周期",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解稳定采样周期对离散控制的重要性。",
+      "knowledge": ["sample-period", "control-loop"],
+      "hints": ["积分和微分都与时间有关。"],
+      "quiz": { "prompt": "在离散 PID 中，尽量保持控制循环采样周期稳定，有助于参数表现一致。", "answer": true, "explanation": "采样周期变化会改变积分和微分项的实际作用，因此应使用稳定时间基准或在公式中显式使用 dt。" }
+    },
+    {
+      "id": "smart-car.true.more-gain-01",
+      "title": "增益不是越大越好",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "建立基本调参安全意识。",
+      "knowledge": ["gain", "tuning", "stability"],
+      "hints": ["过强校正可能产生来回摆动。"],
+      "quiz": { "prompt": "比例增益 Kp 越大，车辆循迹效果一定越好且不会振荡。", "answer": false, "explanation": "Kp 过大可能导致超调、振荡甚至失稳，参数需要结合车辆、速度和采样周期调整。" }
+    },
+    {
+      "id": "smart-car.fill.pwm-01",
+      "title": "脉宽调制缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写电机功率控制常用的脉宽调制缩写。",
+      "knowledge": ["PWM", "motor"],
+      "hints": ["英文为 Pulse Width Modulation。"],
+      "quiz": { "prompt": "通过改变占空比调节电机平均驱动的脉宽调制，英文缩写是 ____。", "blanks": [{ "label": "缩写", "answers": ["PWM"], "caseSensitive": false }], "explanation": "PWM 是 Pulse Width Modulation 的缩写。" }
+    },
+    {
+      "id": "smart-car.fill.pid-01",
+      "title": "三项控制器缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写比例、积分、微分控制器缩写。",
+      "knowledge": ["PID", "control"],
+      "hints": ["三个字母分别代表比例、积分、微分。"],
+      "quiz": { "prompt": "比例—积分—微分控制器通常缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["PID"], "caseSensitive": false }], "explanation": "PID 分别代表 Proportional、Integral、Derivative。" }
+    },
+    {
+      "id": "smart-car.fill.encoder-01",
+      "title": "车轮速度反馈器件",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写根据轴转动产生脉冲的反馈传感器。",
+      "knowledge": ["encoder", "speed"],
+      "hints": ["中文名称是编码器。"],
+      "quiz": { "prompt": "智能车常用旋转 ____ 的脉冲计数估算车轮速度。", "blanks": [{ "label": "器件", "answers": ["编码器", "encoder"], "caseSensitive": false }], "explanation": "旋转编码器将轴转动转换为脉冲，可用于速度和里程估计。" }
+    },
+    {
+      "id": "smart-car.fill.imu-01",
+      "title": "惯性测量单元缩写",
+      "questionType": "fill-blank",
+      "difficulty": "intermediate",
+      "summary": "填写惯性测量单元的常用缩写。",
+      "knowledge": ["IMU", "sensor"],
+      "hints": ["英文为 Inertial Measurement Unit。"],
+      "quiz": { "prompt": "集成加速度计、陀螺仪等惯性传感器的测量单元常缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["IMU"], "caseSensitive": false }], "explanation": "IMU 是 Inertial Measurement Unit 的缩写，可提供加速度和角速度等信息。" }
+    }
+  ]
+}

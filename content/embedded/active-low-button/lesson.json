@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "embedded.input.active-low-01",
+  "title": "识别低电平有效按键",
+  "track": "embedded",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "把 GPIO 原始电平转换为清晰的按下状态。",
+  "prerequisites": ["embedded.choice.active-low-button-01"],
+  "knowledge": ["GPIO", "active-low", "boolean"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["active_low_button.c"], "tests": ["test_active_low_button.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["低电平有效表示 0 对应按下。", "任何非零输入都按高电平处理。", "直接返回 pin_level == 0U 的比较结果即可。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

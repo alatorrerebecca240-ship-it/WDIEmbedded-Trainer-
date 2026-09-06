@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "embedded.adc.millivolts-01",
+  "title": "ADC 采样值换算毫伏",
+  "track": "embedded",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "使用定宽整数和舍入把 ADC 码值换算为电压。",
+  "prerequisites": ["embedded.choice.adc-purpose-01"],
+  "knowledge": ["ADC", "fixed-width-integer", "scaling"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["adc_millivolts.c"], "tests": ["test_adc_millivolts.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["基本比例是 sample × reference_mv / max_code。", "先转换成 uint32_t 再乘，避免 16 位中间结果溢出。", "除法前加 max_code / 2 可以实现最接近整数舍入。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

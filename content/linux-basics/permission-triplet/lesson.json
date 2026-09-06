@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "linux.permission.triplet-01",
+  "title": "权限数字转 rwx（C 教学模型）",
+  "track": "linux-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "用位运算把一个权限数字转换成三位权限文本，不修改电脑上的实际权限。",
+  "prerequisites": [],
+  "knowledge": [
+    "基本权限位",
+    "位运算",
+    "字符数组"
+  ],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c11",
+    "sources": [
+      "permissions.c"
+    ],
+    "tests": [
+      "test_permissions.c"
+    ],
+    "includeDirs": [
+      "."
+    ],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "只处理一组 r/w/x 权限，不是完整的三位 chmod 模式。",
+    "r、w、x 对应位掩码 4、2、1；未设置的位写成 '-'。",
+    "先拒绝大于 7 的输入；成功时别忘记字符串末尾的 '\\0'。"
+  ],
+  "origin": {
+    "type": "self-authored",
+    "license": "project-license"
+  }
+}

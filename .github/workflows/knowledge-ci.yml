@@ -1,0 +1,32 @@
+name: Knowledge tooling checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  checks:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Compile Python and validate normalized source
+        run: python -m compileall -q trainer.py trainerlib
+      - run: python trainer.py validate
+      - name: Offline tool tests (self-authored fixtures only, no imported code)
+        if: runner.os == 'Linux'
+        run: python -m unittest discover -s tests -v
+      - name: Extension syntax and behavior tests
+        working-directory: apps/vscode-extension
+        run: npm run check
+      - working-directory: apps/vscode-extension
+        run: npm test

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.array.reverse-01",
+  "title": "原地反转整数数组",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "练习双端下标、交换和边界条件。",
+  "prerequisites": ["c.pointer.swap-01", "c.true.array-index-01"],
+  "knowledge": ["array", "two-pointers", "in-place"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["reverse_array.c"], "tests": ["test_reverse_array.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["交换第一个和最后一个，再向中间移动。", "只需要处理到左右下标相遇。", "先判断 count，避免对 0 做无符号减一。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

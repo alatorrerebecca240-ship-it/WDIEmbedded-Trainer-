@@ -1,0 +1,128 @@
+const vscode = require('vscode');
+
+const TRACK_NAMES = {
+  'c-basics': 'C 语言基础',
+  'cpp-basics': 'C++ 基础',
+  embedded: '嵌入式基础',
+  'smart-car': '智能车竞赛',
+  'electronic-design': '电子设计竞赛',
+  'linux-basics': 'Linux 基础',
+  'ros2-basics': 'ROS 2 基础'
+};
+
+const LANGUAGE_NAMES = { c: 'C', cpp: 'C++', text: '基础知识' };
+
+const STATUS_NAMES = {
+  'not-started': '未开始',
+  'in-progress': '进行中',
+  passed: '已通过'
+};
+
+const DIFFICULTY_NAMES = {
+  beginner: '入门',
+  intermediate: '进阶',
+  advanced: '高级',
+  project: '项目'
+};
+
+const QUESTION_TYPE_NAMES = {
+  programming: '编程题',
+  'single-choice': '选择题',
+  'true-false': '判断题',
+  'fill-blank': '填空题',
+  'code-reading': '代码阅读题',
+  debugging: '纠错题'
+};
+
+class TrackItem extends vscode.TreeItem {
+  constructor(track, lessons) {
+    super(TRACK_NAMES[track] || track, vscode.TreeItemCollapsibleState.Expanded);
+    this.track = track;
+    this.lessons = lessons;
+    this.description = `${lessons.length} 题`;
+    this.contextValue = 'track';
+    this.iconPath = new vscode.ThemeIcon('library');
+  }
+}
+
+class QuestionTypeItem extends vscode.TreeItem {
+  constructor(questionType, lessons) {
+    super(QUESTION_TYPE_NAMES[questionType] || questionType, vscode.TreeItemCollapsibleState.Collapsed);
+    this.questionType = questionType;
+    this.lessons = lessons;
+    this.description = `${lessons.length} 题`;
+    this.contextValue = 'question-type';
+    this.iconPath = new vscode.ThemeIcon(
+      questionType === 'programming' ? 'code' : questionType === 'single-choice' ? 'list-selection' : questionType === 'true-false' ? 'checklist' : 'symbol-key'
+    );
+  }
+}
+
+class LessonItem extends vscode.TreeItem {
+  constructor(lesson, progress) {
+    super(lesson.title, vscode.TreeItemCollapsibleState.None);
+    this.lesson = lesson;
+    this.progress = progress;
+    const status = progress.status || 'not-started';
+    this.description = `${LANGUAGE_NAMES[lesson.language] || lesson.language} · ${DIFFICULTY_NAMES[lesson.difficulty] || lesson.difficulty} · ${STATUS_NAMES[status] || status}`;
+    this.tooltip = new vscode.MarkdownString(
+      `**${lesson.title}**\n\n${lesson.summary}\n\n课程 ID：\`${lesson.id}\``
+    );
+    this.contextValue = `lesson-${lesson.questionType}-${status}`;
+    this.iconPath = new vscode.ThemeIcon(
+      status === 'passed' ? 'pass-filled' : status === 'in-progress' ? 'edit' : lesson.questionType === 'programming' ? 'code' : 'question',
+      status === 'passed' ? new vscode.ThemeColor('testing.iconPassed') : undefined
+    );
+    this.command = {
+      command: 'embeddedTrainer.dashboard',
+      title: '查看课程',
+      arguments: [lesson.id]
+    };
+  }
+}
+
+class LessonTreeProvider {
+  constructor(catalog) {
+    this.catalog = catalog;
+    this.changed = new vscode.EventEmitter();
+    this.onDidChangeTreeData = this.changed.event;
+  }
+
+  refresh() {
+    this.changed.fire(undefined);
+  }
+
+  getTreeItem(item) {
+    return item;
+  }
+
+  getChildren(item) {
+    if (item instanceof TrackItem) {
+      const groups = new Map();
+      for (const lesson of item.lessons) {
+        const group = groups.get(lesson.questionType) || [];
+        group.push(lesson);
+        groups.set(lesson.questionType, group);
+      }
+      const order = ['programming', 'single-choice', 'true-false', 'fill-blank', 'code-reading', 'debugging'];
+      return [...groups.entries()]
+        .sort((left, right) => order.indexOf(left[0]) - order.indexOf(right[0]))
+        .map(([questionType, lessons]) => new QuestionTypeItem(questionType, lessons));
+    }
+    if (item instanceof QuestionTypeItem) {
+      return item.lessons.map((lesson) => new LessonItem(lesson, this.catalog.status(lesson.id)));
+    }
+    if (item) {
+      return [];
+    }
+    const groups = new Map();
+    for (const lesson of this.catalog.lessons) {
+      const group = groups.get(lesson.track) || [];
+      group.push(lesson);
+      groups.set(lesson.track, group);
+    }
+    return [...groups.entries()].map(([track, lessons]) => new TrackItem(track, lessons));
+  }
+}
+
+module.exports = { LessonTreeProvider, LessonItem, STATUS_NAMES, DIFFICULTY_NAMES, TRACK_NAMES, QUESTION_TYPE_NAMES, LANGUAGE_NAMES };

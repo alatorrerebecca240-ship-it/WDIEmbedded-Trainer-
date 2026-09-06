@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.string.length-01",
+  "title": "手写字符串长度",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "通过扫描空字符理解 C 字符串。",
+  "prerequisites": ["c.choice.string-terminator-01"],
+  "knowledge": ["string", "null-terminator", "loop"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["string_length.c"], "tests": ["test_string_length.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["从下标 0 开始检查字符。", "遇到 '\\0' 时停止。", "不要调用 strlen；NULL 输入按题意返回 0。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

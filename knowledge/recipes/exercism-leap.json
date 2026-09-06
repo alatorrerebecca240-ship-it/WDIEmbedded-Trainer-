@@ -1,0 +1,274 @@
+{
+  "formatVersion": 1,
+  "source": "exercism-c",
+  "pack": {
+    "formatVersion": 1,
+    "id": "exercism.leap",
+    "version": "1.0.0",
+    "title": "Exercism C：闰年基础",
+    "minEngineVersion": "0.6.0",
+    "license": "MIT"
+  },
+  "modifications": "Adapted for Embedded Trainer: added Chinese teaching prompts and a restricted local test adapter (not Unity); TEST_IGNORE is deliberately a no-op so all upstream cases run. Original reference, header and tests are retained with their license. New Chinese prompts, starter/buggy implementations and adaptation code are MIT licensed; upstream copyright is retained. Human review is still required.",
+  "questions": [
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.programming",
+        "title": "编程：判断公历闰年",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "programming",
+        "difficulty": "beginner",
+        "summary": "实现完整的公历闰年判断函数，运行全部上游测试。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "native",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "assetRoot": "lessons/oss.exercism.leap.programming",
+        "starter": "starter",
+        "statement": "README.md",
+        "reference": "reference",
+        "build": {
+          "standard": "c11",
+          "sources": [
+            "leap.c"
+          ],
+          "tests": [
+            "test_leap.c"
+          ],
+          "includeDirs": [
+            ".",
+            "tests"
+          ],
+          "timeoutSeconds": 5
+        }
+      },
+      "files": {
+        "lessons/oss.exercism.leap.programming/README.md": "# 编程：判断公历闰年\n\n实现 bool leap_year(int year)，本题只考虑公历年份 1..9999。\n能被 400 整除的是闰年；否则能被 4 整除但不能被 100 整除的也是闰年。保持头文件接口，不添加 main。\n初始代码尚未实现。例如 1996、2000 为真，1900、2100 为假。\n测试来自固定提交的 Exercism C leap，原始 TEST_IGNORE 在教学适配器中禁用，全部 9 个测试都执行。\n",
+        "lessons/oss.exercism.leap.programming/starter/leap.h": {
+          "upstream": "exercises/practice/leap/leap.h"
+        },
+        "lessons/oss.exercism.leap.programming/starter/leap.c": "#include \"leap.h\"\nbool leap_year(int year) { (void)year; return false; }\n",
+        "lessons/oss.exercism.leap.programming/reference/leap.h": {
+          "upstream": "exercises/practice/leap/leap.h"
+        },
+        "lessons/oss.exercism.leap.programming/reference/leap.c": {
+          "upstream": "exercises/practice/leap/.meta/example.c"
+        },
+        "lessons/oss.exercism.leap.programming/tests/test_leap.c": {
+          "upstream": "exercises/practice/leap/test_leap.c"
+        },
+        "lessons/oss.exercism.leap.programming/tests/test-framework/unity.h": "/* Training adapter, not the Unity library. Enables every retained upstream test. */\n#ifndef TRAINER_TEST_ADAPTER_H\n#define TRAINER_TEST_ADAPTER_H\n#include <stdio.h>\nstatic int trainer_failures = 0;\n#define UNITY_BEGIN() ((void)0)\n#define UNITY_END() trainer_failures\n#define TEST_IGNORE() ((void)0)\n#define RUN_TEST(f) do { setUp(); f(); tearDown(); } while (0)\n#define TEST_ASSERT_TRUE(expr) do { if (!(expr)) { ++trainer_failures; printf(\"FAIL line %d\\n\", __LINE__); } } while (0)\n#define TEST_ASSERT_FALSE(expr) TEST_ASSERT_TRUE(!(expr))\n#endif\n"
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.debugging",
+        "title": "纠错：世纪年的特殊规则",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "debugging",
+        "difficulty": "beginner",
+        "summary": "修复只考虑四年一闰导致的世纪年错误。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "native",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "assetRoot": "lessons/oss.exercism.leap.debugging",
+        "starter": "starter",
+        "statement": "README.md",
+        "reference": "reference",
+        "build": {
+          "standard": "c11",
+          "sources": [
+            "leap.c"
+          ],
+          "tests": [
+            "test_leap.c"
+          ],
+          "includeDirs": [
+            ".",
+            "tests"
+          ],
+          "timeoutSeconds": 5
+        }
+      },
+      "files": {
+        "lessons/oss.exercism.leap.debugging/README.md": "# 纠错：世纪年的特殊规则\n\n实现 bool leap_year(int year)，本题只考虑公历年份 1..9999。\n能被 400 整除的是闰年；否则能被 4 整除但不能被 100 整除的也是闰年。保持头文件接口，不添加 main。\n初始代码含有逻辑错误。例如 1996、2000 为真，1900、2100 为假。\n测试来自固定提交的 Exercism C leap，原始 TEST_IGNORE 在教学适配器中禁用，全部 9 个测试都执行。\n",
+        "lessons/oss.exercism.leap.debugging/starter/leap.h": {
+          "upstream": "exercises/practice/leap/leap.h"
+        },
+        "lessons/oss.exercism.leap.debugging/starter/leap.c": "#include \"leap.h\"\nbool leap_year(int year) { return year % 4 == 0; }\n",
+        "lessons/oss.exercism.leap.debugging/reference/leap.h": {
+          "upstream": "exercises/practice/leap/leap.h"
+        },
+        "lessons/oss.exercism.leap.debugging/reference/leap.c": {
+          "upstream": "exercises/practice/leap/.meta/example.c"
+        },
+        "lessons/oss.exercism.leap.debugging/tests/test_leap.c": {
+          "upstream": "exercises/practice/leap/test_leap.c"
+        },
+        "lessons/oss.exercism.leap.debugging/tests/test-framework/unity.h": "/* Training adapter, not the Unity library. Enables every retained upstream test. */\n#ifndef TRAINER_TEST_ADAPTER_H\n#define TRAINER_TEST_ADAPTER_H\n#include <stdio.h>\nstatic int trainer_failures = 0;\n#define UNITY_BEGIN() ((void)0)\n#define UNITY_END() trainer_failures\n#define TEST_IGNORE() ((void)0)\n#define RUN_TEST(f) do { setUp(); f(); tearDown(); } while (0)\n#define TEST_ASSERT_TRUE(expr) do { if (!(expr)) { ++trainer_failures; printf(\"FAIL line %d\\n\", __LINE__); } } while (0)\n#define TEST_ASSERT_FALSE(expr) TEST_ASSERT_TRUE(!(expr))\n#endif\n"
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.read",
+        "title": "阅读：1900 年的执行路径",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "code-reading",
+        "difficulty": "beginner",
+        "summary": "按嵌套条件追踪实际输出。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "阅读以下完整 C11 程序，填写标准输出的整数（不必填写换行符）。",
+          "code": "#include <stdbool.h>\n#include <stdio.h>\n/* Teaching adaptation of the retained Exercism reference. */\nstatic bool leap_year(int year) {\n    if (year % 4 == 0) {\n        if (year % 400 == 0) return true;\n        if (year % 100 == 0) return false;\n        return true;\n    }\n    return false;\n}\nint main(void) { printf(\"%d\\n\", leap_year(1900)); return 0; }\n",
+          "blanks": [
+            {
+              "label": "输出",
+              "answers": [
+                "0"
+              ],
+              "caseSensitive": true
+            }
+          ],
+          "explanation": "1900 能被 4 和 100 整除，但不能被 400 整除，因此返回 false，打印 0。"
+        },
+        "verification": {
+          "source": "#include <stdbool.h>\n#include <stdio.h>\n/* Teaching adaptation of the retained Exercism reference. */\nstatic bool leap_year(int year) {\n    if (year % 4 == 0) {\n        if (year % 400 == 0) return true;\n        if (year % 100 == 0) return false;\n        return true;\n    }\n    return false;\n}\nint main(void) { printf(\"%d\\n\", leap_year(1900)); return 0; }\n",
+          "expectedStdout": "0"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.choice",
+        "title": "选择：正确的闰年条件",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "single-choice",
+        "difficulty": "beginner",
+        "summary": "区分逻辑与和逻辑或的组合。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "对公历年份 y，哪个表达式完整符合闰年规则？",
+          "options": [
+            {
+              "id": "A",
+              "text": "y % 4 == 0"
+            },
+            {
+              "id": "B",
+              "text": "y % 100 == 0"
+            },
+            {
+              "id": "C",
+              "text": "y % 400 == 0 || (y % 4 == 0 && y % 100 != 0)"
+            },
+            {
+              "id": "D",
+              "text": "y % 4 != 0"
+            }
+          ],
+          "answer": "C",
+          "explanation": "先处理四百年特例，再处理能被四整除且不是普通世纪年的情况。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.judge",
+        "title": "判断：四年规则是否足够",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "true-false",
+        "difficulty": "beginner",
+        "summary": "认识世纪年边界条件。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "在公历规则下，某年只要能被 4 整除，就一定是闰年。",
+          "answer": false,
+          "explanation": "1900、2100 是反例：它们是整百年但不能被 400 整除。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.exercism.leap.fill",
+        "title": "填空：布尔结果",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "fill-blank",
+        "difficulty": "beginner",
+        "summary": "认识 C11 中的布尔类型。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "在包含 stdbool.h 的 C11 代码中，leap_year 的返回类型 ____ 可直接表示 true 或 false。",
+          "blanks": [
+            {
+              "label": "类型",
+              "answers": [
+                "bool"
+              ],
+              "caseSensitive": true
+            }
+          ],
+          "explanation": "此处使用 bool 表达判断结果；函数不需要返回日期字符串。"
+        }
+      }
+    }
+  ],
+  "authoredLicense": {
+    "license": "MIT",
+    "text": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.struct.student-average-01",
+  "title": "计算结构体中的成绩平均值",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "intermediate",
+  "summary": "练习结构体指针、箭头运算符和数组成员。",
+  "prerequisites": ["c.choice.struct-pointer-member-01", "c.number.safe-average-01"],
+  "knowledge": ["struct", "pointer", "array-member"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["student_average.c"], "tests": ["test_student_average.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["通过 student->scores[index] 访问成绩。", "三项成绩相加后要进行浮点除法。", "student 为 NULL 时按题意返回 0.0。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

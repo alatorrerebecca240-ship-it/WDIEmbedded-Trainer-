@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.array.count-positive-01",
+  "title": "统计数组中的正数",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "练习数组遍历、计数和 size_t。",
+  "prerequisites": ["c.true.array-index-01"],
+  "knowledge": ["array", "loop", "size_t"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["count_positive.c"], "tests": ["test_count_positive.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["用下标从 0 遍历到 count - 1。", "只有严格大于 0 的元素才是正数。", "count 为 0 时不应访问 values。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

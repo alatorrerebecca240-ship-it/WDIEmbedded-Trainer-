@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "smart-car.motor.clamp-command-01",
+  "title": "限制电机控制指令",
+  "track": "smart-car",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "把控制器输出限制在电机驱动允许的对称范围。",
+  "prerequisites": ["smart-car.true.output-limit-01"],
+  "knowledge": ["motor-command", "saturation", "range"],
+  "target": "simulator",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": { "standard": "c11", "sources": ["motor_command.c"], "tests": ["test_motor_command.c"], "includeDirs": ["."], "timeoutSeconds": 5 },
+  "hints": ["先比较 command 与正的 limit。", "负方向下限是 -limit。", "区间内的值直接转换并返回。"],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

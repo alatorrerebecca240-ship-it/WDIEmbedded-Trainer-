@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/lesson.schema.json",
+  "schemaVersion": 1,
+  "id": "c.pointer.swap-01",
+  "title": "使用指针交换两个整数",
+  "track": "c-basics",
+  "language": "c",
+  "questionType": "programming",
+  "difficulty": "beginner",
+  "summary": "理解地址、解引用和通过指针修改调用者数据。",
+  "prerequisites": [],
+  "knowledge": ["pointer", "address", "parameter-passing"],
+  "target": "native",
+  "starter": "starter",
+  "statement": "README.md",
+  "build": {
+    "standard": "c11",
+    "sources": ["swap.c"],
+    "tests": ["test_swap.c"],
+    "includeDirs": ["."],
+    "timeoutSeconds": 5
+  },
+  "hints": [
+    "形参保存的是两个 int 对象的地址。",
+    "先用临时变量保存 *left，再分别给两个解引用表达式赋值。",
+    "同一个地址可能同时作为 left 和 right 传入，正常的三步交换也应保持安全。"
+  ],
+  "origin": { "type": "self-authored", "license": "project-license" }
+}

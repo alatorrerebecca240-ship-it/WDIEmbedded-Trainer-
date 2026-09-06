@@ -1,0 +1,6 @@
+* text=auto eol=lf
+# Approval and upstream retention hash exact bytes, across Windows and Linux.
+# Do not let Git silently rewrite knowledge payload line endings after review.
+knowledge/** -text
+*.zip -text
+*.vsix -text

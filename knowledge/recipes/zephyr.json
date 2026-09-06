@@ -1,0 +1,89 @@
+{
+  "formatVersion": 1,
+  "source": "zephyr",
+  "pack": {
+    "formatVersion": 1,
+    "id": "zephyr.basic",
+    "version": "1.0.0",
+    "title": "Zephyr：基础示例",
+    "minEngineVersion": "0.6.0",
+    "license": "mixed"
+  },
+  "modifications": "Selected source retained unchanged for attribution; original Chinese objective questions were added. Hardware-dependent code is not executed or advertised as a portable program. New Chinese prompts and adaptation code are MIT licensed. Upstream license remains unchanged; human review is still required.",
+  "questions": [
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.zephyr.sleep.choice",
+        "title": "Zephyr 示例里的延时单位",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "single-choice",
+        "difficulty": "beginner",
+        "summary": "读懂示例宏与延时接口。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "Zephyr blinky 示例调用 k_msleep(SLEEP_TIME_MS)。这个接口参数使用什么时间单位？",
+          "options": [
+            {
+              "id": "A",
+              "text": "时钟周期"
+            },
+            {
+              "id": "B",
+              "text": "微秒"
+            },
+            {
+              "id": "C",
+              "text": "毫秒"
+            },
+            {
+              "id": "D",
+              "text": "分钟"
+            }
+          ],
+          "answer": "C",
+          "explanation": "k_msleep 的参数使用毫秒；不要把它当作内核 tick 的直接数量。"
+        }
+      }
+    },
+    {
+      "question": {
+        "schemaVersion": 1,
+        "id": "oss.zephyr.gpio.judge",
+        "title": "使用 GPIO 前检查设备",
+        "track": "open-source-basics",
+        "language": "c",
+        "questionType": "true-false",
+        "difficulty": "beginner",
+        "summary": "理解设备就绪检查。",
+        "prerequisites": [],
+        "knowledge": [
+          "基础概念",
+          "开源示例"
+        ],
+        "target": "知识题",
+        "hints": [
+          "先阅读题目约定，区分一般规则与特殊边界。"
+        ],
+        "quiz": {
+          "prompt": "在 blinky 示例中，gpio_is_ready_dt 检查失败后直接退出，不会继续配置并翻转 LED 引脚。",
+          "answer": true,
+          "explanation": "示例在就绪检查失败时 return 0，避免继续操作不可用的设备。"
+        }
+      }
+    }
+  ],
+  "authoredLicense": {
+    "license": "MIT",
+    "text": "MIT License\n\nCopyright (c) 2026 alatorrerebecca240-ship-it\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n"
+  }
+}

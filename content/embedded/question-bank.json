@@ -1,0 +1,224 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "embedded",
+    "language": "c",
+    "target": "simulator",
+    "prerequisites": [],
+    "origin": { "type": "self-authored", "license": "project-license" }
+  },
+  "questions": [
+    {
+      "id": "embedded.choice.gpio-input-01",
+      "title": "GPIO 输入模式",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "判断读取外部按键电平时的 GPIO 方向。",
+      "knowledge": ["GPIO", "input"],
+      "hints": ["程序需要读取引脚外部的电平。", "输入模式不会主动驱动高低电平。"],
+      "quiz": {
+        "prompt": "微控制器需要读取一个外部数字按键的电平，通常应把对应 GPIO 配置成什么模式？",
+        "options": [
+          { "id": "A", "text": "数字输入" },
+          { "id": "B", "text": "推挽输出" },
+          { "id": "C", "text": "PWM 输出" },
+          { "id": "D", "text": "模拟输出" }
+        ],
+        "answer": "A",
+        "explanation": "读取外部数字电平时应使用数字输入模式，并按电路需要配置上拉或下拉。"
+      }
+    },
+    {
+      "id": "embedded.choice.active-low-button-01",
+      "title": "上拉按键的有效电平",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解上拉输入与低电平有效按键。",
+      "knowledge": ["pull-up", "active-low", "button"],
+      "hints": ["松开时上拉电阻把输入保持为高。", "按下后按键把引脚接地。"],
+      "quiz": {
+        "prompt": "按键一端接地，GPIO 开启上拉输入。按键按下时通常读到什么电平？",
+        "options": [
+          { "id": "A", "text": "高电平" },
+          { "id": "B", "text": "低电平" },
+          { "id": "C", "text": "固定为模拟中点" },
+          { "id": "D", "text": "一定是高阻态" }
+        ],
+        "answer": "B",
+        "explanation": "松开时由上拉得到高电平，按下后引脚接地得到低电平，因此是低有效。"
+      }
+    },
+    {
+      "id": "embedded.choice.adc-purpose-01",
+      "title": "ADC 的作用",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "认识模数转换器的基本功能。",
+      "knowledge": ["ADC", "sampling"],
+      "hints": ["A 表示 Analog，D 表示 Digital。"],
+      "quiz": {
+        "prompt": "ADC 外设的主要作用是什么？",
+        "options": [
+          { "id": "A", "text": "把数字代码转换成模拟电压" },
+          { "id": "B", "text": "把模拟电压采样并转换成数字量" },
+          { "id": "C", "text": "放大程序存储空间" },
+          { "id": "D", "text": "产生串口波特率" }
+        ],
+        "answer": "B",
+        "explanation": "ADC 是模数转换器，用于把一定范围内的模拟输入量转换成数字采样值。"
+      }
+    },
+    {
+      "id": "embedded.choice.timer-periodic-01",
+      "title": "周期任务的定时来源",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "为固定周期任务选择合适的硬件外设。",
+      "knowledge": ["timer", "periodic-task"],
+      "hints": ["需要稳定的时间基准。", "硬件定时器可以在计数到期时产生事件。"],
+      "quiz": {
+        "prompt": "要让控制算法每 10 ms 稳定执行一次，通常优先使用哪种外设提供周期事件？",
+        "options": [
+          { "id": "A", "text": "硬件定时器" },
+          { "id": "B", "text": "GPIO 输出锁存器" },
+          { "id": "C", "text": "随机数发生器" },
+          { "id": "D", "text": "Flash 擦除控制器" }
+        ],
+        "answer": "A",
+        "explanation": "硬件定时器能以确定的计数周期触发中断或事件，适合作为周期任务的时间基准。"
+      }
+    },
+    {
+      "id": "embedded.choice.uart-01",
+      "title": "UART 通信特征",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "认识 UART 的基本串行通信方式。",
+      "knowledge": ["UART", "serial"],
+      "hints": ["通信双方预先约定波特率。", "通常没有独立时钟线。"],
+      "quiz": {
+        "prompt": "关于常见 UART 通信，哪项描述正确？",
+        "options": [
+          { "id": "A", "text": "必须使用共享时钟线" },
+          { "id": "B", "text": "通信双方通常需要约定相同波特率" },
+          { "id": "C", "text": "只能发送模拟信号" },
+          { "id": "D", "text": "不需要发送和接收引脚" }
+        ],
+        "answer": "B",
+        "explanation": "UART 是常见异步串行接口，双方通过约定波特率、数据位、校验位和停止位通信。"
+      }
+    },
+    {
+      "id": "embedded.choice.watchdog-01",
+      "title": "看门狗定时器",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "理解看门狗用于故障恢复的基本机制。",
+      "knowledge": ["watchdog", "fault-recovery"],
+      "hints": ["正常软件需要周期性喂狗。", "超时通常说明程序没有按预期运行。"],
+      "quiz": {
+        "prompt": "看门狗定时器在规定时间内没有被正常喂狗时，通常会做什么？",
+        "options": [
+          { "id": "A", "text": "自动扩大 RAM" },
+          { "id": "B", "text": "触发系统复位或故障处理" },
+          { "id": "C", "text": "提高 CPU 主频" },
+          { "id": "D", "text": "永久关闭所有中断" }
+        ],
+        "answer": "B",
+        "explanation": "看门狗用于检测软件失去正常执行节奏，超时后通常复位系统或进入故障处理流程。"
+      }
+    },
+    {
+      "id": "embedded.true.isr-short-01",
+      "title": "中断服务程序应简短",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "判断 ISR 的常见设计原则。",
+      "knowledge": ["interrupt", "ISR", "latency"],
+      "hints": ["中断执行时间会影响其他实时事件。"],
+      "quiz": { "prompt": "中断服务程序通常应尽量简短，把耗时处理留给主循环或任务。", "answer": true, "explanation": "短 ISR 有助于降低中断延迟和系统抖动，通常只完成必要操作并通知后台处理。" }
+    },
+    {
+      "id": "embedded.true.volatile-atomic-01",
+      "title": "volatile 不等于原子操作",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "避免混淆可观察访问和原子性。",
+      "knowledge": ["volatile", "atomicity", "interrupt"],
+      "hints": ["一次 C 表达式可能对应多条机器指令。"],
+      "quiz": { "prompt": "把主循环与中断共享的变量声明为 volatile，就自动保证所有读改写操作都是原子的。", "answer": false, "explanation": "volatile 不能保证原子性；多字节访问或读改写操作仍可能需要临界区或原子机制。" }
+    },
+    {
+      "id": "embedded.true.polling-01",
+      "title": "轮询方式",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解轮询读取外设状态的方式。",
+      "knowledge": ["polling", "peripheral"],
+      "hints": ["程序主动重复查询状态。"],
+      "quiz": { "prompt": "轮询是程序周期性或连续主动检查外设状态的一种方式。", "answer": true, "explanation": "轮询由处理器主动读取状态；与之相对，中断由事件发生时通知处理器。" }
+    },
+    {
+      "id": "embedded.true.uint8-width-01",
+      "title": "uint8_t 位宽",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解固定宽度整数类型的含义。",
+      "knowledge": ["stdint", "uint8_t"],
+      "hints": ["类型名中的数字表示位数。"],
+      "quiz": { "prompt": "在实现提供 uint8_t 的平台上，uint8_t 是恰好 8 位的无符号整数类型。", "answer": true, "explanation": "固定宽度类型只有在平台存在对应精确位宽类型时才提供；uint8_t 若存在就恰好为 8 位。" }
+    },
+    {
+      "id": "embedded.true.button-bounce-01",
+      "title": "机械按键抖动",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "认识按键消抖的必要性。",
+      "knowledge": ["button", "debounce"],
+      "hints": ["机械触点闭合瞬间可能反复接触。"],
+      "quiz": { "prompt": "机械按键按下一次时，原始数字输入可能在短时间内出现多次高低跳变。", "answer": true, "explanation": "机械触点会抖动，软件或硬件消抖用于把一段快速跳变识别为一次稳定动作。" }
+    },
+    {
+      "id": "embedded.fill.gpio-01",
+      "title": "通用数字输入输出缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写通用输入输出接口缩写。",
+      "knowledge": ["GPIO", "digital-io"],
+      "hints": ["英文为 General-Purpose Input/Output。"],
+      "quiz": { "prompt": "微控制器的通用数字输入输出接口通常缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["GPIO"], "caseSensitive": false }], "explanation": "GPIO 是 General-Purpose Input/Output 的缩写。" }
+    },
+    {
+      "id": "embedded.fill.adc-01",
+      "title": "模数转换器缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写模数转换器常用缩写。",
+      "knowledge": ["ADC", "analog"],
+      "hints": ["英文为 Analog-to-Digital Converter。"],
+      "quiz": { "prompt": "把模拟输入转换成数字采样值的外设缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["ADC"], "caseSensitive": false }], "explanation": "ADC 是 Analog-to-Digital Converter，即模数转换器。" }
+    },
+    {
+      "id": "embedded.fill.uart-01",
+      "title": "异步串行接口缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写通用异步收发器缩写。",
+      "knowledge": ["UART", "serial"],
+      "hints": ["英文为 Universal Asynchronous Receiver/Transmitter。"],
+      "quiz": { "prompt": "常用的通用异步串行收发外设缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["UART"], "caseSensitive": false }], "explanation": "UART 是 Universal Asynchronous Receiver/Transmitter 的缩写。" }
+    },
+    {
+      "id": "embedded.fill.isr-01",
+      "title": "中断服务程序缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写中断服务程序的常用英文缩写。",
+      "knowledge": ["interrupt", "ISR"],
+      "hints": ["英文为 Interrupt Service Routine。"],
+      "quiz": { "prompt": "中断服务程序（Interrupt Service Routine）通常缩写为 ____。", "blanks": [{ "label": "缩写", "answers": ["ISR"], "caseSensitive": false }], "explanation": "ISR 是 Interrupt Service Routine 的缩写。" }
+    }
+  ]
+}

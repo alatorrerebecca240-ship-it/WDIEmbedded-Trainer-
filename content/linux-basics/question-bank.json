@@ -1,0 +1,870 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "linux-basics",
+    "language": "text",
+    "target": "无需 Linux 环境",
+    "prerequisites": [],
+    "origin": {
+      "type": "self-authored",
+      "license": "project-license"
+    }
+  },
+  "questions": [
+    {
+      "id": "linux.path.pwd-choice-01",
+      "title": "查看当前位置",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握工作目录、pwd的基础用法。",
+      "knowledge": [
+        "工作目录",
+        "pwd"
+      ],
+      "hints": [
+        "想想 print working directory 的首字母。"
+      ],
+      "quiz": {
+        "prompt": "在 Linux Bash 中，哪个命令用于输出当前工作目录？",
+        "explanation": "pwd 显示当前工作目录；cd 切换目录，mkdir 创建目录，cp 复制文件。",
+        "options": [
+          {
+            "id": "A",
+            "text": "pwd"
+          },
+          {
+            "id": "B",
+            "text": "cd"
+          },
+          {
+            "id": "C",
+            "text": "mkdir"
+          },
+          {
+            "id": "D",
+            "text": "cp"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "linux.path.relative-choice-01",
+      "title": "识别相对路径",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握绝对路径、相对路径的基础用法。",
+      "knowledge": [
+        "绝对路径",
+        "相对路径"
+      ],
+      "hints": [
+        "观察路径是否以 / 开头。"
+      ],
+      "quiz": {
+        "prompt": "以下哪个是相对路径？",
+        "explanation": "相对路径以当前目录为起点；绝对路径以 / 开头。src/main.c 是当前目录下 src 中的文件。",
+        "options": [
+          {
+            "id": "A",
+            "text": "/home/student"
+          },
+          {
+            "id": "B",
+            "text": "/tmp/log.txt"
+          },
+          {
+            "id": "C",
+            "text": "src/main.c"
+          },
+          {
+            "id": "D",
+            "text": "/usr/bin"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "linux.file.hidden-choice-01",
+      "title": "查看隐藏文件",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握隐藏文件、ls的基础用法。",
+      "knowledge": [
+        "隐藏文件",
+        "ls"
+      ],
+      "hints": [
+        "all 表示全部。"
+      ],
+      "quiz": {
+        "prompt": "使用 GNU ls 时，哪个选项会同时显示以点开头的名字（包含 . 和 ..）？",
+        "explanation": "ls -a 不忽略以 . 开头的名字。-l 是长格式，-h 用于易读大小，-r 反转排序。",
+        "options": [
+          {
+            "id": "A",
+            "text": "-l"
+          },
+          {
+            "id": "B",
+            "text": "-a"
+          },
+          {
+            "id": "C",
+            "text": "-h"
+          },
+          {
+            "id": "D",
+            "text": "-r"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "linux.file.copy-choice-01",
+      "title": "复制还是移动",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握cp、文件复制的基础用法。",
+      "knowledge": [
+        "cp",
+        "文件复制"
+      ],
+      "hints": [
+        "复制后原来的文件还在。"
+      ],
+      "quiz": {
+        "prompt": "当前目录有 report.txt，backup 目录已存在且可写，其中还没有 report.txt。哪条命令会复制文件并保留原文件？",
+        "explanation": "cp 创建副本；mv 移动或重命名。操作前应核对目标，已有同名文件可能被覆盖。",
+        "options": [
+          {
+            "id": "A",
+            "text": "mv report.txt backup/"
+          },
+          {
+            "id": "B",
+            "text": "cd backup"
+          },
+          {
+            "id": "C",
+            "text": "cp report.txt backup/"
+          },
+          {
+            "id": "D",
+            "text": "mkdir report.txt"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "linux.file.mkdir-choice-01",
+      "title": "创建多级目录",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握mkdir、父目录的基础用法。",
+      "knowledge": [
+        "mkdir",
+        "父目录"
+      ],
+      "hints": [
+        "需要 parents 对应的选项。"
+      ],
+      "quiz": {
+        "prompt": "要创建尚不存在的 practice/logs，且 practice 也不存在，使用 GNU mkdir 的哪条命令？",
+        "explanation": "mkdir -p 会按需创建缺失的父目录；普通 mkdir 不会自动补齐父目录。",
+        "options": [
+          {
+            "id": "A",
+            "text": "mkdir practice/logs"
+          },
+          {
+            "id": "B",
+            "text": "mkdir -p practice/logs"
+          },
+          {
+            "id": "C",
+            "text": "pwd practice/logs"
+          },
+          {
+            "id": "D",
+            "text": "cd practice/logs"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "linux.text.grep-choice-01",
+      "title": "筛选文本行",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握grep、文本筛选的基础用法。",
+      "knowledge": [
+        "grep",
+        "文本筛选"
+      ],
+      "hints": [
+        "选能按模式查找文本的工具。"
+      ],
+      "quiz": {
+        "prompt": "日志 demo.log 已存在。哪条命令输出其中包含大写 ERROR 的行？",
+        "explanation": "grep 按模式筛选行，默认区分大小写；wc -l 统计换行符数量。此处 ERROR 没有正则特殊字符。",
+        "options": [
+          {
+            "id": "A",
+            "text": "wc -l demo.log"
+          },
+          {
+            "id": "B",
+            "text": "cat ERROR"
+          },
+          {
+            "id": "C",
+            "text": "mkdir demo.log"
+          },
+          {
+            "id": "D",
+            "text": "grep 'ERROR' demo.log"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "linux.shell.pipe-choice-01",
+      "title": "认识管道方向",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握管道、标准输入输出的基础用法。",
+      "knowledge": [
+        "管道",
+        "标准输入输出"
+      ],
+      "hints": [
+        "标准输出与标准错误是不同通道。"
+      ],
+      "quiz": {
+        "prompt": "Bash 中 cmd_a | cmd_b 默认把什么连接到 cmd_b 的标准输入？",
+        "explanation": "普通 | 连接前一个命令的标准输出与后一个命令的标准输入；标准错误默认不会进入这条管道。",
+        "options": [
+          {
+            "id": "A",
+            "text": "cmd_a 的标准输出"
+          },
+          {
+            "id": "B",
+            "text": "cmd_a 的所有文件"
+          },
+          {
+            "id": "C",
+            "text": "cmd_a 的标准错误和标准输出"
+          },
+          {
+            "id": "D",
+            "text": "cmd_b 的标准错误"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "linux.shell.append-choice-01",
+      "title": "追加日志",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握追加重定向的基础用法。",
+      "knowledge": [
+        "追加重定向"
+      ],
+      "hints": [
+        "注意区分覆盖和追加。"
+      ],
+      "quiz": {
+        "prompt": "在默认 Bash 重定向行为下，希望保留已有日志并把新标准输出加到末尾，应使用哪个符号？",
+        "explanation": ">> 追加标准输出；> 通常会截断已有普通文件，< 改变标准输入，| 连接命令。",
+        "options": [
+          {
+            "id": "A",
+            "text": "<"
+          },
+          {
+            "id": "B",
+            "text": ">"
+          },
+          {
+            "id": "C",
+            "text": "|"
+          },
+          {
+            "id": "D",
+            "text": ">>"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "linux.permission.mode-choice-01",
+      "title": "读懂 640 权限",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握权限位、chmod的基础用法。",
+      "knowledge": [
+        "权限位",
+        "chmod"
+      ],
+      "hints": [
+        "把每一位拆成 4、2、1 的和。"
+      ],
+      "quiz": {
+        "prompt": "普通文件权限设为 640，只考虑所有者、所属组和其他人的基本权限位。以下哪个解释正确？",
+        "explanation": "三位分别对应所有者、组、其他人；r=4、w=2、x=1，所以 6=rw、4=r、0=无。",
+        "options": [
+          {
+            "id": "A",
+            "text": "所有者 rwx，组 r，其他无"
+          },
+          {
+            "id": "B",
+            "text": "所有者 rw，组 r，其他无"
+          },
+          {
+            "id": "C",
+            "text": "所有者 r，组 rw，其他无"
+          },
+          {
+            "id": "D",
+            "text": "所有者 rw，组 rw，其他 rw"
+          }
+        ],
+        "answer": "B"
+      }
+    },
+    {
+      "id": "linux.process.snapshot-choice-01",
+      "title": "查看进程",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握进程、ps的基础用法。",
+      "knowledge": [
+        "进程",
+        "ps"
+      ],
+      "hints": [
+        "程序运行后的实例称为进程。"
+      ],
+      "quiz": {
+        "prompt": "以下哪个命令通常用于查看当前进程信息的快照？",
+        "explanation": "ps 输出进程快照，具体范围由选项决定；top 更适合持续更新观察。",
+        "options": [
+          {
+            "id": "A",
+            "text": "pwd"
+          },
+          {
+            "id": "B",
+            "text": "chmod"
+          },
+          {
+            "id": "C",
+            "text": "ps"
+          },
+          {
+            "id": "D",
+            "text": "cp"
+          }
+        ],
+        "answer": "C"
+      }
+    },
+    {
+      "id": "linux.shell.and-choice-01",
+      "title": "仅成功后执行下一步",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "掌握退出状态、条件执行的基础用法。",
+      "knowledge": [
+        "退出状态",
+        "条件执行"
+      ],
+      "hints": [
+        "这里判断的是命令是否成功，不是是否有输出。"
+      ],
+      "quiz": {
+        "prompt": "Bash 中希望 build 成功（退出状态为 0）时才执行 test，应怎样连接两个命令？",
+        "explanation": "&& 仅当前一条命令成功时才执行后一条；|| 在前者失败时执行，; 顺序执行但不要求前者成功。",
+        "options": [
+          {
+            "id": "A",
+            "text": "build ; test"
+          },
+          {
+            "id": "B",
+            "text": "build | test"
+          },
+          {
+            "id": "C",
+            "text": "build || test"
+          },
+          {
+            "id": "D",
+            "text": "build && test"
+          }
+        ],
+        "answer": "D"
+      }
+    },
+    {
+      "id": "linux.shell.stderr-choice-01",
+      "title": "单独保存错误输出",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "掌握标准错误、文件描述符的基础用法。",
+      "knowledge": [
+        "标准错误",
+        "文件描述符"
+      ],
+      "hints": [
+        "记住 0、1、2 分别对应输入、输出、错误。"
+      ],
+      "quiz": {
+        "prompt": "使用 Bash 默认重定向设置，哪种写法只把 cmd 的标准错误写入 errors.log，标准输出仍保持原来的去向？",
+        "explanation": "文件描述符 2 表示标准错误，1 表示标准输出。2> 单独重定向标准错误，并可能覆盖已有日志。",
+        "options": [
+          {
+            "id": "A",
+            "text": "cmd 2> errors.log"
+          },
+          {
+            "id": "B",
+            "text": "cmd > errors.log"
+          },
+          {
+            "id": "C",
+            "text": "cmd < errors.log"
+          },
+          {
+            "id": "D",
+            "text": "cmd | errors.log"
+          }
+        ],
+        "answer": "A"
+      }
+    },
+    {
+      "id": "linux.path.parent-judge-01",
+      "title": "父目录的表示",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握父目录、当前目录的基础用法。",
+      "knowledge": [
+        "父目录",
+        "当前目录"
+      ],
+      "hints": [
+        "两个点与一个点的含义不同。"
+      ],
+      "quiz": {
+        "prompt": "在 Linux 路径中，.. 通常表示父目录，而 . 表示当前目录。",
+        "explanation": "例如 cd .. 用于切换到父目录；在根目录中 .. 仍指向根目录。",
+        "answer": true
+      }
+    },
+    {
+      "id": "linux.shell.case-judge-01",
+      "title": "Bash 变量名大小写",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握Bash 变量的基础用法。",
+      "knowledge": [
+        "Bash 变量"
+      ],
+      "hints": [
+        "变量名是否逐字符相同？"
+      ],
+      "quiz": {
+        "prompt": "在 Bash 中，变量名 robot 和 ROBOT 表示同一个变量。",
+        "explanation": "Bash 变量名区分大小写，robot 与 ROBOT 可以保存不同值。不要把其他环境的大小写规则套用过来。",
+        "answer": false
+      }
+    },
+    {
+      "id": "linux.shell.quote-judge-01",
+      "title": "含空格的文件名",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握参数、引号的基础用法。",
+      "knowledge": [
+        "参数",
+        "引号"
+      ],
+      "hints": [
+        "一个文件名不应该被拆成两个参数。"
+      ],
+      "quiz": {
+        "prompt": "文件名为 my notes.txt 时，在 Bash 中用 cat 'my notes.txt' 可将这个名字作为一个参数传给 cat。",
+        "explanation": "引号把空格保留在同一个参数中。没有引号时，普通未引用空格会分隔命令参数。",
+        "answer": true
+      }
+    },
+    {
+      "id": "linux.file.remove-judge-01",
+      "title": "rm 与回收站",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握rm、操作安全的基础用法。",
+      "knowledge": [
+        "rm",
+        "操作安全"
+      ],
+      "hints": [
+        "命令行删除不等于桌面的移入回收站。"
+      ],
+      "quiz": {
+        "prompt": "在未设置别名或包装脚本的常规命令行环境中，rm 删除的文件一定能从桌面回收站找回。",
+        "explanation": "常规 rm 不会自动移入桌面回收站。删除前核对路径并备份，不要在不确定时尝试递归强制删除。",
+        "answer": false
+      }
+    },
+    {
+      "id": "linux.permission.sudo-judge-01",
+      "title": "权限问题的第一步",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握最小权限、错误排查的基础用法。",
+      "knowledge": [
+        "最小权限",
+        "错误排查"
+      ],
+      "hints": [
+        "提权不能修复所有错误。"
+      ],
+      "quiz": {
+        "prompt": "运行命令遇到报错时，最稳妥的通用做法是不看错误信息，直接给每条命令加 sudo。",
+        "explanation": "先区分路径、参数、依赖与权限问题。sudo 只适用于确有必要且获准的提权操作，也会放大误操作影响。",
+        "answer": false
+      }
+    },
+    {
+      "id": "linux.shell.exit-judge-01",
+      "title": "退出状态含义",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握退出状态的基础用法。",
+      "knowledge": [
+        "退出状态"
+      ],
+      "hints": [
+        "不要混淆 shell 成功状态与 C 布尔判断。"
+      ],
+      "quiz": {
+        "prompt": "按 Bash 的成功/失败约定，退出状态 0 表示成功，非零表示失败。",
+        "explanation": "Shell 的条件执行依据退出状态；这与 C 表达式中 0 为假的规则不是同一层含义。",
+        "answer": true
+      }
+    },
+    {
+      "id": "linux.process.kill-judge-01",
+      "title": "kill 的默认信号",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "掌握信号、SIGTERM的基础用法。",
+      "knowledge": [
+        "信号",
+        "SIGTERM"
+      ],
+      "hints": [
+        "默认行为会给进程正常退出的机会。"
+      ],
+      "quiz": {
+        "prompt": "Linux 中，在没有额外选项时，kill PID 默认发送 SIGKILL，进程没有处理机会。",
+        "explanation": "默认发送的是 SIGTERM。进程可处理或忽略 SIGTERM；SIGKILL 不能被捕获或忽略，但不是默认选项。",
+        "answer": false
+      }
+    },
+    {
+      "id": "linux.permission.directory-judge-01",
+      "title": "目录的 x 权限",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "掌握目录权限的基础用法。",
+      "knowledge": [
+        "目录权限"
+      ],
+      "hints": [
+        "目录是路径的一部分，不是可执行程序。"
+      ],
+      "quiz": {
+        "prompt": "只考虑基本 Unix 权限位，目录上的 x 位表示搜索/穿越目录的权限，而不是把目录当程序运行。",
+        "explanation": "目录权限与普通文件含义不同：r 用于列出名字，x 用于路径查找；能否执行具体操作还取决于其他相关权限。",
+        "answer": true
+      }
+    },
+    {
+      "id": "linux.shell.environment-judge-01",
+      "title": "source 的作用域",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "掌握source、环境继承的基础用法。",
+      "knowledge": [
+        "source",
+        "环境继承"
+      ],
+      "hints": [
+        "已有的独立终端是另一个进程环境。"
+      ],
+      "quiz": {
+        "prompt": "在一个 Bash 终端执行 source setup.bash 后，其他已经打开且独立的终端必然同步获得这些环境修改。",
+        "explanation": "source 在当前 shell 中执行脚本；子进程可继承导出的变量，但独立的已有终端不会自动同步环境。",
+        "answer": false
+      }
+    },
+    {
+      "id": "linux.path.cd-fill-01",
+      "title": "切换目录命令",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握cd的基础用法。",
+      "knowledge": [
+        "cd"
+      ],
+      "hints": [
+        "change directory 的缩写。"
+      ],
+      "quiz": {
+        "prompt": "在 Bash 中补全切换到 logs 目录的命令：____ logs。只填命令名。",
+        "explanation": "cd 修改当前 shell 的工作目录；目标目录需要存在且具有适当权限。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "cd"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.path.home-fill-01",
+      "title": "用户主目录缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握主目录、波浪号展开的基础用法。",
+      "knowledge": [
+        "主目录",
+        "波浪号展开"
+      ],
+      "hints": [
+        "该符号通常在键盘数字 1 左侧。"
+      ],
+      "quiz": {
+        "prompt": "在 Bash 中，cd ~ 使用的用户主目录缩写符号是 ____。只填该符号。",
+        "explanation": "未引用的 ~ 在适用位置会发生波浪号展开；/ 是文件系统根目录，不是当前用户主目录。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "~"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.permission.execute-fill-01",
+      "title": "为所有者增加执行位",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握chmod、执行权限的基础用法。",
+      "knowledge": [
+        "chmod",
+        "执行权限"
+      ],
+      "hints": [
+        "read、write、execute 的权限字母分别是什么？"
+      ],
+      "quiz": {
+        "prompt": "补全 chmod u+____ demo.sh，使其为文件所有者增加执行权限。只填一个权限字母。",
+        "explanation": "u 表示所有者，+ 表示增加，x 表示执行位。能否运行还取决于脚本内容、解释器与所在文件系统设置。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "x"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.shell.status-fill-01",
+      "title": "读取上一命令状态",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握特殊参数、退出状态的基础用法。",
+      "knowledge": [
+        "特殊参数",
+        "退出状态"
+      ],
+      "hints": [
+        "使用 $ 加一个问号。"
+      ],
+      "quiz": {
+        "prompt": "在 Bash 中，echo ____ 会输出上一条前台命令（或管道）的退出状态。只填状态参数的展开写法。",
+        "explanation": "$? 是最近执行的前台管道的退出状态；对于单个命令即其退出状态。应及时读取，后续命令会改变它。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "$?"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.shell.export-fill-01",
+      "title": "让子进程获得变量",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握export、环境变量的基础用法。",
+      "knowledge": [
+        "export",
+        "环境变量"
+      ],
+      "hints": [
+        "仅赋值与导出给子进程不是一回事。"
+      ],
+      "quiz": {
+        "prompt": "在 Bash 中补全：____ ROBOT_NAME=demo，让此变量进入后续子进程的环境。只填内建命令名。",
+        "explanation": "export 标记变量以便传入后续启动的子进程环境，不会修改其他已经运行的独立进程。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "export"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.help.man-fill-01",
+      "title": "查看本机手册",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握man、文档查询的基础用法。",
+      "knowledge": [
+        "man",
+        "文档查询"
+      ],
+      "hints": [
+        "manual 的前三个字母。"
+      ],
+      "quiz": {
+        "prompt": "系统已安装 man 和相应手册页，输入 ____ ls 可阅读 ls 的手册。只填命令名。",
+        "explanation": "man 用于查询本机手册。命令的 --help 通常也能提供简要帮助。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "man"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.text.tail-fill-01",
+      "title": "读取日志末尾",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握tail、日志的基础用法。",
+      "knowledge": [
+        "tail",
+        "日志"
+      ],
+      "hints": [
+        "英文中表示尾部的单词。"
+      ],
+      "quiz": {
+        "prompt": "使用 GNU 工具输出 demo.log 最后 10 行：____ -n 10 demo.log。只填命令名。",
+        "explanation": "tail 读取文件尾部；head 对应头部。此命令只读取现有内容，不会持续跟踪新增内容。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "tail"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.shell.path-fill-01",
+      "title": "可执行文件的搜索路径",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "掌握PATH、命令查找的基础用法。",
+      "knowledge": [
+        "PATH",
+        "命令查找"
+      ],
+      "hints": [
+        "不是工作目录 PWD。"
+      ],
+      "quiz": {
+        "prompt": "Bash 查找不含 / 的外部命令时，会使用环境变量 ____ 中的目录列表。只填大写变量名，不带 $。",
+        "explanation": "PATH 在 Linux 上以冒号分隔目录。内建命令等还有自己的解析规则；带 / 的命令路径不按这种方式搜索。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "PATH"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "linux.shell.redirect-fill-01",
+      "title": "合并错误与标准输出",
+      "questionType": "fill-blank",
+      "difficulty": "intermediate",
+      "summary": "掌握重定向顺序、文件描述符的基础用法。",
+      "knowledge": [
+        "重定向顺序",
+        "文件描述符"
+      ],
+      "hints": [
+        "用 & 加标准输出的文件描述符。"
+      ],
+      "quiz": {
+        "prompt": "补全 Bash 命令 cmd > run.log 2>____，使标准错误也写到已经重定向到 run.log 的标准输出。只填紧跟 2> 的部分。",
+        "explanation": "2>&1 把标准错误复制到标准输出当前的去向。重定向从左往右处理，所以先 > run.log 再 2>&1。默认情况下会覆盖已有 run.log。",
+        "blanks": [
+          {
+            "label": "填写空缺内容",
+            "answers": [
+              "&1"
+            ],
+            "caseSensitive": true
+          }
+        ]
+      }
+    }
+  ]
+}

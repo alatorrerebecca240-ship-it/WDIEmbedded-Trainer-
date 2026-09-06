@@ -1,0 +1,224 @@
+{
+  "$schema": "../../schemas/question-bank.schema.json",
+  "schemaVersion": 1,
+  "defaults": {
+    "schemaVersion": 1,
+    "track": "electronic-design",
+    "language": "c",
+    "target": "simulator",
+    "prerequisites": [],
+    "origin": { "type": "self-authored", "license": "project-license" }
+  },
+  "questions": [
+    {
+      "id": "electronic-design.choice.ohms-law-01",
+      "title": "欧姆定律",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "使用电压、电流和电阻的基本关系。",
+      "knowledge": ["Ohm-law", "voltage", "current"],
+      "hints": ["电压等于电流乘电阻。", "常用表达式是 V = I × R。"],
+      "quiz": {
+        "prompt": "一个 1 kΩ 电阻两端电压为 5 V，忽略误差时流过的电流约为多少？",
+        "options": [
+          { "id": "A", "text": "5 mA" },
+          { "id": "B", "text": "5 A" },
+          { "id": "C", "text": "200 mA" },
+          { "id": "D", "text": "1 kA" }
+        ],
+        "answer": "A",
+        "explanation": "I = V/R = 5 V / 1000 Ω = 0.005 A，也就是 5 mA。"
+      }
+    },
+    {
+      "id": "electronic-design.choice.series-current-01",
+      "title": "串联电路电流",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解串联支路中的电流关系。",
+      "knowledge": ["series-circuit", "current"],
+      "hints": ["串联电路只有一条电流路径。"],
+      "quiz": {
+        "prompt": "理想串联电路中，流过各串联元件的电流有什么关系？",
+        "options": [
+          { "id": "A", "text": "处处相同" },
+          { "id": "B", "text": "从前往后逐个减半" },
+          { "id": "C", "text": "电阻越大电流一定越大" },
+          { "id": "D", "text": "每个元件都随机变化" }
+        ],
+        "answer": "A",
+        "explanation": "串联回路只有一条电流路径，因此各元件流过同一电流。"
+      }
+    },
+    {
+      "id": "electronic-design.choice.parallel-voltage-01",
+      "title": "并联电路电压",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解并联支路两端的电压关系。",
+      "knowledge": ["parallel-circuit", "voltage"],
+      "hints": ["各支路连接在同一对节点之间。"],
+      "quiz": {
+        "prompt": "理想并联电路的各支路连接在同一对节点上，它们两端电压通常怎样？",
+        "options": [
+          { "id": "A", "text": "相同" },
+          { "id": "B", "text": "支路越多电压越大" },
+          { "id": "C", "text": "总是为零" },
+          { "id": "D", "text": "与连接节点无关" }
+        ],
+        "answer": "A",
+        "explanation": "并联支路共享同一对节点，因此每个支路的端电压相同。"
+      }
+    },
+    {
+      "id": "electronic-design.choice.voltage-meter-01",
+      "title": "测量电压的接法",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "掌握万用表测量电压的基本连接方式。",
+      "knowledge": ["multimeter", "voltage-measurement"],
+      "hints": ["电压表示两个节点之间的电势差。"],
+      "quiz": {
+        "prompt": "用万用表测量某电阻两端电压时，表笔应怎样连接？",
+        "options": [
+          { "id": "A", "text": "并联在电阻两端" },
+          { "id": "B", "text": "串联进回路" },
+          { "id": "C", "text": "两个表笔都悬空" },
+          { "id": "D", "text": "只接一个表笔且不接参考点" }
+        ],
+        "answer": "A",
+        "explanation": "电压测量比较两个节点的电势，电压表应并联在被测元件两端。"
+      }
+    },
+    {
+      "id": "electronic-design.choice.sampling-rate-01",
+      "title": "正弦信号采样率",
+      "questionType": "single-choice",
+      "difficulty": "intermediate",
+      "summary": "认识避免混叠的基本采样率要求。",
+      "knowledge": ["sampling", "Nyquist", "aliasing"],
+      "hints": ["采样率至少应高于信号最高频率的两倍。"],
+      "quiz": {
+        "prompt": "只考虑理想带限条件，要采集最高频率为 1 kHz 的信号而避免混叠，采样率应满足哪项？",
+        "options": [
+          { "id": "A", "text": "严格高于 2 kHz" },
+          { "id": "B", "text": "低于 500 Hz" },
+          { "id": "C", "text": "恰好 1 Hz" },
+          { "id": "D", "text": "与信号频率无关" }
+        ],
+        "answer": "A",
+        "explanation": "奈奎斯特条件要求采样率大于最高频率的两倍；实际设计还会留裕量并使用抗混叠滤波。"
+      }
+    },
+    {
+      "id": "electronic-design.choice.led-resistor-01",
+      "title": "LED 串联限流电阻",
+      "questionType": "single-choice",
+      "difficulty": "beginner",
+      "summary": "理解 LED 驱动中的基础限流措施。",
+      "knowledge": ["LED", "current-limiting"],
+      "hints": ["LED 的电流随电压变化很快。"],
+      "quiz": {
+        "prompt": "普通指示 LED 由电压源驱动时，通常串联电阻的主要目的是什么？",
+        "options": [
+          { "id": "A", "text": "限制电流，保护 LED 和驱动端" },
+          { "id": "B", "text": "让 LED 永远反向导通" },
+          { "id": "C", "text": "把直流变成无线信号" },
+          { "id": "D", "text": "增加程序存储容量" }
+        ],
+        "answer": "A",
+        "explanation": "串联电阻承担部分电压并限制电流，防止 LED 或驱动引脚过流。"
+      }
+    },
+    {
+      "id": "electronic-design.true.resistor-polarity-01",
+      "title": "普通电阻的方向",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "判断普通固定电阻是否有极性。",
+      "knowledge": ["resistor", "polarity"],
+      "hints": ["普通两端固定电阻的两个引脚功能对称。"],
+      "quiz": { "prompt": "普通固定电阻通常没有正负极，调换两端连接不会改变其电阻值。", "answer": true, "explanation": "普通电阻是无极性元件；但电阻网络、可调电阻等器件仍需按具体引脚定义连接。" }
+    },
+    {
+      "id": "electronic-design.true.power-01",
+      "title": "直流功率计算",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "判断直流负载的功率关系。",
+      "knowledge": ["power", "voltage", "current"],
+      "hints": ["功率单位是瓦特。"],
+      "quiz": { "prompt": "对直流负载，常用 P = V × I 计算其吸收功率。", "answer": true, "explanation": "在采用被动符号约定时，直流功率等于电压与电流的乘积。" }
+    },
+    {
+      "id": "electronic-design.true.capacitor-dc-01",
+      "title": "电容的稳态直流特性",
+      "questionType": "true-false",
+      "difficulty": "beginner",
+      "summary": "理解理想电容在直流稳态下的基本模型。",
+      "knowledge": ["capacitor", "DC"],
+      "hints": ["电容电流与电压变化率有关。"],
+      "quiz": { "prompt": "理想电容在直流稳态、两端电压不再变化时，可视为开路。", "answer": true, "explanation": "理想电容电流 i = C·dv/dt；稳态直流下 dv/dt 为零，因此电流为零。" }
+    },
+    {
+      "id": "electronic-design.true.scope-ground-01",
+      "title": "示波器地夹安全",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "建立台式示波器接地安全意识。",
+      "knowledge": ["oscilloscope", "ground", "safety"],
+      "hints": ["很多台式示波器地夹与保护地相连。"],
+      "quiz": { "prompt": "使用接地式台式示波器时，可以不检查电路参考地就把地夹接到任意节点。", "answer": false, "explanation": "许多台式示波器地夹连接保护地，误接可能短路节点；测量前必须确认接地关系和安全条件。" }
+    },
+    {
+      "id": "electronic-design.true.opamp-input-01",
+      "title": "理想运放输入电流",
+      "questionType": "true-false",
+      "difficulty": "intermediate",
+      "summary": "认识理想运算放大器的基本假设。",
+      "knowledge": ["op-amp", "ideal-model"],
+      "hints": ["理想模型认为输入阻抗无限大。"],
+      "quiz": { "prompt": "理想运算放大器模型中，流入两个输入端的电流均为零。", "answer": true, "explanation": "理想运放输入阻抗无限大，因此输入电流为零；实际器件存在很小的输入偏置电流。" }
+    },
+    {
+      "id": "electronic-design.fill.ohm-unit-01",
+      "title": "电阻单位",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写电阻的国际单位名称或符号。",
+      "knowledge": ["resistance", "unit"],
+      "hints": ["中文名称为欧姆，符号是希腊字母 Ω。"],
+      "quiz": { "prompt": "电阻的国际单位是 ____。", "blanks": [{ "label": "单位", "answers": ["欧姆", "Ω", "ohm"], "caseSensitive": false }], "explanation": "电阻单位是欧姆，单位符号为 Ω。" }
+    },
+    {
+      "id": "electronic-design.fill.hertz-01",
+      "title": "频率单位",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写频率单位赫兹的符号。",
+      "knowledge": ["frequency", "unit"],
+      "hints": ["单位名称是赫兹。"],
+      "quiz": { "prompt": "频率单位赫兹的符号是 ____。", "blanks": [{ "label": "单位符号", "answers": ["Hz"], "caseSensitive": false }], "explanation": "赫兹的单位符号为 Hz，表示每秒发生一次周期事件。" }
+    },
+    {
+      "id": "electronic-design.fill.rms-01",
+      "title": "有效值英文缩写",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写均方根值的常用缩写。",
+      "knowledge": ["RMS", "signal"],
+      "hints": ["英文为 Root Mean Square。"],
+      "quiz": { "prompt": "交流信号的均方根值常用英文缩写 ____ 表示。", "blanks": [{ "label": "缩写", "answers": ["RMS"], "caseSensitive": false }], "explanation": "RMS 是 Root Mean Square 的缩写，中文常称均方根值或有效值。" }
+    },
+    {
+      "id": "electronic-design.fill.ground-01",
+      "title": "电路参考地标识",
+      "questionType": "fill-blank",
+      "difficulty": "beginner",
+      "summary": "填写原理图中常见的参考地网络名称。",
+      "knowledge": ["ground", "schematic"],
+      "hints": ["常见三个字母是 GND。"],
+      "quiz": { "prompt": "原理图中电路公共参考地网络常标记为 ____。", "blanks": [{ "label": "网络名", "answers": ["GND"], "caseSensitive": false }], "explanation": "GND 是 ground 的常见网络标识；具体系统中还可能区分模拟地、数字地和保护地。" }
+    }
+  ]
+}

@@ -16,7 +16,8 @@ jobs:
           python-version: '3.12'
       - name: Download pinned sources and convert without executing them
         run: python scripts/import-exercism-pilot.py
-      - run: docker pull gcc:14
+      - name: Prepare prebuilt compiler and Boost image
+        run: python scripts/validation-image.py
       - name: Verify references and starter failure inside restricted Docker
         run: python trainer.py packs audit knowledge/drafts/exercism.pilot --runner docker --report exercism-audit.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

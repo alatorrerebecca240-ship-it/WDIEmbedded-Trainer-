@@ -11,7 +11,7 @@ import test_exercism as fixtures
 from trainerlib.common import PackError, atomic_json, canonical, digest, read_json
 from trainerlib.format import fingerprint, load_pack
 from trainerlib.inbox import Inbox, normalized_pack, validate_plan
-from trainerlib.inbox_ci import verify_plan
+from trainerlib.inbox_ci import verify_plan, source_cache_key
 
 REQUEST = "1" * 32
 QID = "oss.exercism.c.leap"
@@ -221,6 +221,47 @@ class InboxTests(unittest.TestCase):
         self.assertEqual(result, {"verified": 1, "total": 2})
         self.assertTrue(all(call.kwargs == {"runner": "docker"} for call in audit.call_args_list))
         self.assertEqual(len(read_json(output)["results"]), 2)
+
+    def test_cache_key_ignores_request_and_order_but_changes_with_sources(self):
+        self.acquire()
+        plan = self.inbox.prepare(REQUEST)
+        plan["entries"].append({**plan["entries"][0], "id": "oss.exercism.c.another", "key": "c/another"})
+        updated = copy.deepcopy(plan)
+        updated["requestId"] = "2" * 32
+        updated["entries"].reverse()
+        self.assertEqual(source_cache_key(plan), source_cache_key(updated))
+        updated["entries"][0]["commit"] = "f" * 40
+        self.assertNotEqual(source_cache_key(plan), source_cache_key(updated))
+        updated["entries"][0]["commit"] = "main"
+        with self.assertRaises(PackError):
+            source_cache_key(updated)
+
+    def test_ci_persistent_cache_timings_and_failure_checkpoints(self):
+        self.acquire()
+        plan = self.inbox.prepare(REQUEST)
+        plan["entries"].append({**plan["entries"][0], "id": "oss.exercism.c.another", "key": "c/another"})
+        output = self.fixture.root / "timed.json"
+        cache = self.fixture.root / "persistent-blobs"
+        def importing(*args, **kwargs):
+            if kwargs["keys"] == ["c/another"]:
+                self.assertEqual(len(read_json(output)["results"]), 1)
+                raise PackError("fixture import failed")
+        with patch("trainerlib.inbox_ci.scan") as scan, \
+                patch("trainerlib.inbox_ci.import_batch", side_effect=importing) as importing_mock, \
+                patch("trainerlib.inbox_ci.normalized_pack", return_value=plan["entries"][0]["contentSha256"]), \
+                patch("trainerlib.inbox_ci.audit", return_value={"passed": True}) as check:
+            result = verify_plan(plan, output, self.fixture.license, cache=cache)
+        self.assertEqual(result, {"verified": 1, "total": 2})
+        self.assertEqual(scan.call_args.args[1], cache)
+        self.assertTrue(all(c.args[2] == cache for c in importing_mock.call_args_list))
+        self.assertEqual(scan.call_count, 1)
+        self.assertEqual(check.call_count, 1)
+        report = read_json(output)
+        self.assertEqual(report["planSha256"], digest(canonical(plan)))
+        self.assertGreaterEqual(report["timings"]["verificationSeconds"], 0)
+        self.assertIn("auditSeconds", report["results"][0]["timings"])
+        self.assertNotIn("auditSeconds", report["results"][1]["timings"])
+        self.assertTrue(all(v["timings"]["totalSeconds"] >= 0 for v in report["results"]))
 
 
 if __name__ == "__main__":

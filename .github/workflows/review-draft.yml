@@ -33,7 +33,8 @@ jobs:
           python-version: '3.12'
       - name: Validate selected path
         run: python scripts/check-draft-path.py
-      - run: docker pull gcc:14
+      - name: Prepare prebuilt compiler and Boost image
+        run: python scripts/validation-image.py
       - name: Static review plus isolated reference execution (does not approve or publish)
         run: python trainer.py packs audit "$DRAFT_PATH" --runner docker --report draft-audit.json
       - name: Prepare human review sheet and job summary

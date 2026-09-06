@@ -25,7 +25,7 @@ class CompilationError(PackError):
         super().__init__("Compilation failed: " + diagnostics[:4000])
 
 
-def run_program(root, q, reference=True, runner="none", compiler=None, image="gcc:14"):
+def run_program(root, q, reference=True, runner="none", compiler=None, image=None):
     """Only an explicit native/docker audit may run content; install never calls this."""
     if runner not in {"native", "docker"}:
         raise PackError("Reference execution requires --runner docker or explicitly trusted --runner native")
@@ -57,6 +57,7 @@ def run_program(root, q, reference=True, runner="none", compiler=None, image="gc
         tool = "gcc" if q["language"] == "c" else "g++"
         options = [f"-std={build['standard']}", "-Wall", "-Wextra", "-Wpedantic", "-Werror", *["-I" + p for p in includes], *sources, *["-l" + lib for lib in build.get("linkLibraries", [])]]
         if runner == "docker":
+            image = image or os.environ.get("TRAINER_VALIDATION_IMAGE", "gcc:14")
             # TemporaryDirectory is 0700 on Linux; the unprivileged container user
             # needs read/traverse permission on this disposable, code-only copy.
             work.chmod(0o755)
@@ -213,7 +214,7 @@ def audit(root, runner="none", compilers=None, against=(), execution_report=None
                         check["failedStage"] = stage
                         errors.append(f"{q['id']}: {stage}: {exc}")
             signatures.append((q, text))
-        return {"formatVersion": 1, "verificationPolicy": "upstream-scaffold-v1", "checks": checks, "packId": manifest["id"], "contentSha256": content_sha, "runner": "ci-report" if execution_report is not None else runner, "passed": not errors, "errors": errors, "warnings": warnings, "referenceVerified": executed, "questionCount": len(questions)}
+        return {"formatVersion": 1, "verificationPolicy": "upstream-scaffold-v1", "checks": checks, "packId": manifest["id"], "contentSha256": content_sha, "runner": "ci-report" if execution_report is not None else runner, "containerImage": os.environ.get("TRAINER_VALIDATION_IMAGE", "gcc:14") if runner == "docker" and execution_report is None else None, "passed": not errors, "errors": errors, "warnings": warnings, "referenceVerified": executed, "questionCount": len(questions)}
     except (PackError, TypeError, KeyError, ValueError) as exc:
         return {"formatVersion": 1, "passed": False, "errors": [str(exc)], "warnings": [], "referenceVerified": []}
 

@@ -46,9 +46,10 @@ function requestRaw(url, { token, method = 'GET', body } = {}) {
 }
 
 class AuthoringCloud {
-  constructor(context, backend, transport = requestRaw) {
+  constructor(context, backend, transport = requestRaw, timers = { setTimeout, clearTimeout }) {
     this.context = context; this.backend = backend; this.transport = transport;
-    this.busy = false; this.timer = undefined;
+    this.busy = false; this.timer = undefined; this.timers = timers;
+    this.started = false; this.failures = 0; this.retryAt = 0;
   }
   jobs() { return this.context.workspaceState.get(JOBS_KEY, []); }
   async save(job) {
@@ -68,7 +69,12 @@ class AuthoringCloud {
       const error = new Error(response.status === 404
         ? '云端工作流尚未部署或无权访问。请先推送本轮工具和 acquire-review.yml；本地草稿已保留。'
         : `GitHub 返回 HTTP ${response.status}。请检查登录权限、限流或稍后重试。`);
-      error.status = response.status; throw error;
+      error.status = response.status;
+      const retry = Number(response.headers?.['retry-after']);
+      const reset = Number(response.headers?.['x-ratelimit-reset']) * 1000 - Date.now();
+      error.retryAfterMs = Number.isFinite(retry) && retry > 0 ? retry * 1000
+        : response.headers?.['x-ratelimit-remaining'] === '0' && reset > 0 ? reset : 0;
+      throw error;
     }
     return response.body.length ? JSON.parse(response.body.toString('utf8')) : {};
   }
@@ -110,28 +116,58 @@ class AuthoringCloud {
         // Network/5xx ambiguity: keep the unique job and poll; never blindly POST twice.
         throw error;
       }
-    } finally { this.busy = false; }
+    } finally { this.busy = false; this.schedule(); }
   }
   start() {
-    this.timer = setInterval(() => this.poll(true).catch(() => {}), 60000);
-    this.context.subscriptions.push({ dispose: () => clearInterval(this.timer) });
+    if (this.started) return;
+    this.started = true;
+    this.context.subscriptions.push({ dispose: () => {
+      this.started = false; this.timers.clearTimeout(this.timer); this.timer = undefined;
+    } });
+    this.schedule();
+  }
+  schedule() {
+    this.timers.clearTimeout(this.timer); this.timer = undefined;
+    if (!this.started || this.busy || !this.jobs().some((v) => !v.done)) return;
+    const delay = Math.max(15000, this.retryAt - Date.now());
+    this.timer = this.timers.setTimeout(() => {
+      this.timer = undefined;
+      this.poll(true).catch(() => {});
+    }, Math.min(delay, 2147483647));
+  }
+  backoff(error) {
+    this.failures = Math.min(this.failures + 1, 5);
+    this.retryAt = Math.max(this.retryAt, Date.now() + Math.max(
+      Math.min(300000, 15000 * 2 ** this.failures), error?.retryAfterMs || 0));
   }
   async poll(silent = false) {
     if (this.busy) return;
+    if (Date.now() < this.retryAt) { this.schedule(); return; }
     const pending = this.jobs().filter((v) => !v.done);
     if (!pending.length) return;
     this.busy = true;
     try {
       const session = await vscode.authentication.getSession('github', ['repo'], { silent: true });
-      if (!session) { if (!silent) vscode.window.showInformationMessage('请通过“重新验证”登录 GitHub；本地审核列表仍可使用。'); return; }
+      if (!session) {
+        this.retryAt = Date.now() + 60000;
+        if (!silent) vscode.window.showInformationMessage('请通过“重新验证”登录 GitHub；本地审核列表仍可使用。');
+        return;
+      }
+      let failed = false;
       for (const job of pending) {
         try { await this.pollJob(job, session.accessToken); }
         catch (error) {
+          failed = true; this.backoff(error);
           if (!silent) vscode.window.showWarningMessage(error.message);
           // Transient failures retain both the current state and pending job.
+          if (error.status === 429 || error.status === 403) break;
         }
       }
-    } finally { this.busy = false; }
+      if (!failed) { this.failures = 0; this.retryAt = 0; }
+    } catch (error) {
+      this.backoff(error);
+      if (!silent) vscode.window.showWarningMessage(error.message);
+    } finally { this.busy = false; this.schedule(); }
   }
   async pollJob(job, token) {
     repository(job.repo);

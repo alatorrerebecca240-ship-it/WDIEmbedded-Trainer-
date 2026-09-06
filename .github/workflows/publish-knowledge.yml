@@ -38,7 +38,7 @@ jobs:
       - name: Offline tool tests
         run: python -m unittest discover -s tests -v
       - name: Prepare compiler container
-        run: docker pull gcc:14
+        run: python scripts/validation-image.py
       - name: Recheck licenses, review fingerprint, duplicates, references and failing starters
         # The publisher has no write credential. Imported programs run with no network,
         # read-only source, no host home/socket mounts, memory/CPU/PID/time/output limits.

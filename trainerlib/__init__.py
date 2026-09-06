@@ -1,3 +1,3 @@
 """UI-independent knowledge package tooling (Python standard library only)."""
 
-ENGINE_VERSION = "0.10.0"
+ENGINE_VERSION = "0.10.1"

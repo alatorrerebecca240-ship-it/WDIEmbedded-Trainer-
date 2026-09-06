@@ -27,7 +27,20 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
-      - run: docker pull gcc:14
+      - name: Validate plan and compute data-only cache key
+        id: source-plan
+        env:
+          TRAINER_INBOX_PLAN: ${{ inputs.plan }}
+        run: python scripts/verify-inbox.py --cache-key >> "$GITHUB_OUTPUT"
+      - name: Restore pinned upstream blobs (not reports or executables)
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .imports/ci-blobs
+          key: trainer-blobs-v1-${{ runner.os }}-${{ hashFiles('trainerlib/exercism*.py') }}-${{ steps.source-plan.outputs.cache-key }}
+          restore-keys: |
+            trainer-blobs-v1-${{ runner.os }}-${{ hashFiles('trainerlib/exercism*.py') }}-
+      - name: Prepare prebuilt compiler and Boost image
+        run: python scripts/validation-image.py
       - name: Rebuild each question and verify only inside restricted Docker
         env:
           TRAINER_INBOX_PLAN: ${{ inputs.plan }}

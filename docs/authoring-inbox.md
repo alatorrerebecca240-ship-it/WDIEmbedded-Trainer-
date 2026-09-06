@@ -1,4 +1,24 @@
-# 一键获取 + 集中审核（0.10.0）
+# 一键获取 + 集中审核（0.10.1）
+
+## 云端轻量加速与预制镜像
+
+0.10.1 保持单任务串行、逐题独立容器验证，不新增并行或弱化审核。
+
+- Actions 跨运行缓存 `.imports/ci-blobs`，只含公开上游源码，不含执行程序、验证结论、个人代码或凭据。缓存按导入器版本及上游题目/提交寻址，请求 ID 变化不导致无意义失效；相近批次可以恢复共享源码。每轮仍通过官方 API 获取固定提交的文件树，再逐文件校验 Git blob 哈希，最后核对整题 SHA-256；缓存损坏会拒绝验证。
+- 报告 `inbox-results.json` 每题新增 `timings.rebuildSeconds`、`auditSeconds`、`totalSeconds`；失败题也计时并保留已完成结果。报告顶层记录验证总时间。Actions Summary 展示逐题表格和镜像准备方式/耗时；排队、缓存恢复、上传耗时查看 Actions 各步骤。计时不是新的审核证据。
+- 有任务时插件每 15 秒查询；失败时指数退避到 5 分钟，尊重服务端更长的限流等待；无登录会话每分钟再试。没有任务时停止计时器，轮询不会重叠，不重复提交任务，不修改题目状态以假装加速。
+- 预制镜像包含 GCC 14（基础镜像固定摘要）、Boost 开发头文件及 date-time 库，以及自编写的 C11/C++17 自检代码。各依赖沿用自己的许可证，不因本项目 MIT 而重新许可。配方哈希由 Dockerfile 和自检文件内容决定；不使用 `latest`，本轮执行进一步固定到拉取后的不可变镜像 ID，并写入审核报告。
+
+### 首次启用（仅维护者）
+
+1. 推送本轮插件/工具、`docker/validation/`、`scripts/validation-image.py` 和所有工作流到 main。
+2. 等待 **Build validation image** 完成；它只在 main 的镜像相关文件变动或手动启动时运行，不运行第三方题目。只有这个独立镜像作业有 `packages: write`，题目验证作业仍仅有 `contents: read`。
+3. 在 GitHub 账号/仓库的 **Packages** 找到 `<仓库名>-validator`，打开 **Package settings → Change visibility → Public**。GHCR 初次发布默认私有，不随公开仓库自动公开；公开后验证作业无需镜像登录或额外令牌。[GitHub Container registry 官方说明](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
+4. 重新加载新版 VS Code 插件，集中审核中重试待处理题。打开这次 Actions 运行的 Summary，确认镜像方式为 `prebuilt`，比较缓存热运行与首次冷运行的耗时。
+
+镜像不存在、未公开或拉取超时时，验证作业会在云端用同一固定配方构建，不退回缺依赖镜像、不转为本机原生执行。此路径首次会慢；构建或自检失败就停止，不产生通过证据。镜像发布故障与题库发布分开，不会自动上传题库或批准题目。缓存被清理后可重新下载，不影响正确性。
+
+收件箱、整包审核、Exercism 试点和正式发布的重验均使用这份镜像准备程序。更新编译器/Boost 时显式修改 Dockerfile（必要时增加配方注释版本），推送后生成新配方标签；同配方已存在时不主动覆盖。旧版本保留，回退工具提交即可选择旧配方。固定 Debian 包版本若上游停止提供，应由维护者审核后更新，不能自动降低验证标准。
 
 ## 原题直用与简化验证
 
@@ -22,12 +42,12 @@
 
 ## 一次性云端配置
 
-1. 将 0.10.0 工具、测试和 `.github/workflows/acquire-review.yml` 推送到目标仓库的 main。
+1. 将 0.10.1 工具、测试、镜像文件和工作流推送到目标仓库的 main，按上节完成镜像的一次性设置。
 2. 在用户级 `embeddedTrainer.authoringRepository` 配置 `owner/repo`，默认本项目仓库。工作区不能覆盖此设置。
 3. 首次自动验证时确认发送范围，并通过 VS Code GitHub 登录授权。插件使用 VS Code 官方认证接口，会话令牌仅用于 `api.github.com` 请求，不写入参数、日志、工作区或队列。[VS Code 认证 API](https://code.visualstudio.com/api/references/vscode-api#authentication)
 4. 后续“获取新题”自动提交等待题目；未配置、取消授权或网络失败时保留本地收件箱，配置好后点“重新验证待处理题目”。工作流调度需要相应仓库权限，GitHub OAuth 调度接口使用 `repo` scope。[GitHub 工作流调度 API](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)
 
-每个云端任务最多 50 题，更多待办再次点击重新验证。每次任务有唯一请求 ID，发送前持久化；POST 响应丢失时按请求名寻找原任务，不盲目重复提交。VS Code 运行期间每分钟检查任务，退出后不运行后台程序，重开恢复检查。状态不变时静默；验证完成或需要处理时通知。
+每个云端任务最多 50 题，更多待办再次点击重新验证。每次任务有唯一请求 ID，发送前持久化；POST 响应丢失时按请求名寻找原任务，不盲目重复提交。VS Code 运行期间有任务时每 15 秒检查，异常时退避，退出后不运行后台程序，重开恢复检查。状态不变时静默；验证完成或需要处理时通知。
 
 ## 内容与云端证据如何对应
 

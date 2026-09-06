@@ -2,7 +2,7 @@
   "name": "embedded-trainer",
   "displayName": "Embedded Trainer",
   "description": "独立知识包驱动的 C/C++、嵌入式、Linux 与 ROS 2 训练，支持更新、回退和离线导入。",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "publisher": "local-development",
   "engines": {
     "vscode": "^1.85.0"

@@ -28,7 +28,7 @@ try {
 beforeEach(() => { notices = []; requests = []; commands = []; writes = []; state = {}; authCalls = []; });
 const response = (value, status = 200, headers = {}) => ({ status, headers, body: Buffer.from(value === null ? '' : JSON.stringify(value)) });
 
-function create(transport) {
+function create(transport, timers) {
   const context = { globalStorageUri: uri('/private-extension-storage'), subscriptions: [], workspaceState: { get: (k, fallback) => state[k] ?? fallback, update: async (k, v) => { state[k] = v; } } };
   const backend = { rootUri: uri('/workspace'), run: async (args) => {
     commands.push(args);
@@ -39,7 +39,7 @@ function create(transport) {
   const cloud = new AuthoringCloud(context, backend, async (url, options) => {
     requests.push({ url, options });
     return transport(url, options);
-  });
+  }, timers);
   return cloud;
 }
 function dispatchTransport(url, options) {
@@ -138,4 +138,62 @@ test('transport rejects arbitrary hosts, plaintext and cross-host authorization 
     ['http://api.github.com/', {}], ['https://evil.invalid/', {}],
     ['https://fixture.blob.core.windows.net/report', { token }], ['https://api.github.com:8443/', { token }]
   ]) await assert.rejects(requestRaw(url, options), /拒绝/);
+});
+
+function fakeTimers() {
+  const pending = new Map(); let id = 0;
+  return { pending, setTimeout(fn, delay) { pending.set(++id, { fn, delay }); return id; },
+    clearTimeout(key) { pending.delete(key); } };
+}
+
+test('polls every 15 seconds only while pending and stops on completion or disposal', async () => {
+  const timers = fakeTimers();
+  const cloud = create(dispatchTransport, timers);
+  cloud.start(); cloud.start();
+  assert.equal(timers.pending.size, 0);
+  assert.equal(cloud.context.subscriptions.length, 1);
+  await cloud.dispatch();
+  assert.equal(timers.pending.size, 1);
+  assert.equal([...timers.pending.values()][0].delay, 15000);
+  const job = cloud.jobs()[0];
+  cloud.transport = async () => response(runFor(job, { conclusion: 'cancelled' }));
+  await cloud.poll(true);
+  assert.equal(timers.pending.size, 0);
+  assert.equal(cloud.jobs()[0].done, true);
+  cloud.context.subscriptions.forEach((v) => v.dispose());
+  cloud.transport = dispatchTransport;
+  await cloud.dispatch();
+  assert.equal(timers.pending.size, 0);
+});
+
+test('rate limits back off including manual refresh; success restores normal polling', async () => {
+  const timers = fakeTimers();
+  const cloud = create(dispatchTransport, timers);
+  cloud.start(); await cloud.dispatch();
+  let reads = 0;
+  cloud.transport = async () => { reads++; return response({}, 429, { 'retry-after': '120' }); };
+  await cloud.poll(true);
+  assert.ok([...timers.pending.values()][0].delay >= 119000);
+  assert.equal(cloud.jobs()[0].done, false);
+  await cloud.poll(false);
+  assert.equal(reads, 1);
+  assert.ok(!commands.some((v) => v[1] === 'inbox-fail'));
+  cloud.retryAt = 0;
+  cloud.transport = async () => response(runFor(cloud.jobs()[0], { status: 'in_progress' }));
+  await cloud.poll(true);
+  assert.equal(cloud.failures, 0);
+  assert.equal([...timers.pending.values()][0].delay, 15000);
+  cloud.context.subscriptions.forEach((v) => v.dispose());
+});
+
+test('transient network failures back off without concurrent polls or duplicate dispatches', async () => {
+  const timers = fakeTimers();
+  const cloud = create(dispatchTransport, timers);
+  cloud.start(); await cloud.dispatch();
+  cloud.transport = async () => { throw new Error('offline'); };
+  await Promise.all([cloud.poll(true), cloud.poll(true)]);
+  assert.equal(cloud.failures, 1);
+  assert.ok([...timers.pending.values()][0].delay >= 29000);
+  assert.equal(requests.filter((v) => v.options.method === 'POST').length, 1);
+  cloud.context.subscriptions.forEach((v) => v.dispose());
 });

@@ -106,3 +106,16 @@ class ScaffoldTests(TestCase):
         with patch("subprocess.Popen", side_effect=AssertionError("No process allowed")):
             errors, _ = static_errors(self.root)
         self.assertEqual(errors, [])
+
+    def test_host_image_is_used_without_weakening_container_limits(self):
+        from subprocess import CompletedProcess
+        image = "sha256:" + "c" * 64
+        with patch.dict("os.environ", {"TRAINER_VALIDATION_IMAGE": image}), \
+                patch("trainerlib.audit.limited_run", return_value=CompletedProcess([], 0, "", "")) as run, \
+                patch("trainerlib.audit.subprocess.run"):
+            run_program(self.root, self.q, runner="docker")
+        command = run.call_args.args[0]
+        self.assertIn(image, command)
+        for flag, value in (("--network", "none"), ("--cap-drop", "ALL"), ("--user", "65534:65534")):
+            self.assertEqual(command[command.index(flag) + 1], value)
+        self.assertIn("--read-only", command)

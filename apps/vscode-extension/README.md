@@ -1,6 +1,8 @@
 # Embedded Trainer VS Code Extension
 
-Embedded Trainer 0.10.0 用独立知识包驱动 C/C++、嵌入式、智能车、电赛、Linux 和 ROS 2 训练，不要求学习者手动使用 PowerShell。支持编程、选择、判断、填空、代码阅读和纠错六种题型。
+Embedded Trainer 0.10.1 用独立知识包驱动 C/C++、嵌入式、智能车、电赛、Linux 和 ROS 2 训练，不要求学习者手动使用 PowerShell。支持编程、选择、判断、填空、代码阅读和纠错六种题型。
+
+0.10.1 轻量优化云端验证：跨运行缓存校验过的上游源码，记录逐题重建/测试耗时；有任务时每 15 秒查询结果，异常时退避，没有任务时停止计时器。新增固定配方的 GCC 14 + Boost 预制镜像及独立发布工作流；镜像未公开时在云端按同配方构建备用镜像。需推送云端工具后生效，镜像首次发布后在 GitHub Packages 将可见性设为 Public。没有增加并行任务、自动批准或自动发布题库。
 
 0.10.0 简化可信原题验证：自动识别并保留与上游逐字节一致的 Exercism 初始框架，缺少待实现接口不再一刀切拒绝；参考答案仍需通过完整 Docker 测试，缺依赖/超时/内容修改仍阻止通过。报告区分参考答案与初始代码失败，集中审核显示框架提示。旧草稿直接重新验证，不必重新获取；先推送新版工具到 main，再在插件操作。
 
@@ -29,7 +31,7 @@ Embedded Trainer 0.10.0 用独立知识包驱动 C/C++、嵌入式、智能车�
 
 ## 安装 VSIX
 
-选择 `embedded-trainer-0.10.0.vsix`，在 VS Code 扩展视图菜单中“从 VSIX 安装”，然后重新加载窗口。VSIX 包含界面、帮助及 Python 训练引擎，不包含题库或私人答案。新电脑需要 Python 3.9+，编程评测另需 GCC/G++；无需复制或克隆项目，添加已经发布的题库清单或离线导入审核包即可。
+选择 `embedded-trainer-0.10.1.vsix`，在 VS Code 扩展视图菜单中“从 VSIX 安装”，然后重新加载窗口。VSIX 包含界面、帮助及 Python 训练引擎，不包含题库或私人答案。新电脑需要 Python 3.9+，编程评测另需 GCC/G++；无需复制或克隆项目，添加已经发布的题库清单或离线导入审核包即可。
 
 本项目工作区通过 `trainer-packs.json` 加载分离后的 198 道本地基础题。已发布的 `foundation.core 1.0.0` 可从[公共清单](https://alatorrerebecca240-ship-it.github.io/WDIEmbedded-Trainer-/catalog.json)安装；新版本知识包仍需审核后发布。原创部分采用 MIT，学习者说明见插件内问号，维护者工作流见根目录 `docs/knowledge-pack-workflow.md`。
 

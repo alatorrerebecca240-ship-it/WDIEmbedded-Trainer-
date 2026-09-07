@@ -1,0 +1,30 @@
+{
+  "formatVersion": 1,
+  "id": "embedded-trainer-windows-x64-20260907",
+  "platform": "win32",
+  "arch": "x64",
+  "python": {
+    "file": "python-3.13.15-amd64.exe",
+    "version": "3.13.15",
+    "sha256": "edec09c4853aeae9ac36efb8c9f95b6b8e2fee65eee56d9767a8b7c69c574403",
+    "url": "https://www.python.org/ftp/python/3.13.15/python-3.13.15-amd64.exe",
+    "source": "https://www.python.org/downloads/release/python-31315/",
+    "directory": "Python313"
+  },
+  "compiler": {
+    "file": "llvm-mingw-20260826-ucrt-x86_64.zip",
+    "version": "20260826",
+    "sha256": "ae601f4e0f72bbdf441ad2df8bb16f037e2e9251559ea6b37b4057aef39c06c3",
+    "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20260826/llvm-mingw-20260826-ucrt-x86_64.zip",
+    "source": "https://github.com/mstorsjo/llvm-mingw/releases/tag/20260826",
+    "directory": "llvm-mingw-20260826-ucrt-x86_64"
+  },
+  "boost": {
+    "file": "boost_1_85_0.zip",
+    "version": "1.85.0",
+    "sha256": "e712fe7eb1b9ec37ac25102525412fb4d74e638996443944025791f48f29408a",
+    "url": "https://archives.boost.io/release/1.85.0/source/boost_1_85_0.zip",
+    "source": "https://archives.boost.io/release/1.85.0/source/boost_1_85_0.zip.json",
+    "directory": "boost_1_85_0"
+  }
+}

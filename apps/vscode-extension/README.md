@@ -1,5 +1,7 @@
 # Embedded Trainer VS Code Extension
 
+0.12.0 新增 Windows 10/11 x64 离线环境安装。执行“Embedded Trainer: 检查训练环境”，已有可用 Python 和 C/C++ 编译器会保留；缺失时选择已解压的配套离线包，确认后自动安装到当前用户默认目录并复检。不修改系统 PATH，不需要管理员权限。VSIX 自身不携带大型环境安装程序。
+
 Embedded Trainer 0.11.0 在原插件中加入实验室／社团新生训练营：7 个能力阶段的路线图、49 道主线必做题、逐层提示和本地学习报告。不按周划分，不替换现有题库，不要求学习者手动使用 PowerShell。
 
 点击侧边栏“新生训练营 · 路线图”开始；“完整题库”保留原来的学科分类和所有题型。自查与已有题目成绩分开保存；报告由学习者主动导出，不自动上传。可导出路线模板为工作区根目录 `trainer-roadmap.json`，只引用题目 ID，不复制题库。详见插件内使用说明。
@@ -33,7 +35,9 @@ Embedded Trainer 0.11.0 在原插件中加入实验室／社团新生训练营�
 
 ## 安装 VSIX
 
-选择 `embedded-trainer-0.10.1.vsix`，在 VS Code 扩展视图菜单中“从 VSIX 安装”，然后重新加载窗口。VSIX 包含界面、帮助及 Python 训练引擎，不包含题库或私人答案。新电脑需要 Python 3.9+，编程评测另需 GCC/G++；无需复制或克隆项目，添加已经发布的题库清单或离线导入审核包即可。
+选择 `embedded-trainer-0.12.0.vsix`，在 VS Code 扩展视图菜单中“从 VSIX 安装”，然后重新加载窗口。VSIX 包含界面、帮助及 Python 训练引擎，不包含题库或私人答案。打开自己的练习文件夹后，先执行“检查训练环境”；Windows x64 可从配套包补齐 Python 3.13.15、LLVM-MinGW C/C++ 编译器与 Boost 头文件，然后离线导入基础知识包。无需克隆项目。
+
+默认路径为 `%LOCALAPPDATA%\Programs\Python\Python313` 及 `%LOCALAPPDATA%\Programs\EmbeddedTrainer\` 下的版本目录；路径仅由插件本机保存，不参与设置同步。安装器验证 VSIX 内固定的 SHA-256，拒绝损坏文件、路径跳转及覆盖已有目录。部分 C++ 拓展题需要 Boost，基础训练可暂不补充。其他操作系统仍可手动配置 Python 3.9+ 和 GCC/Clang。
 
 本项目工作区通过 `trainer-packs.json` 加载分离后的 198 道本地基础题。已发布的 `foundation.core 1.0.0` 可从[公共清单](https://alatorrerebecca240-ship-it.github.io/WDIEmbedded-Trainer-/catalog.json)安装；新版本知识包仍需审核后发布。原创部分采用 MIT，学习者说明见插件内问号，维护者工作流见根目录 `docs/knowledge-pack-workflow.md`。
 

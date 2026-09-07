@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const path = require('path');
 const { spawn } = require('child_process');
+const { launchEnvironment } = require('./environment');
 
 function toCrlf(text) {
   return text.replace(/\r?\n/g, '\r\n');
@@ -13,10 +14,13 @@ class TrainerBackend {
     this.diagnostics = diagnostics;
     this.enginePath = options.enginePath || path.join(rootUri.fsPath, 'trainer.py');
     this.packHome = options.packHome;
+    this.runtime = options.runtime;
   }
 
   get pythonPath() {
-    return vscode.workspace.getConfiguration('embeddedTrainer').get('pythonPath', 'python');
+    const configured = vscode.workspace.getConfiguration('embeddedTrainer').get('pythonPath', 'python');
+    const detected = this.runtime?.launch();
+    return detected?.python && (configured === 'python' || detected.pythonSetting === configured) ? detected.python : configured;
   }
 
   async run(args, options = {}) {
@@ -32,7 +36,7 @@ class TrainerBackend {
         cwd: this.rootUri.fsPath,
         windowsHide: true,
         shell: false,
-        env: { ...process.env, PYTHONIOENCODING: 'utf-8', TRAINER_PROJECT_ROOT: this.rootUri.fsPath,
+        env: { ...launchEnvironment(this.runtime?.launch()), PYTHONIOENCODING: 'utf-8', TRAINER_PROJECT_ROOT: this.rootUri.fsPath,
           ...(this.packHome ? { TRAINER_PACK_HOME: this.packHome } : {}) }
       });
 

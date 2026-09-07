@@ -1,0 +1,33 @@
+{
+  "compilerRelease": "20260826",
+  "archives": [
+    {
+      "component": "LLVM-MinGW build recipes and wrapper sources",
+      "file": "llvm-mingw-20260826-source.zip",
+      "revision": "20260826",
+      "sha256": "ff35458ecfc3345b8c158a43a22c4dbe6f01c1f78978121ae6520c1cfc5e0c46",
+      "url": "https://codeload.github.com/mstorsjo/llvm-mingw/zip/refs/tags/20260826"
+    },
+    {
+      "component": "BusyBox-w32",
+      "file": "busybox-w32-1f493261d16be3d984fe8a689f5113dafb6eaaa7.zip",
+      "revision": "1f493261d16be3d984fe8a689f5113dafb6eaaa7",
+      "sha256": "978e7091362d6e465008a39d72084b22b294d38386f6104182b552c88a446fba",
+      "url": "https://codeload.github.com/rmyorston/busybox-w32/zip/1f493261d16be3d984fe8a689f5113dafb6eaaa7"
+    },
+    {
+      "component": "GNU Make",
+      "file": "make-4.4.1.tar.gz",
+      "revision": "4.4.1",
+      "sha256": "dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3",
+      "url": "https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz"
+    },
+    {
+      "component": "MinGW-w64 including gendef and widl",
+      "file": "mingw-w64-a3d708261d5ba659205067cb82cae36e7ae8bbb0.zip",
+      "revision": "a3d708261d5ba659205067cb82cae36e7ae8bbb0",
+      "sha256": "1797eb4ad5e8d519ffab7ba11239632771ff6ec258e3aa9c1372fc713bc8c743",
+      "url": "https://codeload.github.com/mingw-w64/mingw-w64/zip/a3d708261d5ba659205067cb82cae36e7ae8bbb0"
+    }
+  ]
+}

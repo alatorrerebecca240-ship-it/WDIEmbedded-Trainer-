@@ -10,6 +10,8 @@ const { AuthoringManager } = require('./src/authoring');
 const { RefreshQueue } = require('./src/refresh');
 const { CampDashboard } = require('./src/roadmap');
 const { hintSteps } = require('./src/hints');
+const { RuntimeEnvironment } = require('./src/environment');
+const { checkEnvironment } = require('./src/environment-ui');
 
 async function exists(uri) {
   try {
@@ -44,7 +46,8 @@ async function activate(context) {
   const diagnostics = vscode.languages.createDiagnosticCollection('embeddedTrainer');
   const bundledEngine = vscode.Uri.joinPath(context.extensionUri, 'runtime', 'trainer.py');
   const enginePath = await exists(bundledEngine) ? bundledEngine.fsPath : path.resolve(context.extensionUri.fsPath, '..', '..', 'trainer.py');
-  const backend = new TrainerBackend(rootUri, output, diagnostics, { enginePath, packHome: packUri.fsPath });
+  const runtime = new RuntimeEnvironment(context, output);
+  const backend = new TrainerBackend(rootUri, output, diagnostics, { enginePath, packHome: packUri.fsPath, runtime });
   const catalog = new LessonCatalog(rootUri, backend);
   const treeProvider = new LessonTreeProvider(catalog);
   const treeView = vscode.window.createTreeView('embeddedTrainer.lessons', {
@@ -216,16 +219,7 @@ async function activate(context) {
   };
 
   const runDoctor = async () => {
-    const result = await vscode.window.withProgress(
-      { location: vscode.ProgressLocation.Notification, title: '检查 Embedded Trainer 环境', cancellable: false },
-      () => backend.run(['doctor'])
-    );
-    output.show(true);
-    if (result.code === 0) {
-      vscode.window.showInformationMessage('训练环境检查通过。');
-    } else {
-      vscode.window.showErrorMessage('训练环境检查未通过，请查看“Embedded Trainer”输出。');
-    }
+    await checkEnvironment(runtime, backend, refresh);
   };
 
   const showProgress = async () => {

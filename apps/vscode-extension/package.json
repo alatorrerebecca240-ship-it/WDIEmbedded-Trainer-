@@ -2,7 +2,7 @@
   "name": "embedded-trainer",
   "displayName": "Embedded Trainer",
   "description": "实验室与社团的新生训练营：能力路线图、分层提示与本地学习报告，兼容原有 C/C++ 和嵌入式知识包。",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "publisher": "local-development",
   "engines": {
     "vscode": "^1.85.0"
@@ -26,6 +26,8 @@
     "media/**",
     "docs/**",
     "routes/**",
+    "resources/**",
+    "scripts/install-offline-runtime.ps1",
     "README.md",
     "LICENSE",
     "runtime/**/*.py"
@@ -157,7 +159,7 @@
     "viewsWelcome": [
       {
         "view": "embeddedTrainer.lessons",
-        "contents": "从[训练路线图](command:embeddedTrainer.roadmap)开始，或通过[管理知识包](command:embeddedTrainer.packages)添加可信题库。仍需 Python；编程评测另需 C/C++ 编译器。"
+        "contents": "先[检查训练环境](command:embeddedTrainer.doctor)，Windows x64 可从配套离线包补齐 Python 和 C/C++ 编译器。再通过[管理知识包](command:embeddedTrainer.packages)导入题库，从[训练路线图](command:embeddedTrainer.roadmap)开始。"
       }
     ],
     "menus": {
@@ -301,6 +303,7 @@
     "check": "node --check extension.js && node --check src/backend.js && node --check src/catalog.js && node --check src/refresh.js && node --check src/tree.js && node --check src/dashboard.js && node --check src/dashboard-client.js && node --check src/testing.js && node --check src/packages.js && node --check src/authoring.js && node --check src/authoring-cloud.js && node --check src/roadmap.js && node --check src/roadmap-model.js && node --check src/roadmap-client.js && node --check src/camp-store.js && node --check src/hints.js",
     "package": "npx @vscode/vsce package",
     "test": "node --test tests/*.test.js",
-    "vscode:prepublish": "node scripts/prepare-runtime.js && npm run check"
+    "check:environment": "node --check src/environment.js && node --check src/environment-ui.js",
+    "vscode:prepublish": "node scripts/prepare-runtime.js && npm run check && npm run check:environment"
   }
 }
